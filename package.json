@@ -161,6 +161,15 @@
   },
   "devDependencies": {
     "@deepseek-ai/cordis": "4.0.5",
+    "esbuild": "0.28.2",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "react-test-renderer": "18.3.1",
     "semver": "^7.8.6"
+  },
+  "pnpm": {
+    "onlyBuiltDependencies": [
+      "esbuild"
+    ]
   }
 }
