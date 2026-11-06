@@ -8,7 +8,7 @@ A self-hosted, minimal add-on for DeepSeek Harness (known in the community as a 
 
 [![Release](https://img.shields.io/github/v/release/youki258/dsh-purge-minimal?label=release)](https://github.com/youki258/dsh-purge-minimal/releases)
 
-Current version 0.1.1 · targets **DSH Desktop 0.2.2-rc.1** (0.2.1-rc.1 / rc.2 / rc.3 / rc.5 also pass)
+Current version 0.1.2 · targets **DSH Desktop 0.2.2-rc.1** (0.2.1-rc.1 / rc.2 / rc.3 / rc.5 also pass)
 
 **Original project and author:** this is an independently maintained minimal distribution, derived from [dsh-purge by 小杨 / YuJunZhiXue](https://github.com/YuJunZhiXue/dsh-purge) and its later community branch. The original repository is available again. Original attribution, copyright and the MIT license are retained; this distribution is not an official upstream release.
 
@@ -51,7 +51,7 @@ Local learning, personal projects, automation experiments and maintenance work. 
 - CLI/Web users who already have `dsh` on PATH and use the `web` profile can use the official command below. Desktop users should not download another npx host to install into their existing desktop profile.
 
 ```sh
-dsh plugin --profile web add "https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.1/dsh-purge-minimal-0.1.1.tgz"
+dsh plugin --profile web add "https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.2/dsh-purge-minimal-0.1.2.tgz"
 ```
 
 Use the actual instance's profile and `DSH_HOME`. This project distributes via GitHub; do not substitute bare npm package names. The official command does not run our extra Release SHA256 check, migration snapshot or rollback wrapper.
@@ -68,17 +68,17 @@ A full page in the left sidebar: one line of state at the top, "Apply" as the pr
 
 ## Commands
 
-`selfcheck`, `status`, `host-status`, `diagnose`, `reanchor`, `probe`, `audit`, `boost`, `preset`, `retry`, `usage` / `prune`, `backup` / `rollback`. See `purge --help`.
+`selfcheck`, `status`, `host-status` / `host-check`, `diagnose`, `reanchor`, `probe`, `audit`, `boost`, `preset`, `retry`, `usage` / `prune`, `backup` / `rollback`. See `purge --help`.
 
 ## Updates
 
-0.1.1 is the start of the minimal line: based on 1.6.82, host source rewrites are cut to 27 patches — everything else is done through cordis config overrides and runtime hooks. The bundled red-team drill is gone. See the [release notes](../release-notes.md).
+0.1.2 is the start of the minimal line: based on 1.6.82, host source rewrites are cut to 27 patches — everything else is done through cordis config overrides and runtime hooks. The bundled red-team drill is gone. See the [release notes](../release-notes.md).
 
 Two separate preferences (check / install), default check-only every six hours. Installing never restarts the app — you decide when to reopen it.
 
 ## Compatibility
 
-Plugin `dsh-purge-minimal` 0.1.1 · verified on DSH Desktop 0.2.2-rc.1 / 0.2.1-rc.1 / rc.2 / rc.3 / rc.5 · Node ≥ 18.
+Plugin `dsh-purge-minimal` 0.1.2 · verified on DSH Desktop 0.2.2-rc.1 / 0.2.1-rc.1 / rc.2 / rc.3 / rc.5 · Node ≥ 18.
 
 ## Troubleshooting
 

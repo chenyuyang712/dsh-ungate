@@ -39,7 +39,8 @@ diff -ru /tmp/dsh-purge-*/lib/ lib/ | grep -v "^Only in" | head -200
 | 本发行版 | 上游基线 | 补丁数 | 主要变化 |
 | --- | --- | --- | --- |
 | 0.1.0 | 1.6.82 | 75 | 剥离 11 条行为类补丁；CLI 改名 `purge`；中性化界面；关闭在线更新 |
-| 0.1.1 | 1.6.82 | 27 | 48 条补丁改为 cordis 配置覆盖 / 运行时 hook 或直接删除；移除红队演练台；出厂提示词缩减为 2009 字节 |
+| 0.1.1 | 1.6.82 | 75 | 出厂提示词缩到 2009 字节（原槽含操作者本机设定）；仓库历史重建 |
+| 0.1.2 | 1.6.82 | 27 | 48 条补丁改为 cordis 配置覆盖 / 运行时 hook 或直接删除；移除红队演练台 |
 
 ## 上游能力的取舍记录
 
@@ -52,3 +53,35 @@ diff -ru /tmp/dsh-purge-*/lib/ lib/ | grep -v "^Only in" | head -200
 | 红队演练台 | 移除 | 与「无限制」目标无关，且要 1.1MB 代码 + 599MB 工具链；SOP 抽成 `skills/pentest-sop.md` |
 | 解锁类宿主补丁 | 保留 | 本项目核心价值 |
 | 在线自动更新 | 关闭（可显式开启） | 防止被上游 release 覆盖 |
+
+## 上游核对台账
+
+每次打算吸收上游改动时，按下面的表追加一行。**没有这一行就等于没核对过**。
+
+| 核对日期 | 上游 tag | 比对的目录 | 结论 | 处理 |
+| --- | --- | --- | --- | --- |
+| 2026-11-06 | v1.6.84 | `lib/`、`presets/`、`skills/`、`scripts/` | `lib/` 与 `presets/` 逐字节相同（`diff -rq` 空）；补丁表 86 条，id 集合与 1.6.82 相比新增 0 / 删除 0；`skills/redteam/unauth-exploit.md` 新增 21 行「如何复核命令执行」；新增 `scripts/exec-proof.mjs`（16 行） | **只吸收 exec-proof**：本地已无 `skills/redteam/`（已随红队演练台移除），`scripts/exec-proof.mjs` 与本发行版无关，故**不移植**。 |
+
+核对命令（可重复执行）：
+
+```sh
+curl -fL https://codeload.github.com/kingcharleslzy-ai/dsh-purge/tar.gz/refs/tags/v<tag> -o /tmp/upstream.tgz
+mkdir -p /tmp/upstream && tar -xzf /tmp/upstream.tgz -C /tmp/upstream
+diff -rq /tmp/upstream/dsh-purge-<tag>/lib lib | grep -v '^Only in lib'
+diff -rq /tmp/upstream/dsh-purge-<tag>/presets presets
+```
+
+补丁 id 集合比对：
+
+```sh
+node -e 'import("/tmp/upstream/dsh-purge-<tag>/lib/patches/index.mjs").then(async m=>{const up=m.ALL_PATCHES.map(p=>p.id).sort((a,b)=>a-b);const ours=(await import("./lib/patches/index.mjs")).ALL_PATCHES.map(p=>p.id).sort((a,b)=>a-b);console.log("upstream",up.length,"ours",ours.length);console.log("only upstream:",up.filter(id=>!ours.includes(id)));console.log("only ours:",ours.filter(id=>!up.includes(id)))})'
+```
+
+## 宿主版本跟进
+
+本发行版**不联网查询宿主新版本**，也不自动 apply。跟随 DSH 官方节奏的方式是：
+
+1. 升级宿主后先跑 `purge host-status`（只读）看版本与布局；
+2. 再跑 `purge selfcheck --json`，看 27 条补丁里哪些变成 `missing`（锚点漂移）；
+3. `purge diagnose` 输出漂移详情，`purge reanchor` 只在你确认后改写锚点；
+4. 允许写入的判据是 `layout && !sealed`（只看布局与 `app.asar` 是否解包），与版本号无关；版本只影响兼容性报告。

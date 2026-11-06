@@ -8,9 +8,9 @@
 
 [![Release](https://img.shields.io/github/v/release/youki258/dsh-purge-minimal?label=release)](https://github.com/youki258/dsh-purge-minimal/releases)
 
-当前版本 **0.1.1** · 适配 **DSH Desktop 0.2.2-rc.1**（0.2.1-rc.1 / rc.2 / rc.3 / rc.5 同样通过） · [English](docs/README.en.md)
+当前版本 **0.1.2** · 适配 **DSH Desktop 0.2.2-rc.1**（0.2.1-rc.1 / rc.2 / rc.3 / rc.5 同样通过） · [English](docs/README.en.md)
 
-0.1.1 是精简发行线起点：以 1.6.82 为基线，把宿主源码改写压到 27 条（其余能力改走 cordis 配置覆盖与运行时 hook），并移除内置红队演练台。[发行说明](release-notes.md)。
+0.1.2 是精简发行线起点：以 1.6.82 为基线，把宿主源码改写压到 27 条（其余能力改走 cordis 配置覆盖与运行时 hook），并移除内置红队演练台。[发行说明](release-notes.md)。
 
 **原项目与作者**：本仓库是独立维护的精简发行版（minimal），代码源自 [小杨 / YuJunZhiXue 的 dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) 及其后续社区分支。原仓库已恢复；保留原作者署名、版权与 MIT 许可证。本发行版不是原作者官方发行。
 
@@ -88,7 +88,7 @@ Purge Minimal 是一个跑在你自己机器上的 Harness 附加组件。它把
 下面命令适用于**已经安装 `dsh` 命令、且使用 `web` profile 的 CLI/Web 用户**，在 macOS/Linux 终端或 Windows PowerShell 中运行。桌面版用户优先用上面的界面；不要为了安装插件再用 `npx` 下载另一套宿主。
 
 ```sh
-dsh plugin --profile web add "https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.1/dsh-purge-minimal-0.1.1.tgz"
+dsh plugin --profile web add "https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.2/dsh-purge-minimal-0.1.2.tgz"
 ```
 
 `web` 必须与实际启动的 profile 一致；自定义数据目录需要沿用该实例的 `DSH_HOME`。命令使用本次发行的固定版本 URL；不是 `npm install -g`，也不是安装裸 npm 包名。本项目通过 GitHub 发行，**不要替换成裸包名 `add dsh-purge-minimal`**。官方 CLI 的安装不会额外运行我们安装器的 Release SHA256 比对及迁移快照；需要这些功能时选方式三。[官方 CLI 安装说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.zh.md)
@@ -171,7 +171,7 @@ sh "$PURGE_INSTALL_DIR/install.sh" --dry-run
 | --- | --- |
 | `purge selfcheck [--json]` | 逐层状态与证据；不适用项单独标注 |
 | `purge status` | 宿主路径与计数 |
-| `purge host-status` | 只读查看安装布局与当前入口（不换包、不重启） |
+| `purge host-status` / `purge host-check` | 只读查看安装布局与当前入口（不换包、不重启）；升级宿主后先跑这条 |
 | `purge diagnose` | 锚点漂移诊断，给出文件、行号与候选落点 |
 | `purge reanchor …` | 把确认过的新锚点钉成本地覆盖，可撤销 |
 | `purge probe [new]` | 生成运行时探针，验证注入确实送达模型 |
@@ -190,7 +190,7 @@ sh "$PURGE_INSTALL_DIR/install.sh" --dry-run
 
 | 组件 | 值 |
 | --- | --- |
-| 插件 | `dsh-purge-minimal` 0.1.1 |
+| 插件 | `dsh-purge-minimal` 0.1.2 |
 | 已验证宿主 | DSH Desktop 0.2.2-rc.1 / 0.2.1-rc.1 / 0.2.1-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5 |
 | 其它宿主 | 允许安装，自检会标「未验证」；先看 `diagnose` |
 | Node | ≥18（桌面版自带运行时即可）；红队工具需 ≥22.5（`node:sqlite`） |

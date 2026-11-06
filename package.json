@@ -1,6 +1,6 @@
 {
   "name": "dsh-purge-minimal",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "让 AI 更专注地辅助学习与动手实验：DSH 附加组件，提供状态自检、提示词与规则管理、本机备份与回滚。 [minimal: 保留解锁类宿主补丁与红队模式，剥离 11 条改变原生行为的补丁]",
   "type": "module",
   "main": "lib/index.js",
@@ -93,7 +93,7 @@
     },
     "install": {
       "preferred": "tarball",
-      "tarball": "https://github.com/youki258/dsh-purge-minimal/releases/latest/download/dsh-purge-minimal-0.1.1.tgz",
+      "tarball": "https://github.com/youki258/dsh-purge-minimal/releases/latest/download/dsh-purge-minimal-0.1.2.tgz",
       "git": "https://github.com/youki258/dsh-purge-minimal.git"
     },
     "compatibility": {
