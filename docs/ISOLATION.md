@@ -71,7 +71,7 @@ node /tmp/verify3.mjs <token> <port>
 # 期望：hasFailed=false、errors=[]、面板显示「Purge <ver> / DSH <host> / 已回归验证 / N/M · K 条本机不适用」
 
 # 3) CLI 侧（隔离台 profile 没有 yaml 依赖，必须用仓库的 bin）
-cd /home/kali/.dsh/dsh-purge-minimal
+cd /home/kali/dsh-projects/dsh-purge-minimal
 DSH_HOME=/home/kali/.dsh-iso \
 DSH_BASE=/home/kali/.dsh-iso/host/node_modules/@deepseek-ai \
 node bin/community.js selfcheck --json
