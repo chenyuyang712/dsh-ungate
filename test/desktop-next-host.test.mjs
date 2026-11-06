@@ -115,8 +115,11 @@ test("resolveInstance：显式选择器优先，指错就报错不回落", () =>
 
   const decoy = makeNextInstall(path.join(TMP, "resolve-decoy"));
   const bad = resolveInstance({ env: { DSH_BASE: decoy.root }, resourcesPath: next.resources, electron: "44.7.0", argv: [] });
+  // 契约（lib/instance.js describe()）：显式选择器指向存在的目录时不悄悄清空，
+  // 而是 resolved:false 并把该目录交出去，让上层报"缺件"而不是退回"未定位"。
   assert.equal(bad.resolved, false);
-  assert.equal(bad.host, "");
+  assert.equal(bad.host, decoy.root);
+  assert.equal(bad.source, "DSH_BASE");
   assert.match(bad.reason, /不是有效插件根/);
 
   assert.throws(

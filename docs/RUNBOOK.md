@@ -1,98 +1,84 @@
-# 运维手册（Purge Minimal 0.1.0）
+# 运维手册（dsh-purge-minimal 0.1.2）
 
-> 面向在本机维护本插件的操作者。所有命令都假设已在目标实例的 profile 上下文里（`DSH_HOME` / `DSH_PROFILE` 正确）。
+> 当前版本 **0.1.2**。面向在本机维护插件的人：体检、改宿主、重启、隔离验证、出事怎么收。
+> 前提：`DSH_HOME` 与 `DSH_PROFILE` 指向**你要操作的那个实例**，不是"这台机器上恰好跑着的那个"。
 
-## 0. 铁律：不要在自己的 cgroup 里停服务
-
-在本会话/本进程里执行 `systemctl stop dsh-web` 会连带杀掉发起命令的 shell（历史上停服 6h27m）。改动宿主或用例重启时必须跳出 cgroup：
-
-```sh
-sudo systemd-run --unit=dsh-restart-$$ --collect --wait \
-  /bin/bash /tmp/dsh-restart-helper.sh
-```
-
-辅助脚本内容最少是：`systemctl stop dsh-web; sleep 2; systemctl start dsh-web`，并把结果写进 `/tmp/dsh-restart-result.log`。
-
-## 1. 日常检查
+## 0. 一分钟体检
 
 ```sh
-purge selfcheck --json     # 逐层证据；broken>0 才算失败
-purge status               # 宿主路径与补丁计数
-purge audit --limit 20     # 最近动作
+export DSH_HOME=/home/kali/.dsh DSH_PROFILE=web
+export PURGE_DSH_CLI="$(command -v dsh)"
+node /path/to/dsh-purge-minimal/bin/community.js status
+node /path/to/dsh-purge-minimal/bin/community.js selfcheck --json | jq '{ok, state, patch, broken}'
+node /path/to/dsh-purge-minimal/bin/community.js audit --limit 20
 ```
 
-判读口径：`applied/required` 全等才算该层 ok；`na` 是明确不适用，不是失败；`unknown` 必须人工确认，不能当成功。
+判断顺序：`state` → `broken[]` → `patch.applied/total` → 最近审计里有没有 `refusal_retry`。
 
-## 2. 一键开关（宿主补丁面）
+## 1. 日常动作
+
+| 场景 | 动作 |
+| --- | --- |
+| DSH 官方升级后 | 面板「应用」→ 完整退出 → 重开 → `selfcheck`；有漂移先 `diagnose` |
+| 插件升级后 | 同上（新补丁要重新写） |
+| 模型开始推脱 | `purge probe new` → 发一句话看回显 → 回显则调人设/强化段，不回显则查注入层 |
+| 想临时关强化段 | `purge boost off` → 重开；`boost on` 恢复 |
+| 工具被追问审批 | `selfcheck` 看审批/沙箱层；绿则属工具自身限制，红则重新应用 |
+| 要撤掉所有补丁 | 面板「还原」/ `purge revert`，再重开 |
+| 要回到旧插件版本 | `purge rollback <id>` |
+
+## 2. 重启 DSH 的安全做法
+
+**不要在会话自己的 cgroup 里 `systemctl stop dsh-web`**——停掉的就是当前会话的宿主，之后没人能把服务拉回来（本项目历史上因此出现过 6 小时 27 分钟的中断）。
+
+用 transient unit 把重启动作放到会话之外：
 
 ```sh
-purge toggle
+sudo systemd-run --unit=dsh-web-restart --collect \
+  /bin/sh -c 'systemctl restart dsh-web'
 ```
 
-- 宿主补丁在位 → 执行 `--revert --no-shim`，还原原生宿主；
-- 宿主补丁不在位 → 执行 `--apply`；
-- 返回 `{action, host, before:{on,off,counts}, exit}`，`exit=0` 才算成功；
-- **改动重启后生效**，不重启等于没发生。
+隔离实例同理，把 unit 名换成 `dsh-web-iso`。Desktop 用户不需要这条：手动完整退出再打开即可。
 
-全局 shim 不随 toggle 变化，需要显式 `purge revert`。
+## 3. 改宿主类改动的流程
 
-## 3. 重新应用与回滚
+1. 先在**隔离实例**上做（独立 `DSH_HOME`、独立端口、独立 unit），绝不先动主实例。
+2. 隔离实例里跑完整链路：装插件 → 应用 → 重启 → `selfcheck` → 探针。
+3. 证据齐了再动主实例；主实例改完同样走「应用 → 退出 → 重开 → 自检」。
+4. 每一步都留输出（`status`/`selfcheck --json`/`audit`），别只留一句"好了"。
+
+## 4. 隔离实例速查
 
 ```sh
-purge apply                # 重新写宿主补丁（宿主升级后必做）
-purge backup               # 手动快照
-purge rollback <备份ID>     # 回到某个快照
-purge migrate <tgz>        # 迁移到新版本包
+# 起
+sudo systemd-run --unit=dsh-web-iso --collect \
+  env DSH_HOME=/home/kali/.dsh-iso /usr/bin/node <host>/lib/bin.js \
+  --profile web --port 3081 --no-open --trusted-host 127.0.0.1 --trusted-host 127.0.0.1:3081
+# 看
+systemctl status dsh-web-iso --no-pager
+journalctl -u dsh-web-iso -n 50 --no-pager
 ```
 
-`apply` 前会自动快照。宿主目录只读（Linux 系统宿主属 root）时必须 `sudo -E env DSH_HOME=... DSH_BASE=... node bin/dsh-purge.js --apply`，否则会报 `Host backup failed; patch writes cancelled`。
+token 从该实例的启动日志里取，不要复用主实例的。
 
-## 4. 诊断锚点漂移
+## 5. 出事怎么收
 
-宿主升级会让补丁锚点失效，表现为 `selfcheck` 某层 `pending` 或 `diagnose` 报 drifted。
+| 现象 | 先做 | 再决定 |
+| --- | --- | --- |
+| 应用后启动报错 | 读 `selfcheck` 的 `broken` 与 `apply` 的 `failed`；看宿主源码是否被写坏 | 面板「还原」或 `purge revert`，重开验证 |
+| 换包后起不来 | 看 `resources/app.asar.purge-handoff.json` / `.log`，`asar_handoff.phase` | 用 `app.asar.purge-<token>.bak` 恢复归档，再重新应用 |
+| 面板报错但 CLI 正常 | 前端 bundle 与后端版本不一致 | 重装插件（同一个 tgz），刷新页面 |
+| 审计里连续 `refusal_retry` | 注入到了但模型仍在拒 | 调强化段/人设/`injectPosition`，别改补丁 |
+| 插件目录被删/依赖坏了 | `purge usage` 看快照，`purge rollback <id>` | 仍不行就卸干净重装，保留用户内容 |
 
-```sh
-purge diagnose                    # 文件、行号、候选落点
-purge reanchor list               # 已钉的本地覆盖
-purge reanchor apply <id> --index n   # 把候选钉成本地覆盖
-purge reanchor clear <id>         # 撤销
-```
+收集信息时给：插件版本、宿主版本、surface（web/desktop）、`selfcheck` 的 `broken`、脱敏后的错误行。**不要**贴 token、提示词正文、完整 profile 配置。
 
-钉住的是本地覆盖，不修改上游补丁表；下一次宿主升级后要重新核对。
+## 6. 备份与清理
 
-## 5. 面板不渲染
+- 快照由「应用」「备份」自动创建；`purge usage` 看占用，`purge prune` 清理并 GC。
+- 审计 1MB 轮转、保留 2 份；需要长期保留就自己归档 `audit.jsonl`。
+- 卸载（`purge uninstall`）只清插件目录与链接；`$DSH_HOME/dsh-purge*` 里的状态要手动删。
 
-按顺序排查：
+## 7. 验证边界
 
-1. 看浏览器 console 是否有 `Found module … but plugin … was not registered` —— 说明 client bundle 的注册 id 与 profile 里的插件名不一致，重建 bundle（`node packages/purge-panel/scripts/build.mjs --community`）后强刷；
-2. 看 `/plugins/…/client.js?rev=` 返回的 bundle 里是否含正确 id：`grep -o 'id:"[^"]*"' client.js`；
-3. 宿主按内容算 rev，改完 bundle 不需要重启宿主，但浏览器要 Ctrl+F5；
-4. 仍然空白就看宿主日志：`sudo grep -a "dsh web:" /var/log/dsh-web.log | tail -3` 取 token，直接访问带 token 的 URL。
-
-## 6. 版本一致性与打包
-
-```sh
-node scripts/check-docs.mjs
-node packages/purge-panel/scripts/build.mjs --community --check
-pnpm test
-bash scripts/pack-tgz.sh          # 产物在 pkgs/
-```
-
-打包必须排除 `node_modules/ .git/ backups/ objects/ test/ pkgs/`，否则会把本机状态和私密快照打进发行包。
-
-## 7. 升级到新上游版本
-
-1. 取上游 tag 的 source tarball，比对 `lib/patches/` 与 `lib/` 差异；
-2. 只在 `lib/patches/index.mjs` 的 `ALL_PATCHES` 里增删条目，不用改宿主；
-3. 剥离清单见 [STATE.md](STATE.md)，新增补丁先判断是否改变原生行为；
-4. 跑全量测试 + 双实例回归，再打 tgz。
-
-## 8. 出问题时的最小恢复
-
-```sh
-purge revert               # 还原宿主（含 shim）
-# 或
-purge rollback <最近备份ID>
-```
-
-回滚后必须重启宿主；只刷新浏览器不会重载后端。
+组件测试、打包 smoke、面板契约测试都不能替代真机验收。写结论时分开写：哪一层验证过、哪一层只是"测试覆盖"。宿主升级后尤其如此——磁盘写成功不代表当前进程加载了。

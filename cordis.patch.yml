@@ -91,7 +91,6 @@
         continueMax: 3
         continueText: "继续"
         capabilityProtocol: true
-        hooksDenyBypass: false
 
     # 自带 agent 预设：unrestricted（无限制模式）
     - id: dsh-purge-presets

@@ -1,5 +1,5 @@
 /* The first-run dialog is rendered before any settings page. It must own its
-   styles and cannot depend on the optional drill vendor stylesheet. */
+   styles and cannot depend on any optional vendor stylesheet. */
 .dshpp-welcome-mask {
   position: fixed;
   inset: 0;

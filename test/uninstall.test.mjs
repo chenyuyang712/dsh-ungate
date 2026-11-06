@@ -17,20 +17,20 @@ test('uninstall removes community and legacy registrations from native profile m
  assert.equal(stripPluginFromPackage(pkg),false);
 });
 
-test('public CLI uninstall executes file cleanup and preserves unrelated plugins and drill data',()=>{
+test('public CLI uninstall executes file cleanup and preserves unrelated plugins and user files',()=>{
  const root=fs.mkdtempSync(path.join(os.tmpdir(),'purge-cli-uninstall-'));
  try{
   const home=path.join(root,'home'),host=path.join(root,'host'),profile=path.join(home,'profiles/web');
   for(const dir of [path.join(host,'dsh-agent-instructions/lib'),path.join(profile,'node_modules/dsh-purge-minimal'),path.join(profile,'node_modules/other-plugin'),path.join(home,'dsh-purge'),path.join(home,'redteam'),path.join(home,'skills/keep')])fs.mkdirSync(dir,{recursive:true});
   fs.writeFileSync(path.join(profile,'package.json'),JSON.stringify({dependencies:{'dsh-purge-minimal':'1','other-plugin':'1'},dsh:{profile:{bundles:['dsh-purge-minimal','other-plugin']}}}));
-  fs.writeFileSync(path.join(home,'redteam/keep.txt'),'drill');fs.writeFileSync(path.join(home,'skills/keep/SKILL.md'),'skill');
+  fs.writeFileSync(path.join(home,'redteam/keep.txt'),'keep');fs.writeFileSync(path.join(home,'skills/keep/SKILL.md'),'skill');
   const cli=fileURLToPath(new URL('../bin/dsh-purge.js',import.meta.url));
   const result=spawnSync(process.execPath,[cli,'--uninstall'],{env:{...process.env,DSH_HOME:home,DSH_BASE:host,DSH_PROFILE:'web',PURGE_PROFILE_DIR:profile,PURGE_DSH_CLI:''},encoding:'utf8',timeout:30000});
   assert.equal(result.status,0,result.stdout+'\n'+result.stderr);
   assert.equal(fs.existsSync(path.join(profile,'node_modules/dsh-purge-minimal')),false);
   assert.equal(fs.existsSync(path.join(home,'dsh-purge')),false);
   assert.equal(fs.existsSync(path.join(profile,'node_modules/other-plugin')),true);
-  assert.equal(fs.readFileSync(path.join(home,'redteam/keep.txt'),'utf8'),'drill');
+  assert.equal(fs.readFileSync(path.join(home,'redteam/keep.txt'),'utf8'),'keep');
   assert.equal(fs.readFileSync(path.join(home,'skills/keep/SKILL.md'),'utf8'),'skill');
   const pkg=JSON.parse(fs.readFileSync(path.join(profile,'package.json'),'utf8'));
   assert.deepEqual(pkg.dependencies,{'other-plugin':'1'});assert.deepEqual(pkg.dsh.profile.bundles,['other-plugin']);

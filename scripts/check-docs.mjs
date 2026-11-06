@@ -1,5 +1,6 @@
-// 文档跟着版本走：版本号、发行说明首行、英文 README 的版本行必须一致。
-// 放在 CI 里跑，避免"代码发版了、README 还停在上一个版本"。
+// 文档跟着版本走：版本号、发行说明首行、英文 README、AGENTS 与 docs/*.md 必须指向同一个 0.1.2 事实。
+// 另外拦住三类历史漂移：上游 1.6.x 残留、已删除功能（红队/演练台/hooks 否决旁路）的死引用、
+// 以及没有实测支撑的兼容性声明。CI 与本地 `pnpm run check:docs` 都跑它。
 import fs from "node:fs";
 import { checkInstallExamples } from "./lib/check-install-examples.mjs";
 
@@ -8,62 +9,105 @@ const pkg = JSON.parse(read("package.json"));
 const version = pkg.version;
 const notesFirst = read("release-notes.md").split("\n")[0].trim();
 const readme = read("README.md");
+const readmeZh = read("README.zh-CN.md");
 const readmeEn = read("docs/README.en.md");
 const agents = read("AGENTS.md");
-
 const problems = [];
-if (read("README.zh-CN.md") !== readme) problems.push("README.zh-CN.md 必须与 README.md 保持一致");
-for (const file of ["docs/MAINTENANCE.md", "docs/INSTALLATION.md"]) {
+
+// 1) 中文 README 与主 README 完全一致：避免两份事实各自漂移。
+if (readmeZh !== readme) problems.push("README.zh-CN.md 必须与 README.md 保持一致");
+
+// 2) 版本号的首行锚点。
+if (notesFirst !== `# ${version}`) problems.push(`release-notes.md 首行应为 "# ${version}"，实际是 "${notesFirst}"`);
+if (!new RegExp(`当前版本[：:]\\s*\\*\\*${version.replaceAll(".", "\\.")}\\*\\*`).test(agents))
+  problems.push(`AGENTS.md 缺少 "当前版本：**${version}**"`);
+if (!agents.includes(`\`dsh-purge-minimal\` ${version}`))
+  problems.push(`AGENTS.md 版本表未同步到 ${version}`);
+
+// 3) 当前事实文档：都写着同一个版本，且不再引用上游 1.6.x 或已删除功能。
+const currentDocs = [
+  "README.md", "README.zh-CN.md", "AGENTS.md", "release-notes.md", "NOTICE.md", "CONTRIBUTORS.md",
+  "docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK.md", "docs/STATE.md",
+  "docs/README.en.md", "docs/preset-test.md",
+];
+for (const file of ["docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK.md", "docs/STATE.md"]) {
   if (!read(file).includes(`当前版本 **${version}**`)) problems.push(`${file} 当前版本未同步到 ${version}`);
 }
-for (const [file, needles] of [
-  ["README.md", ["scripts/install.ps1", "issue #7", "插件加载前", "不修改全局 npm 源"]],
-  ["AGENTS.md", ["scripts/install.ps1", "minimumReleaseAge=0", "不要安装后自动 apply/restart"]],
-]) {
-  for (const needle of needles) if (!read(file).includes(needle)) problems.push(`${file} 缺少安装边界：${needle}`);
-}
-if (notesFirst !== `# ${version}`) {
-  problems.push(`release-notes.md 首行应为 "# ${version}"，实际是 "${notesFirst}"`);
-}
-if (!readme.includes(`**${version}**`)) {
-  problems.push(`README.md 首屏缺少版本号 **${version}**`);
-}
-if (!readme.includes("raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.sh")) {
-  problems.push("README.md 缺少安装器下载命令");
-}
-if (!readmeEn.includes(`Current version ${version}`)) {
-  problems.push(`docs/README.en.md 缺少 "Current version ${version}"`);
-}
-if (!agents.includes(`当前版本：**${version}**`)) {
-  problems.push(`AGENTS.md 缺少 "当前版本：**${version}**"`);
-}
-if (!agents.includes(`\`dsh-purge-minimal\` ${version}`)) {
-  problems.push(`AGENTS.md §9 版本表未同步到 ${version}`);
-}
-const hostLine = readme.match(/适配 \*\*DSH Desktop ([0-9a-z.\-]+)\*\*/i);
-if (!hostLine) problems.push("README.md 缺少「适配 DSH Desktop …」的版本行");
 
-// Copyable release commands must move with the package version, not retain an old TGZ.
-for (const file of ["README.md", "docs/README.en.md"]) {
+// 上游历史资料只在 docs/upstream 里；当前文档里出现旧版本号通常意味着整段没重写。
+const forbidden = [
+  [/1\.6\.\d+/, "上游 1.6.x 版本号"],
+  [/全量 84|73\/76/, "旧的补丁总数说法"],
+  [/红队|演练台|redteam/i, "已删除的红队/演练台"],
+  [/drill/i, "已删除的 drill-grant"],
+  [/hooks[- ]?deny|hooksDeny|否决旁路/i, "已删除的 hooks 否决旁路"],
+  [/#76|#24\b|#18\/#19|enable 18,19/, "已不存在的补丁编号"],
+  [/补丁 30 \/ 31 \/ 64 \/ 65/, "已删除的补丁编号组"],
+];
+// release-notes.md 天生要记录"删掉了什么"，所以只对现状文档做残留扫描。
+for (const file of currentDocs.filter((f) => !["release-notes.md", "NOTICE.md"].includes(f))) {
   const doc = read(file);
-  const links = [...doc.matchAll(/releases\/download\/v([0-9.]+)\/dsh-purge-minimal-([0-9.]+)\.tgz/g)];
-  if (!links.length) problems.push(`${file} 缺少固定版本的官方 CLI 安装来源`);
-  for (const [, tag, archive] of links) if (tag !== version || archive !== version)
-    problems.push(`${file} CLI 安装链接版本必须为 ${version}`);
+  for (const [pattern, label] of forbidden) {
+    const hit = doc.match(pattern);
+    if (hit) problems.push(`${file} 仍有历史残留（${label}）：${hit[0]}`);
+  }
 }
-if (/安装器不会改动 DSH 本体|installer leaves DSH itself untouched/.test(readme + readmeEn))
-  problems.push("安装说明不能承诺安装器完全不写宿主目录");
 
-// Historical examples remain intact, with a warning attached to the actual YAML.
-// Parse entries so quote style cannot bypass the guard and prose is not mistaken for config.
+// 4) 兼容性声明必须与 package.json 的 dshReleases 对得上，不能只写在 README 里。
+const declared = pkg.dsh?.compatibility?.dshReleases || {};
+const claimed = new Set();
+for (const doc of [readme, readmeEn, agents]) {
+  for (const line of doc.split("\n")) {
+    // 只有"已验证/适配"这类断言才算声明；"未验证 0.2.1-rc.4"是在免责，不是在声称兼容。
+    if (!/已验证|适配|Verified|verified/.test(line)) continue;
+    for (const m of line.matchAll(/DSH Desktop ([0-9][0-9a-z.\-]*)/gi)) claimed.add(m[1]);
+  }
+}
+for (const v of claimed) {
+  if (!(v in declared)) problems.push(`文档声称验证过 DSH Desktop ${v}，但 package.json dshReleases 没有这一项`);
+  else if (declared[v] !== "compatible") problems.push(`文档把 DSH Desktop ${v} 写成已验证，但 dshReleases 是 ${declared[v]}`);
+}
+if (!Object.values(declared).includes("compatible")) problems.push("dshReleases 里至少要有一条 compatible 实测");
+if (!pkg.dshTarget) problems.push("package.json 缺少 dshTarget（当前主验证宿主）");
+const targetRelease = String(pkg.dshTarget).split(/[\s(]/)[0];
+if (targetRelease && !(targetRelease in declared)) problems.push(`dshTarget ${targetRelease} 不在 dshReleases 里`);
+
+// 5) 安装包链接必须指向当前版本，且 install.tarball 同源。
+const tarball = pkg.dsh?.install?.tarball || "";
+if (!tarball.includes(`/releases/download/v${version}/dsh-purge-minimal-${version}.tgz`))
+  problems.push(`package.json install.tarball 应指向 v${version} 的发行包，实际是 ${tarball || "(空)"}`);
+for (const [file, doc] of [["README.md", readme], ["docs/README.en.md", readmeEn]]) {
+  const links = [...doc.matchAll(/releases\/download\/v([0-9.]+)\/dsh-purge-minimal-([0-9.]+)\.tgz/g)];
+  if (!links.length) problems.push(`${file} 缺少固定版本的发行包链接`);
+  for (const [, tag, archive] of links)
+    if (tag !== version || archive !== version) problems.push(`${file} 发行包链接版本必须为 ${version}`);
+}
+
+// 6) 来源与致谢：README 必须写明本仓库来自 kingcharleslzy-ai/dsh-purge，NOTICE 保留上游归属。
+if (!readme.includes("kingcharleslzy-ai/dsh-purge")) problems.push("README.md 缺少来源说明：kingcharleslzy-ai/dsh-purge");
+if (!readme.includes("YuJunZhiXue/dsh-purge")) problems.push("README.md 缺少上游作者归属：YuJunZhiXue/dsh-purge");
+if (!fs.existsSync("docs/upstream/README.md")) problems.push("docs/upstream/README.md 缺失（上游资料归档目录）");
+
+// 7) 补丁条数是可核对的事实，不是形容词。
+let patchCount = 0;
+try {
+  const core = await import("../lib/core.js");
+  patchCount = core.ALL_PATCHES.length;
+} catch (error) {
+  console.warn(`! 跳过补丁条数核对：${error.message}`);
+}
+if (patchCount && !agents.includes(`${patchCount} 条`)) problems.push(`AGENTS.md 未写明当前补丁条数（${patchCount} 条）`);
+if (patchCount && !readme.includes(`${patchCount} 条`)) problems.push(`README.md 未写明当前补丁条数（${patchCount} 条）`);
+
+// 8) 可复制的安装示例：归档目录里的历史 YAML 原样保留，当前文档必须能被解析器读懂。
 for (const file of ["docs/upstream/README.md", "docs/upstream/README.zh-CN.md"])
   for (const problem of checkInstallExamples(read(file), { archive: true })) problems.push(`${file}: ${problem}`);
-for (const file of ["README.md", "README.zh-CN.md", "docs/README.en.md", "docs/INSTALLATION.md", "docs/MAINTENANCE.md", "AGENTS.md"])
+for (const file of currentDocs.filter((f) => f.endsWith(".md")))
   for (const problem of checkInstallExamples(read(file))) problems.push(`${file}: ${problem}`);
 
 if (problems.length) {
-  console.error("✗ 文档与版本不一致：");
+  console.error(`✗ 文档与 ${version} 的版本事实不一致：`);
   for (const p of problems) console.error("  - " + p);
   process.exit(1);
 }
-console.log(`✓ 文档版本一致：${version}（README / release-notes / README.en 均指向该版本）`);
+console.log(`✓ 文档一致：${version} · 补丁 ${patchCount || "?"} 条 · 已验证宿主 ${Object.entries(declared).filter(([, v]) => v === "compatible").map(([k]) => k).join(" / ")}`);

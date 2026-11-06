@@ -70,8 +70,8 @@ var zh = {
   "welcome.title": "\u7528\u6237\u987B\u77E5",
   "welcome.lead": "\u9996\u6B21\u5B89\u88C5\u672C\u63D2\u4EF6\u65F6\u8BF7\u9605\u8BFB\u4EE5\u4E0B\u8BF4\u660E\u3002\u786E\u8BA4\u540E\u672C\u7A97\u4E0D\u518D\u5F39\u51FA\u3002",
   "welcome.warn": "\u672C\u63D2\u4EF6\u514D\u8D39\u5F00\u6E90\u3002\u4EFB\u4F55\u80CC\u7740\u4F5C\u8005\u79C1\u81EA\u552E\u5356\u3001\u4ED8\u8D39\u5012\u5356\u6216\u501F\u672C\u9879\u76EE\u76C8\u5229\u7684\u884C\u4E3A\uFF0C\u4F5C\u8005\u5C06\u4F9D\u6CD5\u8FFD\u7A76\u6CD5\u5F8B\u8D23\u4EFB\u3002",
-  "welcome.body": "dsh-purge \u662F DeepSeek Harness \u7684\u672C\u673A\u7F51\u7EDC\u5B89\u5168\u7EA2\u961F\u8BC4\u6D4B\u4E0E\u6E05\u6D17\u63D2\u4EF6\uFF1A\u5728\u53D7\u63A7\u672C\u673A\u73AF\u5883\u4E2D\u8C03\u6574\u63D0\u793A\u8BCD\u4E0E\u8865\u4E01\u3001\u505A\u6388\u6743\u8303\u56F4\u5185\u7684\u6F14\u7EC3\u53F0\u64CD\u4F5C\u3002\u9879\u76EE\u514D\u8D39\u3001\u975E\u8425\u5229\uFF0C\u6E90\u7801\u4ED3\u5E93\uFF1A",
-  "welcome.repo": "https://github.com/YuJunZhiXue/dsh-purge",
+  "welcome.body": "dsh-purge-minimal \u662F DeepSeek Harness \u7684\u672C\u673A\u63D2\u4EF6\uFF1A\u5728\u53D7\u63A7\u672C\u673A\u73AF\u5883\u4E2D\u8C03\u6574\u63D0\u793A\u8BCD\u4E0E\u5BBF\u4E3B\u8865\u4E01\u3001\u89E3\u9664\u5BA1\u6279\u4E0E\u6C99\u7BB1\u62E6\u622A\uFF0C\u9002\u5408\u5B89\u5168\u8BC4\u6D4B\u4E0E\u81EA\u52A8\u5316\u8C03\u8BD5\u3002\u9879\u76EE\u514D\u8D39\u3001\u975E\u8425\u5229\uFF0C\u6E90\u7801\u4ED3\u5E93\uFF1A",
+  "welcome.repo": "https://github.com/youki258/dsh-purge-minimal",
   "welcome.ban1": "\u7981\u6B62\u5C06\u672C\u9879\u76EE\u7528\u4E8E\u672A\u6388\u6743\u7684\u7F51\u7EDC\u653B\u51FB\u3001\u5165\u4FB5\u3001\u7A83\u53D6\u6570\u636E\u3001\u7834\u574F\u7CFB\u7EDF\u6216\u4EFB\u4F55\u8FDD\u6CD5\u72AF\u7F6A\u3002",
   "welcome.ban2": "\u7981\u6B62\u5546\u4E1A\u552E\u5356\u3001\u4ED8\u8D39\u5012\u5356\u3001\u9ED1\u7070\u4EA7\u725F\u5229\uFF0C\u4EE5\u53CA\u9690\u7792\u4F5C\u8005\u7684\u8425\u5229\u6027\u518D\u5206\u53D1\u3002",
   "welcome.ban3": "\u4F7F\u7528\u8005\u987B\u81EA\u884C\u9075\u5B88\u6240\u5728\u5730\u6CD5\u5F8B\u6CD5\u89C4\u4E0E\u5E73\u53F0\u89C4\u8303\uFF1B\u8FDD\u6CD5\u540E\u679C\u7531\u884C\u4E3A\u4EBA\u81EA\u884C\u627F\u62C5\uFF0C\u4E0E\u4F5C\u8005\u65E0\u5173\u3002",
@@ -381,10 +381,6 @@ var zh = {
   "rewind.once.hint": "\u628A\u8FD9\u4E00\u8F6E\u53D1\u51FA\u53BB\u7684\u90A3\u53E5\u653E\u56DE\u8F93\u5165\u6846\uFF0C\u5E76\u6E05\u6389\u8FD9\u4E00\u8F6E",
   "rewind.round": "\u56DE\u9000\u4E0A\u4E00\u8F6E",
   "rewind.round.hint": "\u628A\u8FD9\u4E00\u8F6E\u53D1\u51FA\u53BB\u7684\u90A3\u53E5\u653E\u56DE\u8F93\u5165\u6846\uFF1B\u5B50\u4EE3\u7406\u4E5F\u53EA\u64A4\u8FD9\u4E00\u8F6E",
-  "hooksDeny.title": "Hooks \u62E6\u622A",
-  "hooksDeny.bypass": "\u653E\u884C hooks \u7684 deny / ask\uFF08\u8865\u4E01 30 / 31 / 64 / 65\uFF09",
-  "hooksDeny.hint": "\u5173\u6389\u540E\uFF0C\u7528\u6237\u81EA\u5DF1\u7684 PreToolUse / UserPromptSubmit / Stop hook \u7684 deny \u4F1A\u6309\u5B98\u65B9\u903B\u8F91\u751F\u6548\u3002\u5B98\u65B9 ask \u5206\u652F\u672C\u8EAB\u662F\u7A7A\u64CD\u4F5C\uFF0C\u5173\u5F00\u5173\u4E0D\u4F1A\u5F39\u51FA\u5BA1\u6279\u6846\u3002\u6539\u5B8C\u540E\u70B9\u300C\u5E94\u7528\u300D\u5E76\u91CD\u542F\u624D\u5199\u8FDB\u5BBF\u4E3B\u3002",
-  "saved.hooksDeny": "\u5DF2\u4FDD\u5B58",
   "continue.title": "\u5931\u8D25\u91CD\u8BD5 / \u7EE7\u7EED",
   "continue.hint": "\u8BF7\u6C42\u5931\u8D25\u4F1A\u81EA\u52A8\u91CD\u8BD5\uFF1B\u5F02\u5E38\u505C\u6B62\u6216\u4E2D\u65AD\u53EF\u70B9\u300C\u7EE7\u7EED\u300D\u6216\u81EA\u52A8\u7EED\u8DD1\u3002\u81EA\u5DF1\u70B9\u505C\u6B62\u4E0D\u4F1A\u81EA\u52A8\u7EE7\u7EED\u3002\u6B21\u6570\u7528\u5B8C\u540E\u9700\u65B0\u5F00\u4E00\u8F6E\u3002",
   "continue.autoRetry": "\u5931\u8D25\u81EA\u52A8\u91CD\u8BD5",
@@ -424,8 +420,8 @@ var en = {
   "welcome.title": "User notice",
   "welcome.lead": "Please read this on first install. After you confirm, it will not appear again.",
   "welcome.warn": "This plugin is free and open source. Anyone who sells, resells, or profits from it behind the author's back may face legal action.",
-  "welcome.body": "dsh-purge is a local DeepSeek Harness plugin for security evaluation and cleaning: adjust prompts and patches on a machine you control, and use the drill console only within authorized scope. It is free and non-profit. Repository:",
-  "welcome.repo": "https://github.com/YuJunZhiXue/dsh-purge",
+  "welcome.body": "dsh-purge-minimal is a local DeepSeek Harness plugin: adjust prompts and host patches on a machine you control to remove approval and sandbox gates for security evaluation and automation. It is free and non-profit. Repository:",
+  "welcome.repo": "https://github.com/youki258/dsh-purge-minimal",
   "welcome.ban1": "Do not use this project for unauthorized attacks, intrusion, data theft, sabotage, or any illegal activity.",
   "welcome.ban2": "Do not commercially sell, resell, or profit from gray-market use, or redistribute for profit without the author.",
   "welcome.ban3": "You must follow local law and platform rules; illegal use is solely your responsibility.",
@@ -735,10 +731,6 @@ var en = {
   "rewind.once.hint": "Put this round's message back in the box and drop only this round",
   "rewind.round": "Undo last round",
   "rewind.round.hint": "Put this round's message back in the box; subagents drop only this round",
-  "hooksDeny.title": "Hook interception",
-  "hooksDeny.bypass": "Bypass hook deny / ask (patches 30 / 31 / 64 / 65)",
-  "hooksDeny.hint": "When off, your own PreToolUse / UserPromptSubmit / Stop hook deny runs as the official host wrote it. The official ask branch is a no-op; turning this off will not show an approval dialog. Click Apply and restart to write the host files.",
-  "saved.hooksDeny": "Saved",
   "continue.title": "Retry / Continue",
   "continue.hint": "Failed requests auto-retry. After an abnormal stop or interrupt, use Continue or auto-resume. A manual stop never auto-continues. Counts reset after a completed turn.",
   "continue.autoRetry": "Auto-retry on failure",
@@ -1230,13 +1222,6 @@ function HelpTip({ title, children, label }) {
 }
 
 // src/components/maintenance.js
-function useText() {
-  const t = useT();
-  return (key, fallback) => {
-    const hit = t(key);
-    return hit && hit !== key ? hit : fallback;
-  };
-}
 function StatusExtras() {
   const [check, setCheck] = useState(null);
   const [boost, setBoost] = useState(null);
@@ -1381,335 +1366,25 @@ function StatusExtras() {
     )
   );
 }
-function assertMaintenanceResult(result) {
-  if (!result || typeof result !== "object")
-    throw new Error("\u7EF4\u62A4\u63A5\u53E3\u8FD4\u56DE\u4E86\u65E0\u6548\u7ED3\u679C");
-  if (result.ok === false) {
-    const errors = Array.isArray(result.errors) ? result.errors.filter(Boolean).join("\uFF1B") : "";
-    const partial = result.applied ? "\uFF1B\u90E8\u5206\u76EE\u6807\u5DF2\u66F4\u65B0\uFF0C\u8BF7\u91CD\u542F\u5BF9\u5E94 DSH \u8FDB\u7A0B\u52A0\u8F7D" : "";
-    throw new Error((result.error || errors || "\u7EF4\u62A4\u64CD\u4F5C\u5931\u8D25") + partial);
-  }
-}
-function maintenanceNotice(op, result) {
-  if (op === "backup") {
-    if (!result.id)
-      throw new Error("\u5907\u4EFD\u64CD\u4F5C\u672A\u8FD4\u56DE\u5907\u4EFD\u7F16\u53F7\uFF0C\u8BF7\u5237\u65B0\u5217\u8868\u6838\u5BF9\u7ED3\u679C");
-    return `\u5907\u4EFD\u5DF2\u521B\u5EFA\uFF1A${result.id}`;
-  }
-  if (op === "rollback")
-    return (result.note || "\u63D2\u4EF6\u56DE\u6EDA\u5DF2\u5B8C\u6210") + "\u3002\u8BF7\u91CD\u542F DSH \u8FDB\u7A0B\uFF1B\u4EC5\u5237\u65B0\u6D4F\u89C8\u5668\u4E0D\u4F1A\u52A0\u8F7D\u65B0\u7248\u540E\u7AEF\u3002";
-  if (op === "update") {
-    if (result.applied === false || result.skipped)
-      return result.note || "\u672A\u5B89\u88C5\u65B0\u7248\u672C\uFF0C\u5F53\u524D\u5B89\u88C5\u672A\u66F4\u65B0\u3002";
-    if (result.applied || result.needRestart || result.restart_required) {
-      const version = result.release?.version || result.localVersion || result.remoteVersion;
-      const warnings = result.cleanup_warnings || [];
-      const cleanup = warnings.length ? `\u6E05\u7406\u672A\u5B8C\u6210\uFF08${warnings.map((w) => `${w.stage}:${w.code}`).join("\uFF0C")}\uFF09\uFF0C\u6B8B\u7559\u5DF2\u4FDD\u7559\u3002` : "";
-      return `${cleanup}\u63D2\u4EF6\u5DF2\u5B89\u88C5${version ? "\uFF1A" + version : ""}\u3002\u8BF7\u91CD\u542F DSH \u8FDB\u7A0B\uFF1B\u4EC5\u5237\u65B0\u6D4F\u89C8\u5668\u4E0D\u4F1A\u52A0\u8F7D\u65B0\u7248\u540E\u7AEF\u3002`;
-    }
-    return result.note || "\u66F4\u65B0\u8BF7\u6C42\u5DF2\u5B8C\u6210\uFF0C\u8BF7\u5237\u65B0\u72B6\u6001\u6838\u5BF9\u5B89\u88C5\u7ED3\u679C\u3002";
-  }
-  return result.note || "\u7EF4\u62A4\u64CD\u4F5C\u5DF2\u5B8C\u6210";
-}
-function UpdatePreferences({
-  value,
-  status = {},
-  onSaved,
-  onOpenChannel
-}) {
-  const tr = useText();
-  const [saving, setSaving] = useState(false), [error, setError] = useState("");
-  const locked = useRef(false);
-  if (!value) return null;
-  async function save(patch) {
-    if (locked.current) return;
-    locked.current = true;
-    setSaving(true);
-    setError("");
-    try {
-      const result = await apiJson("/dsh-purge/community", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ op: "preferences", value: patch })
-      });
-      assertMaintenanceResult(result);
-      onSaved(result.update_preferences);
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      locked.current = false;
-      setSaving(false);
-    }
-  }
-  return h(
-    "section",
-    { "aria-label": "\u81EA\u52A8\u66F4\u65B0\u8BBE\u7F6E", className: "dshpp-card" },
-    h(
-      "div",
-      { className: "dshpp-row" },
-      h(
-        "label",
-        null,
-        h("input", {
-          type: "checkbox",
-          checked: value.autoCheck,
-          disabled: saving,
-          onChange: (e) => save({ autoCheck: e.target.checked }),
-          "aria-label": "\u81EA\u52A8\u68C0\u67E5\u66F4\u65B0"
-        }),
-        "\u81EA\u52A8\u68C0\u67E5\u66F4\u65B0"
-      ),
-      h(HelpTip, {
-        title: "\u81EA\u52A8\u68C0\u67E5\u66F4\u65B0",
-        children: "\u542F\u52A8 30 \u79D2\u540E\u68C0\u67E5\uFF0C\u4E4B\u540E\u6309\u95F4\u9694\u68C0\u67E5\u3002\u5173\u95ED\u4E0D\u4F1A\u6539\u53D8\u5DF2\u4FDD\u5B58\u7684\u81EA\u52A8\u5B89\u88C5\u504F\u597D\uFF0C\u4F46\u4F1A\u6682\u505C\u81EA\u52A8\u5B89\u88C5\u3002"
-      }),
-      h(
-        "select",
-        {
-          "aria-label": "\u66F4\u65B0\u68C0\u67E5\u95F4\u9694",
-          value: value.intervalHours,
-          disabled: saving || !value.autoCheck,
-          onChange: (e) => save({ intervalHours: Number(e.target.value) })
-        },
-        [.../* @__PURE__ */ new Set([1, 6, 12, 24, value.intervalHours])].sort((a, b) => a - b).map((v) => h("option", { key: v, value: v }, `\u6BCF ${v} \u5C0F\u65F6`))
-      ),
-      // 「更新通道」与上面两个控件同行并排，尺寸与 select 一致：
-      // 它配置的正是这条更新检查走的代理/密钥，不该漂到标题最右端。
-      onOpenChannel ? h(
-        Btn,
-        {
-          tiny: true,
-          className: "dshpp-updch-open",
-          disabled: saving,
-          onClick: () => onOpenChannel(),
-          title: tr("updch.title", "\u66F4\u65B0\u901A\u9053\uFF1A\u4EE3\u7406\u4E0E GitHub \u5BC6\u94A5")
-        },
-        tr("updch.open", "\u66F4\u65B0\u901A\u9053")
-      ) : null
-    ),
-    h(
-      "div",
-      { className: "dshpp-row" },
-      h(
-        "label",
-        null,
-        h("input", {
-          type: "checkbox",
-          checked: value.autoInstall,
-          disabled: saving,
-          onChange: (e) => save({ autoInstall: e.target.checked }),
-          "aria-label": "\u81EA\u52A8\u5B89\u88C5\u66F4\u65B0"
-        }),
-        "\u81EA\u52A8\u5B89\u88C5\u66F4\u65B0"
-      ),
-      h(HelpTip, {
-        title: "\u81EA\u52A8\u5B89\u88C5\u66F4\u65B0",
-        children: "\u4EC5\u5728\u81EA\u52A8\u68C0\u67E5\u5F00\u542F\u3001\u53D1\u73B0\u672A\u9501\u5B9A\u7684\u65B0\u6B63\u5F0F\u7248\u65F6\u5B89\u88C5\u3002\u5B89\u88C5\u524D\u5907\u4EFD\u3001\u6821\u9A8C\u53D1\u884C\u5305\uFF1B\u5931\u8D25\u4E0D\u81EA\u52A8\u5207\u6362\u6765\u6E90\u3002\u5B89\u88C5\u540E\u7B49\u5F85\u4F60\u624B\u52A8\u91CD\u542F\uFF0C\u4E0D\u4F1A\u81EA\u52A8\u91CD\u542F DSH\u3002"
-      })
-    ),
-    h(
-      "p",
-      { className: "dshpp-hint" },
-      status.reconciliationError ? "\u5B89\u88C5\u72B6\u6001\u5F85\u6838\u5BF9\uFF0C\u81EA\u52A8\u5B89\u88C5\u5DF2\u6682\u505C\u3002" : status.restartRequired ? `\u78C1\u76D8\u7248\u672C ${status.pendingVersion}\uFF0C\u5F53\u524D\u8FD0\u884C ${status.runningVersion || "\u672A\u77E5"}\uFF1B\u7B49\u5F85\u4F60\u624B\u52A8\u91CD\u542F DSH\u3002` : !value.autoCheck ? "\u81EA\u52A8\u68C0\u67E5\u5DF2\u5173\u95ED\uFF0C\u81EA\u52A8\u5B89\u88C5\u6682\u505C\u3002" : status.checkedAt ? `\u4E0A\u6B21\u68C0\u67E5\uFF1A${new Date(status.checkedAt).toLocaleString()}${status.hasUpdate ? ` \xB7 \u53EF\u7528\u7248\u672C ${status.availableVersion}` : ""}` : "\u542F\u52A8\u540E\u81EA\u52A8\u68C0\u67E5\uFF1B\u5B89\u88C5\u540E\u4EC5\u63D0\u793A\u624B\u52A8\u91CD\u542F\u3002"
-    ),
-    status.reconciliationError ? h("p", { role: "alert" }, status.reconciliationError) : null,
-    [...new Set([status.error, status.installError].filter(Boolean))].map(
-      (message) => h("p", { key: message, role: "alert" }, message)
-    ),
-    error ? h("p", { role: "alert" }, error) : null
-  );
-}
-function UpdateChannelDialog({ value, onClose, onSaved }) {
-  const tr = useText();
-  const [proxy, setProxy] = useState(value?.proxyUrl || "");
-  const [mirror, setMirror] = useState(value?.mirrorUrl || "");
-  const [token, setToken] = useState("");
-  const [clearToken, setClearToken] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const [error, setError] = useState("");
-  const proxyRef = useRef(null);
-  const hasToken = !!value?.hasGithubToken;
-  useEffect(() => {
-    try {
-      proxyRef.current?.focus?.();
-    } catch {
-    }
-  }, []);
-  useEffect(() => {
-    if (typeof document === "undefined" || !document.addEventListener)
-      return void 0;
-    const onKey = (e) => {
-      if (e.key !== "Escape") return;
-      e.stopPropagation();
-      onClose();
-    };
-    document.addEventListener("keydown", onKey, true);
-    return () => document.removeEventListener("keydown", onKey, true);
-  }, [onClose]);
-  async function save() {
-    if (saving) return;
-    const next = {};
-    if (mirror.trim() !== (value?.mirrorUrl || ""))
-      next.mirrorUrl = mirror.trim();
-    if (proxy.trim() !== (value?.proxyUrl || "")) next.proxyUrl = proxy.trim();
-    if (clearToken) next.clearGithubToken = true;
-    else if (token.trim()) next.githubToken = token.trim();
-    setSaving(true);
-    setError("");
-    try {
-      const result = await apiJson("/dsh-purge/community", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ op: "preferences", value: next })
-      });
-      assertMaintenanceResult(result);
-      onSaved(result.update_preferences);
-      onClose();
-    } catch (e) {
-      setError(e.message);
-    } finally {
-      setSaving(false);
-    }
-  }
-  return h(
-    "div",
-    {
-      className: "dshpp-updch-mask",
-      role: "dialog",
-      "aria-modal": "true",
-      "aria-label": tr("updch.title", "\u66F4\u65B0\u901A\u9053\uFF1A\u4EE3\u7406\u4E0E GitHub \u5BC6\u94A5"),
-      onClick: (e) => {
-        if (e.target === e.currentTarget && !saving) onClose();
-      }
-    },
-    h(
-      "div",
-      { className: "dshpp-updch-card" },
-      h(
-        "h4",
-        { className: "dshpp-updch-title" },
-        tr("updch.title", "\u66F4\u65B0\u901A\u9053\uFF1A\u4EE3\u7406\u4E0E GitHub \u5BC6\u94A5")
-      ),
-      h(
-        "p",
-        { className: "dshpp-hint" },
-        tr(
-          "updch.scope",
-          "\u8FD9\u91CC\u7684\u4EE3\u7406\u4E0E\u5BC6\u94A5\u53EA\u4F5C\u7528\u4E8E\u672C\u63D2\u4EF6\u7684\u66F4\u65B0\u68C0\u67E5\u4E0E\u4E0B\u8F7D\u901A\u9053\uFF0C\u4E0D\u5F71\u54CD\u5176\u5B83\u6A21\u578B\u5382\u5546\u7684\u8BF7\u6C42\uFF0C\u4E5F\u4E0D\u5199\u5165\u5BBF\u4E3B\u8FDB\u7A0B\u73AF\u5883\u3002\u7559\u7A7A\u7EE7\u627F\u5DF2\u6709\u66F4\u65B0\u4EE3\u7406\u73AF\u5883\u3002"
-        )
-      ),
-      h(
-        "label",
-        { className: "dshpp-updch-label" },
-        h("span", null, "GitHub \u955C\u50CF\uFF08\u53EF\u9009\uFF09"),
-        h("input", {
-          type: "text",
-          value: mirror,
-          placeholder: "https://\u955C\u50CF\u4E3B\u673A/",
-          onChange: (e) => setMirror(e.target.value),
-          disabled: saving
-        }),
-        h(
-          "small",
-          null,
-          "\u7528\u4E8E\u67E5\u8BE2\u4E0E\u4E0B\u8F7D\uFF1B\u4E0D\u53D1\u9001 GitHub \u5BC6\u94A5\u3002\u5B89\u88C5\u4ECD\u987B\u4ECE GitHub \u83B7\u53D6\u5B98\u65B9\u6821\u9A8C\u503C\uFF0C\u53EF\u4F7F\u7528\u66F4\u65B0\u4EE3\u7406\u3002\u7559\u7A7A\u5173\u95ED\u955C\u50CF\u3002"
-        )
-      ),
-      h(
-        "label",
-        { className: "dshpp-updch-label" },
-        h("span", null, tr("updch.proxy", "\u4EE3\u7406\u5730\u5740")),
-        h("input", {
-          ref: proxyRef,
-          type: "text",
-          className: "dshpp-field dshpp-updch-field",
-          "aria-label": tr("updch.proxy", "\u4EE3\u7406\u5730\u5740"),
-          value: proxy,
-          disabled: saving,
-          placeholder: tr("updch.proxy.ph", "socks5://127.0.0.1:60808"),
-          spellCheck: false,
-          autoComplete: "off",
-          onChange: (e) => setProxy(e.target.value)
-        })
-      ),
-      h(
-        "p",
-        { className: "dshpp-hint" },
-        tr(
-          "updch.proxy.hint",
-          "\u652F\u6301 http:// / https:// / socks5:// \u524D\u7F00\uFF0C\u4F8B\u5982 http://127.0.0.1:7890\u3002\u7559\u7A7A\u7EE7\u627F\u5DF2\u6709\u66F4\u65B0\u4EE3\u7406\u73AF\u5883\u3002"
-        )
-      ),
-      h(
-        "label",
-        { className: "dshpp-updch-label" },
-        h("span", null, tr("updch.token", "GitHub \u5BC6\u94A5")),
-        h("input", {
-          type: "password",
-          className: "dshpp-field dshpp-updch-field",
-          "aria-label": tr("updch.token", "GitHub \u5BC6\u94A5"),
-          value: token,
-          disabled: saving || clearToken,
-          placeholder: tr(
-            "updch.token.ph",
-            "\u53EF\u9009\uFF1A\u63D0\u9AD8 GitHub API \u989D\u5EA6\uFF0C\u7559\u7A7A\u5219\u4E0D\u4FEE\u6539"
-          ),
-          spellCheck: false,
-          autoComplete: "off",
-          onChange: (e) => setToken(e.target.value)
-        })
-      ),
-      h(
-        "p",
-        { className: "dshpp-hint" },
-        hasToken ? tr(
-          "updch.token.set",
-          "\u672C\u673A\u5DF2\u914D\u7F6E\u5BC6\u94A5\u3002\u8F93\u5165\u6846\u59CB\u7EC8\u4E3A\u7A7A\uFF0C\u7559\u7A7A\u4FDD\u5B58\u8868\u793A\u4FDD\u6301\u4E0D\u53D8\u3002"
-        ) : tr("updch.token.unset", "\u672C\u673A\u5C1A\u672A\u914D\u7F6E\u5BC6\u94A5\u3002\u7559\u7A7A\u8868\u793A\u4E0D\u914D\u7F6E\u3002")
-      ),
-      hasToken ? h(
-        "label",
-        { className: "dshpp-updch-check" },
-        h("input", {
-          type: "checkbox",
-          checked: clearToken,
-          disabled: saving,
-          "aria-label": tr("updch.token.clear", "\u6E05\u9664\u5DF2\u4FDD\u5B58\u7684\u5BC6\u94A5"),
-          onChange: (e) => setClearToken(!!e.target.checked)
-        }),
-        h("span", null, tr("updch.token.clear", "\u6E05\u9664\u5DF2\u4FDD\u5B58\u7684\u5BC6\u94A5"))
-      ) : null,
-      error ? h("p", { role: "alert" }, error) : null,
-      h(
-        "div",
-        { className: "dshpp-updch-ops" },
-        h(
-          Btn,
-          { disabled: saving, onClick: onClose },
-          tr("updch.cancel", "\u53D6\u6D88")
-        ),
-        h(
-          Btn,
-          { kind: "primary", disabled: saving, onClick: save },
-          saving ? tr("updch.saving", "\u4FDD\u5B58\u4E2D\u2026") : tr("updch.save", "\u4FDD\u5B58")
-        )
-      )
-    )
-  );
-}
 function CommunityMaintenance() {
-  const [value, setValue] = useState(null), [notice, setNotice] = useState(""), [busy, setBusy] = useState(false), [selected, setSelected] = useState(""), [releases, setReleases] = useState(null), [release, setRelease] = useState("");
-  const [listState, setListState] = useState("loading"), [listError, setListError] = useState("");
-  const [channelOpen, setChannelOpen] = useState(false);
-  const tr = useText();
-  const mounted = useRef(false), generation = useRef(0), running = useRef(false);
+  const [value, setValue] = useState(null);
+  const [selected, setSelected] = useState("");
+  const [listState, setListState] = useState("loading");
+  const [listError, setListError] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
+  const running = useRef(false);
+  const mounted = useRef(false);
+  const generation = useRef(0);
   const load = useCallback(async () => {
     const request = ++generation.current;
     setListState("loading");
     setListError("");
     try {
       const result = await apiJson("/dsh-purge/community");
-      assertMaintenanceResult(result);
+      if (!result || typeof result !== "object")
+        throw new Error("\u7EF4\u62A4\u63A5\u53E3\u8FD4\u56DE\u4E86\u65E0\u6548\u7ED3\u679C");
+      if (result.ok === false) throw new Error(result.error || "\u7EF4\u62A4\u63A5\u53E3\u8FD4\u56DE\u5931\u8D25");
       if (!Array.isArray(result.backups)) throw new Error("\u5907\u4EFD\u5217\u8868\u54CD\u5E94\u65E0\u6548");
       if (!mounted.current || request !== generation.current) return;
       setValue(result);
@@ -1734,11 +1409,7 @@ function CommunityMaintenance() {
   async function run(op) {
     if (running.current) return;
     if (op === "rollback" && !window.confirm(
-      "\u53EA\u56DE\u6EDA Purge \u63D2\u4EF6\u53CA\u5176\u5165\u53E3\uFF0C\u4FDD\u7559\u5F53\u524D\u63D0\u793A\u8BCD\u548C\u8BBE\u7F6E\uFF1B\u5B8C\u6210\u540E\u9700\u91CD\u542F DSH \u8FDB\u7A0B\uFF1B\u4EC5\u5237\u65B0\u6D4F\u89C8\u5668\u4E0D\u4F1A\u52A0\u8F7D\u65B0\u7248\u540E\u7AEF\u3002\u7EE7\u7EED\uFF1F"
-    ))
-      return;
-    if (op === "update" && !window.confirm(
-      "\u5C06\u5148\u5907\u4EFD\uFF0C\u518D\u5B89\u88C5\u6240\u9009\u793E\u533A\u6B63\u5F0F\u7248\uFF1B\u4E0D\u4F1A\u91CD\u65B0\u5E94\u7528\u5BBF\u4E3B\u8865\u4E01\u3002\u5B89\u88C5\u540E\u8BF7\u91CD\u542F DSH \u8FDB\u7A0B\uFF1B\u4EC5\u5237\u65B0\u6D4F\u89C8\u5668\u4E0D\u4F1A\u52A0\u8F7D\u65B0\u7248\u540E\u7AEF\u3002\u7EE7\u7EED\uFF1F"
+      "\u53EA\u56DE\u6EDA Purge \u63D2\u4EF6\u53CA\u5176\u5165\u53E3\uFF0C\u4FDD\u7559\u5F53\u524D\u63D0\u793A\u8BCD\u548C\u8BBE\u7F6E\uFF1B\u5B8C\u6210\u540E\u9700\u91CD\u542F DSH \u8FDB\u7A0B\u3002\u7EE7\u7EED\uFF1F"
     ))
       return;
     running.current = true;
@@ -1748,76 +1419,60 @@ function CommunityMaintenance() {
       const r = await apiJson("/dsh-purge/community", {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify({ op, id: selected, ref: release })
+        body: JSON.stringify({ op, id: selected })
       });
-      assertMaintenanceResult(r);
-      if (!mounted.current) return;
-      if (op === "check") {
-        if (!Array.isArray(r.versions)) throw new Error("\u53D1\u884C\u5217\u8868\u54CD\u5E94\u65E0\u6548");
-        setReleases(r.versions.filter((v) => v.asset));
-        setRelease(r.versions.find((v) => v.asset)?.ref || "");
-        setNotice(
-          r.degraded ? `${r.degraded}\uFF1B${r.stale ? "\u5F53\u524D\u663E\u793A\u7F13\u5B58\u5217\u8868\uFF0C\u8BF7\u7A0D\u540E\u91CD\u8BD5" : "\u5DF2\u663E\u793A\u5907\u7528\u5217\u8868"}` : r.error ? `\u68C0\u67E5\u66F4\u65B0\u5931\u8D25\uFF1A${r.error}` : r.hasUpdate ? `\u53D1\u73B0\u65B0\u7248\u672C ${r.remoteVersion}` : "\u5F53\u524D\u5DF2\u662F\u6700\u65B0\u6B63\u5F0F\u7248"
-        );
-      } else {
-        setNotice(maintenanceNotice(op, r));
-      }
+      if (!r || typeof r !== "object")
+        throw new Error("\u7EF4\u62A4\u63A5\u53E3\u8FD4\u56DE\u4E86\u65E0\u6548\u7ED3\u679C");
+      if (r.ok === false) throw new Error(r.error || "\u7EF4\u62A4\u64CD\u4F5C\u5931\u8D25");
+      setNotice(
+        op === "backup" ? "\u5FEB\u7167\u5DF2\u521B\u5EFA\u3002" : "\u5DF2\u56DE\u6EDA\uFF1B\u8BF7\u91CD\u542F DSH \u8FDB\u7A0B\u540E\u786E\u8BA4\u7248\u672C\u3002"
+      );
     } catch (e) {
-      if (mounted.current)
-        setNotice(
-          e.message === "timeout" ? "\u7EF4\u62A4\u8BF7\u6C42\u8D85\u65F6\uFF0C\u64CD\u4F5C\u53EF\u80FD\u4ECD\u5728\u6267\u884C\uFF1B\u8BF7\u5148\u5237\u65B0\u72B6\u6001\uFF0C\u52FF\u91CD\u590D\u63D0\u4EA4\u3002" : e.message
-        );
+      setNotice(
+        e.message === "timeout" ? "\u7EF4\u62A4\u8BF7\u6C42\u8D85\u65F6\uFF0C\u64CD\u4F5C\u53EF\u80FD\u4ECD\u5728\u6267\u884C\uFF1B\u8BF7\u5148\u5237\u65B0\u72B6\u6001\uFF0C\u52FF\u91CD\u590D\u63D0\u4EA4\u3002" : e.message
+      );
     } finally {
-      if (op !== "check" && mounted.current) await load();
+      if (mounted.current) await load();
       running.current = false;
       if (mounted.current) setBusy(false);
+    }
+  }
+  async function showAudit() {
+    try {
+      const r = await apiJson("/dsh-purge/audit?limit=10");
+      const lines = (r.entries || []).map(
+        (x) => `${new Date(x.at).toLocaleString()}  ${x.event}  ${JSON.stringify(
+          Object.fromEntries(
+            Object.entries(x).filter(
+              ([k]) => !["at", "event", "pid"].includes(k)
+            )
+          )
+        )}`
+      );
+      setNotice(lines.length ? lines.join("\n") : "\u8FD8\u6CA1\u6709\u52A8\u4F5C\u8BB0\u5F55");
+    } catch (e) {
+      setNotice(e.message);
     }
   }
   return h(
     "section",
     { className: "dshpp-panel", "aria-label": "\u7EF4\u62A4" },
-    h("h3", null, "\u7EF4\u62A4\uFF1A\u66F4\u65B0\u4E0E\u672C\u673A\u5907\u4EFD"),
-    // 通道现状摘要：代理是否直连、密钥是否已配置（密钥明文永不回显）。
-    // 入口按钮不在这里，它跟「自动检查更新」放在同一行。
-    value ? h(
+    h("h3", null, "\u7EF4\u62A4\uFF1A\u672C\u673A\u5907\u4EFD"),
+    h(
       "p",
       { className: "dshpp-hint" },
-      (value.update_preferences?.proxyUrl ? tr("updch.state.proxy", "\u66F4\u65B0\u901A\u9053\u4EE3\u7406\uFF1A") + value.update_preferences.proxyUrl : tr("updch.state.direct", "\u66F4\u65B0\u901A\u9053\uFF1A\u7EE7\u627F\u73AF\u5883\u6216\u7CFB\u7EDF\u4EE3\u7406")) + " \xB7 " + (value.update_preferences?.hasGithubToken ? tr("updch.state.token.on", "GitHub \u5BC6\u94A5\u5DF2\u914D\u7F6E") : tr("updch.state.token.off", "\u672A\u914D\u7F6E GitHub \u5BC6\u94A5"))
-    ) : null,
-    h(UpdatePreferences, {
-      value: value?.update_preferences,
-      status: value?.update_status,
-      onSaved: (next) => setValue((current) => ({ ...current, update_preferences: next })),
-      onOpenChannel: () => setChannelOpen(true)
-    }),
+      "\u63D2\u4EF6\u66F4\u65B0\u4E0D\u7531\u672C\u9762\u677F\u53D1\u8D77\uFF1A\u8BF7\u901A\u8FC7 DSH \u63D2\u4EF6\u5E02\u573A\u6216\u624B\u52A8\u5B89\u88C5\u5347\u7EA7\u3002\u8FD9\u91CC\u53EA\u505A\u672C\u673A\u5FEB\u7167\u4E0E\u56DE\u6EDA\uFF0C\u4E0D\u8054\u7F51\u68C0\u67E5\u7248\u672C\u3002"
+    ),
     h(
       "div",
       { className: "dshpp-row" },
-      h(Btn, { disabled: busy, onClick: () => run("check") }, "\u68C0\u67E5\u66F4\u65B0"),
       h(
         Btn,
-        {
-          disabled: busy,
-          onClick: async () => {
-            try {
-              const r = await apiJson("/dsh-purge/audit?limit=10");
-              const lines = (r.entries || []).map(
-                (x) => `${new Date(x.at).toLocaleString()}  ${x.event}  ${JSON.stringify(
-                  Object.fromEntries(
-                    Object.entries(x).filter(
-                      ([k]) => !["at", "event", "pid"].includes(k)
-                    )
-                  )
-                )}`
-              );
-              setNotice(lines.length ? lines.join("\n") : "\u8FD8\u6CA1\u6709\u52A8\u4F5C\u8BB0\u5F55");
-            } catch (e) {
-              setNotice(e.message);
-            }
-          }
-        },
-        "\u6700\u8FD1\u52A8\u4F5C"
+        { disabled: busy || listState === "loading", onClick: load },
+        "\u5237\u65B0\u5907\u4EFD\u5217\u8868"
       ),
+      h(Btn, { disabled: busy, onClick: () => run("backup") }, "\u7ACB\u5373\u5907\u4EFD"),
+      h(Btn, { disabled: busy, onClick: showAudit }, "\u6700\u8FD1\u52A8\u4F5C"),
       h(
         "a",
         {
@@ -1828,40 +1483,12 @@ function CommunityMaintenance() {
         "\u53D1\u884C\u8BB0\u5F55"
       )
     ),
-    releases?.length ? h(
-      "div",
-      { className: "dshpp-row" },
-      h(
-        "select",
-        {
-          "aria-label": "\u9009\u62E9\u793E\u533A\u53D1\u884C\u7248\u672C",
-          value: release,
-          onChange: (e) => setRelease(e.target.value),
-          disabled: busy
-        },
-        releases.map(
-          (r) => h("option", { key: r.ref, value: r.ref }, r.label)
-        )
-      ),
-      h(
-        Btn,
-        { disabled: busy || !release, onClick: () => run("update") },
-        "\u5B89\u88C5\u6240\u9009\u7248\u672C"
-      )
-    ) : null,
-    h("h3", { style: { marginTop: 20 } }, "\u672C\u673A\u5907\u4EFD"),
-    h(
-      Btn,
-      { disabled: busy || listState === "loading", onClick: load },
-      "\u5237\u65B0\u5907\u4EFD\u5217\u8868"
-    ),
     listState === "loading" ? h("p", { role: "status" }, "\u6B63\u5728\u8BFB\u53D6\u5907\u4EFD\u2026") : null,
     listState === "error" ? h("p", { role: "alert" }, `\u8BFB\u53D6\u5907\u4EFD\u5931\u8D25\uFF1A${listError}`) : null,
-    listState === "ready" && !value.backups.length ? h("p", { role: "status" }, "\u6682\u65E0\u5907\u4EFD") : null,
+    listState === "ready" && !value?.backups?.length ? h("p", { role: "status" }, "\u6682\u65E0\u5907\u4EFD") : null,
     h(
       "div",
       { className: "dshpp-row" },
-      h(Btn, { disabled: busy, onClick: () => run("backup") }, "\u7ACB\u5373\u5907\u4EFD"),
       h(
         "select",
         {
@@ -1886,25 +1513,19 @@ function CommunityMaintenance() {
           onClick: () => run("rollback")
         },
         "\u56DE\u6EDA\u63D2\u4EF6"
+      ),
+      h(
+        HelpTip,
+        { title: "\u56DE\u6EDA\u8303\u56F4" },
+        "\u53EA\u56DE\u6EDA Purge \u63D2\u4EF6\u76EE\u5F55\u4E0E\u5165\u53E3\uFF0C\u4FDD\u7559\u63D0\u793A\u8BCD\u3001\u89C4\u5219\u4E0E\u5176\u4ED6\u63D2\u4EF6\u8BBE\u7F6E\u3002"
       )
     ),
     h(
       "p",
       { className: "dshpp-hint" },
-      "\u5907\u4EFD\u53EA\u4FDD\u5B58\u5728\u672C\u673A\u3002\u56DE\u6EDA\u4FDD\u7559\u5F53\u524D\u63D0\u793A\u8BCD\u3001\u89C4\u5219\u548C\u5176\u4ED6\u63D2\u4EF6\u8BBE\u7F6E\uFF1B\u5B89\u88C5\u6216\u56DE\u6EDA\u540E\u9700\u8981\u91CD\u542F DSH \u8FDB\u7A0B\uFF1B\u4EC5\u5237\u65B0\u6D4F\u89C8\u5668\u4E0D\u4F1A\u52A0\u8F7D\u65B0\u7248\u540E\u7AEF\u3002"
+      "\u5907\u4EFD\u53EA\u4FDD\u5B58\u5728\u672C\u673A\u3002\u56DE\u6EDA\u540E\u9700\u8981\u91CD\u542F DSH \u8FDB\u7A0B\uFF1B\u4EC5\u5237\u65B0\u6D4F\u89C8\u5668\u4E0D\u4F1A\u52A0\u8F7D\u65B0\u7248\u540E\u7AEF\u3002"
     ),
-    notice ? h("p", { role: "status" }, notice) : null,
-    // 对话框挂在面板内部，靠固定定位脱离容器，不依赖 portal。
-    channelOpen && value ? h(UpdateChannelDialog, {
-      value: value.update_preferences,
-      onClose: () => setChannelOpen(false),
-      onSaved: (next) => {
-        setValue((current) => ({ ...current, update_preferences: next }));
-        setNotice(
-          tr("updch.saved", "\u66F4\u65B0\u901A\u9053\u5DF2\u4FDD\u5B58\uFF0C\u4E0B\u4E00\u6B21\u68C0\u67E5\u66F4\u65B0\u5373\u751F\u6548\u3002")
-        );
-      }
-    }) : null
+    notice ? h("p", { role: "status" }, notice) : null
   );
 }
 
@@ -1935,77 +1556,6 @@ function incompleteApplyDetail(result, t) {
       ...runtimeRepairDetails(result.cli_repair)
     );
   return parts.length ? parts.join("\uFF1B") : t("restart.incomplete.unknown");
-}
-
-// src/components/advanced.js
-function HooksDenySection({ onSaved }) {
-  const t = useT();
-  const [cfg, setCfg] = useState(null);
-  const [notice, setNotice] = useState({ kind: "idle", text: "" });
-  const [busy, setBusy] = useState(false);
-  useEffect(() => {
-    apiJson("/dsh-purge/hooks-deny").then((d) => {
-      if (d && d.ok) setCfg({ hooksDenyBypass: d.hooksDenyBypass !== false });
-    }).catch(() => {
-    });
-  }, []);
-  const save = (hooksDenyBypass) => {
-    if (!cfg || busy) return;
-    setCfg({ hooksDenyBypass });
-    setBusy(true);
-    apiJson("/dsh-purge/hooks-deny", {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify({ hooksDenyBypass })
-    }).then((d) => {
-      if (d && d.ok) {
-        setCfg({ hooksDenyBypass: d.hooksDenyBypass === true });
-        setNotice({ kind: "ok", text: t("saved.hooksDeny") });
-        if (typeof onSaved === "function") onSaved();
-      } else {
-        setNotice({
-          kind: "error",
-          text: t("err.save", { error: d && d.error || "" })
-        });
-      }
-    }).catch(
-      (e) => setNotice({ kind: "error", text: t("err.save", { error: e.message }) })
-    ).finally(() => setBusy(false));
-  };
-  if (!cfg) return null;
-  return h(
-    "div",
-    { className: "dshpp-cr", style: { marginTop: 12 } },
-    h(
-      "div",
-      { className: "dshpp-sub" },
-      h("h4", null, t("hooksDeny.title")),
-      noticeNode(notice)
-    ),
-    h(
-      "p",
-      {
-        className: "dshpp-hint",
-        style: { margin: "0 0 4px", color: "var(--dshpp-mute)", fontSize: 12 }
-      },
-      t("hooksDeny.hint")
-    ),
-    h(
-      "div",
-      { className: "dshpp-cr-row" },
-      h(
-        "label",
-        null,
-        h("input", {
-          type: "checkbox",
-          checked: cfg.hooksDenyBypass === true,
-          disabled: busy,
-          onChange: (e) => save(e.target.checked)
-        }),
-        t("hooksDeny.bypass")
-      )
-    )
-  );
 }
 
 // src/components/restart.js
@@ -3022,12 +2572,6 @@ function PurgifySection({ page = "status", onStatus } = {}) {
         ),
         h(PatchGroups, { state: s })
       ),
-      h(
-        "details",
-        null,
-        h("summary", null, "\u9AD8\u7EA7\u9009\u9879"),
-        h(HooksDenySection, { onSaved: loadAll })
-      ),
       askUninstall ? h(
         "div",
         {
@@ -3230,7 +2774,7 @@ function PurgifySection({ page = "status", onStatus } = {}) {
 }
 
 // src/state/session-context.js
-var import_react8 = require("react");
+var import_react7 = require("react");
 var host = null;
 var listeners = /* @__PURE__ */ new Set();
 function notify() {
@@ -3289,7 +2833,7 @@ function clientCurrentCwd() {
   }
 }
 function useCurrentCwd() {
-  return (0, import_react8.useSyncExternalStore)(subscribe, clientCurrentCwd, () => "");
+  return (0, import_react7.useSyncExternalStore)(subscribe, clientCurrentCwd, () => "");
 }
 
 // src/components/rules.js
@@ -5199,7 +4743,7 @@ function installRewindUi(ctx) {
 var rd2 = __toESM(require("react-dom"), 1);
 
 // src/styles/welcome.css
-var welcome_default = "/* The first-run dialog is rendered before any settings page. It must own its\n   styles and cannot depend on the optional drill vendor stylesheet. */\n.dshpp-welcome-mask {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483000;\n  display: grid;\n  place-items: center;\n  padding: 24px;\n  overflow: auto;\n  box-sizing: border-box;\n  background: rgb(0 0 0 / 35%);\n  color: var(--dsw-alias-label-primary, #171717);\n  font-family: inherit;\n  font-size: 14px;\n  line-height: 1.6;\n  text-align: left;\n}\n.dshpp-welcome-card {\n  width: min(600px, 100%);\n  max-height: calc(100dvh - 48px);\n  overflow: auto;\n  box-sizing: border-box;\n  padding: 24px;\n  border: 1px solid var(--dsw-alias-border-l1, #ddd);\n  border-radius: 16px;\n  background: var(--dsw-alias-bg-layer-1, #fff);\n  box-shadow: 0 16px 64px rgb(0 0 0 / 18%);\n}\n.dshpp-welcome-card h2 {\n  margin: 0 0 6px;\n  font: inherit;\n  font-size: 20px;\n  font-weight: 600;\n}\n.dshpp-welcome-card h3 {\n  margin: 16px 0 6px;\n  font: inherit;\n  font-weight: 600;\n}\n.dshpp-welcome-lead {\n  color: var(--dsw-alias-label-secondary, #666);\n}\n.dshpp-welcome-warn {\n  margin: 16px 0;\n  padding: 12px;\n  border-radius: 8px;\n  background: var(--dsw-alias-bg-layer-2, #f5f5f5);\n}\n.dshpp-welcome-legal p {\n  margin: 10px 0;\n}\n.dshpp-welcome-legal a {\n  color: var(--dsw-alias-label-brand, #436ee8);\n  overflow-wrap: anywhere;\n}\n.dshpp-welcome-check {\n  display: flex;\n  align-items: flex-start;\n  gap: 10px;\n  margin-top: 20px;\n  cursor: pointer;\n}\n.dshpp-welcome-check input {\n  flex: 0 0 auto;\n  width: 16px;\n  height: 16px;\n  margin: 4px 0 0;\n  accent-color: var(--dsw-alias-label-brand, #436ee8);\n}\n.dshpp-welcome-ops {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 20px;\n}\n.dshpp-welcome-ops button {\n  min-height: 36px;\n  padding: 8px 16px;\n  border: 0;\n  border-radius: 8px;\n  background: var(--dsw-alias-label-primary, #171717);\n  color: var(--dsw-alias-bg-base, #fff);\n  font: inherit;\n  cursor: pointer;\n}\n.dshpp-welcome-ops button:disabled {\n  opacity: 0.4;\n  cursor: default;\n}\n.dshpp-welcome-ops button:focus-visible,\n.dshpp-welcome-check input:focus-visible {\n  outline: 2px solid var(--dsw-alias-label-brand, #436ee8);\n  outline-offset: 3px;\n}\n@media (max-height: 600px) {\n  .dshpp-welcome-mask {\n    padding: 12px;\n  }\n  .dshpp-welcome-card {\n    max-height: calc(100dvh - 24px);\n    padding: 18px;\n  }\n}\n";
+var welcome_default = "/* The first-run dialog is rendered before any settings page. It must own its\n   styles and cannot depend on any optional vendor stylesheet. */\n.dshpp-welcome-mask {\n  position: fixed;\n  inset: 0;\n  z-index: 2147483000;\n  display: grid;\n  place-items: center;\n  padding: 24px;\n  overflow: auto;\n  box-sizing: border-box;\n  background: rgb(0 0 0 / 35%);\n  color: var(--dsw-alias-label-primary, #171717);\n  font-family: inherit;\n  font-size: 14px;\n  line-height: 1.6;\n  text-align: left;\n}\n.dshpp-welcome-card {\n  width: min(600px, 100%);\n  max-height: calc(100dvh - 48px);\n  overflow: auto;\n  box-sizing: border-box;\n  padding: 24px;\n  border: 1px solid var(--dsw-alias-border-l1, #ddd);\n  border-radius: 16px;\n  background: var(--dsw-alias-bg-layer-1, #fff);\n  box-shadow: 0 16px 64px rgb(0 0 0 / 18%);\n}\n.dshpp-welcome-card h2 {\n  margin: 0 0 6px;\n  font: inherit;\n  font-size: 20px;\n  font-weight: 600;\n}\n.dshpp-welcome-card h3 {\n  margin: 16px 0 6px;\n  font: inherit;\n  font-weight: 600;\n}\n.dshpp-welcome-lead {\n  color: var(--dsw-alias-label-secondary, #666);\n}\n.dshpp-welcome-warn {\n  margin: 16px 0;\n  padding: 12px;\n  border-radius: 8px;\n  background: var(--dsw-alias-bg-layer-2, #f5f5f5);\n}\n.dshpp-welcome-legal p {\n  margin: 10px 0;\n}\n.dshpp-welcome-legal a {\n  color: var(--dsw-alias-label-brand, #436ee8);\n  overflow-wrap: anywhere;\n}\n.dshpp-welcome-check {\n  display: flex;\n  align-items: flex-start;\n  gap: 10px;\n  margin-top: 20px;\n  cursor: pointer;\n}\n.dshpp-welcome-check input {\n  flex: 0 0 auto;\n  width: 16px;\n  height: 16px;\n  margin: 4px 0 0;\n  accent-color: var(--dsw-alias-label-brand, #436ee8);\n}\n.dshpp-welcome-ops {\n  display: flex;\n  justify-content: flex-end;\n  margin-top: 20px;\n}\n.dshpp-welcome-ops button {\n  min-height: 36px;\n  padding: 8px 16px;\n  border: 0;\n  border-radius: 8px;\n  background: var(--dsw-alias-label-primary, #171717);\n  color: var(--dsw-alias-bg-base, #fff);\n  font: inherit;\n  cursor: pointer;\n}\n.dshpp-welcome-ops button:disabled {\n  opacity: 0.4;\n  cursor: default;\n}\n.dshpp-welcome-ops button:focus-visible,\n.dshpp-welcome-check input:focus-visible {\n  outline: 2px solid var(--dsw-alias-label-brand, #436ee8);\n  outline-offset: 3px;\n}\n@media (max-height: 600px) {\n  .dshpp-welcome-mask {\n    padding: 12px;\n  }\n  .dshpp-welcome-card {\n    max-height: calc(100dvh - 24px);\n    padding: 18px;\n  }\n}\n";
 
 // src/components/welcome.js
 var WELCOME_KEY = "dsh-purge-user-notice-v1";

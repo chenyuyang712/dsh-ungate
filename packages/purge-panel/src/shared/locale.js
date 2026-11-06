@@ -19,8 +19,8 @@ export const zh = {
   "welcome.warn":
     "本插件免费开源。任何背着作者私自售卖、付费倒卖或借本项目盈利的行为，作者将依法追究法律责任。",
   "welcome.body":
-    "dsh-purge 是 DeepSeek Harness 的本机网络安全红队评测与清洗插件：在受控本机环境中调整提示词与补丁、做授权范围内的演练台操作。项目免费、非营利，源码仓库：",
-  "welcome.repo": "https://github.com/YuJunZhiXue/dsh-purge",
+    "dsh-purge-minimal 是 DeepSeek Harness 的本机插件：在受控本机环境中调整提示词与宿主补丁、解除审批与沙箱拦截，适合安全评测与自动化调试。项目免费、非营利，源码仓库：",
+  "welcome.repo": "https://github.com/youki258/dsh-purge-minimal",
   "welcome.ban1":
     "禁止将本项目用于未授权的网络攻击、入侵、窃取数据、破坏系统或任何违法犯罪。",
   "welcome.ban2":
@@ -356,11 +356,6 @@ export const zh = {
   "rewind.once.hint": "把这一轮发出去的那句放回输入框，并清掉这一轮",
   "rewind.round": "回退上一轮",
   "rewind.round.hint": "把这一轮发出去的那句放回输入框；子代理也只撤这一轮",
-  "hooksDeny.title": "Hooks 拦截",
-  "hooksDeny.bypass": "放行 hooks 的 deny / ask（补丁 30 / 31 / 64 / 65）",
-  "hooksDeny.hint":
-    "关掉后，用户自己的 PreToolUse / UserPromptSubmit / Stop hook 的 deny 会按官方逻辑生效。官方 ask 分支本身是空操作，关开关不会弹出审批框。改完后点「应用」并重启才写进宿主。",
-  "saved.hooksDeny": "已保存",
   "continue.title": "失败重试 / 继续",
   "continue.hint":
     "请求失败会自动重试；异常停止或中断可点「继续」或自动续跑。自己点停止不会自动继续。次数用完后需新开一轮。",
@@ -407,8 +402,8 @@ export const en = {
   "welcome.warn":
     "This plugin is free and open source. Anyone who sells, resells, or profits from it behind the author's back may face legal action.",
   "welcome.body":
-    "dsh-purge is a local DeepSeek Harness plugin for security evaluation and cleaning: adjust prompts and patches on a machine you control, and use the drill console only within authorized scope. It is free and non-profit. Repository:",
-  "welcome.repo": "https://github.com/YuJunZhiXue/dsh-purge",
+    "dsh-purge-minimal is a local DeepSeek Harness plugin: adjust prompts and host patches on a machine you control to remove approval and sandbox gates for security evaluation and automation. It is free and non-profit. Repository:",
+  "welcome.repo": "https://github.com/youki258/dsh-purge-minimal",
   "welcome.ban1":
     "Do not use this project for unauthorized attacks, intrusion, data theft, sabotage, or any illegal activity.",
   "welcome.ban2":
@@ -765,11 +760,6 @@ export const en = {
   "rewind.round": "Undo last round",
   "rewind.round.hint":
     "Put this round's message back in the box; subagents drop only this round",
-  "hooksDeny.title": "Hook interception",
-  "hooksDeny.bypass": "Bypass hook deny / ask (patches 30 / 31 / 64 / 65)",
-  "hooksDeny.hint":
-    "When off, your own PreToolUse / UserPromptSubmit / Stop hook deny runs as the official host wrote it. The official ask branch is a no-op; turning this off will not show an approval dialog. Click Apply and restart to write the host files.",
-  "saved.hooksDeny": "Saved",
   "continue.title": "Retry / Continue",
   "continue.hint":
     "Failed requests auto-retry. After an abnormal stop or interrupt, use Continue or auto-resume. A manual stop never auto-continues. Counts reset after a completed turn.",

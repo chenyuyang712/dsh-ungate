@@ -1,275 +1,142 @@
-<div align="center">
+# dsh-purge-minimal
 
-# Purge Minimal
+**当前版本 0.1.2** · 已验证 DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；0.2.2-rc.1 仅 web / npm CLI 面已验证
 
-**让 AI 更专注地辅助你的学习与动手实验。**
+把 DSH 里拦你的东西拆掉：审批弹窗、沙箱围栏、写意图拦截、模型自己的推脱倾向。装完点一次「应用」，退出重开，selfcheck 全绿就能开工。
 
-给 DeepSeek Harness 的自托管精简控件（俗称「破甲」插件）· 27 条宿主补丁 · 20 层状态自检 · 左侧栏整页设置
-
-[![Release](https://img.shields.io/github/v/release/youki258/dsh-purge-minimal?label=release)](https://github.com/youki258/dsh-purge-minimal/releases)
-
-当前版本 **0.1.2** · 适配 **DSH Desktop 0.2.2-rc.1**（0.2.1-rc.1 / rc.2 / rc.3 / rc.5 同样通过） · [English](docs/README.en.md)
-
-0.1.2 是精简发行线起点：以 1.6.82 为基线，把宿主源码改写压到 27 条（其余能力改走 cordis 配置覆盖与运行时 hook），并移除内置红队演练台。[发行说明](release-notes.md)。
-
-**原项目与作者**：本仓库是独立维护的精简发行版（minimal），代码源自 [小杨 / YuJunZhiXue 的 dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) 及其后续社区分支。原仓库已恢复；保留原作者署名、版权与 MIT 许可证。本发行版不是原作者官方发行。
-
-</div>
+- 补丁只写宿主**源码副本**（应用前自动备份），不改你的提示词、规则、其他插件配置。
+- 面板与 CLI 各做同一件事：`purge` 命令是 CLI 入口，左侧栏「Purge」是图形入口。
+- 不做公网门禁、不做内容审核、不替你判断目标归属——范围由操作者自己声明。
 
 ---
 
-## 搭配：本机出图（Qwen Studio）
+## 它改哪五层
 
-破甲之后最直接的玩法，是把「生图」也搬到本机——不用网页、不用会员、不把提示词发到别人服务器。
+| 层 | 由谁提供 | 生效方式 | 怎么查 |
+| --- | --- | --- | --- |
+| 宿主补丁（27 条） | 本插件写进 DSH 源码 | 点「应用」→ **退出重开** | `purge selfcheck` |
+| 运行时提示词注入 | 插件运行时（每步重贴） | 立刻生效 | 面板「状态」/ `purge probe new` |
+| 破甲强化段 | 插件运行时（尾部 section） | 立刻生效 | `purge boost` |
+| 权限配置 | profile 的 `cordis.patch.yml` | 重载后生效 | `purge selfcheck` 的权限层 |
+| agent 预设 `unrestricted` | 本包 `presets/unrestricted` | 新会话下拉选择 | 面板 / 下拉框 |
 
-配套插件 **Qwen Studio**（`dsh-qwen-studio`）把 Qwen Image 2.1 接进 DSH：
-
-- **Apple Silicon Mac**：MLX / MFLUX 本机推理，模型用时加载、空闲释放；
-- **Windows / Linux + NVIDIA**：连你自己的 GPU 网关（ComfyUI 或 vLLM-Omni 协议），也支持 SSH 按需拉起；
-- 支持参考图编辑（按图改画风、换材质）、LoRA、ControlNet、蒙版、整套预设、图库与批量任务；
-- 装好之后，会话里直接说「画一张…」或「把这张改成水彩」，Agent 调用 `qwen_generate_image` 并把图返回到对话里。
-
-**组合效果**：破甲让 Agent 不再反复确认「要不要画」，出图插件让它真的画出来，全程在你自己的机器上完成。
-
-**仓库**：[kingcharleslzy-ai/dsh-qwen-studio](https://github.com/kingcharleslzy-ai/dsh-qwen-studio) · **下载**：[最新 Releases](https://github.com/kingcharleslzy-ai/dsh-qwen-studio/releases/latest) · **安装与硬件自查**：[docs/SETUP.md](https://github.com/kingcharleslzy-ai/dsh-qwen-studio/blob/main/docs/SETUP.md)（先看「这台机器能不能跑」再动手）
-
-## 它是什么
-
-Purge Minimal 是一个跑在你自己机器上的 Harness 附加组件。它把日常使用里最消耗注意力的几件事收敛到一处：
-
-- **看清楚状态**：安装、补丁、注入到底有没有就绪，一条命令或一屏面板给结论；
-- **少一些往返**：把反复出现的确认与打断，收敛成一次设置；
-- **随时能回去**：应用、回滚、开关都留记录，操作前自动快照；
-- **方便做实验**：提示词、规则、预设集中管理，改坏了能撤。
-
-目标很简单：**让助手更连贯地配合你的学习与动手实验**，而不是每做一步都先停下来问一句。
-
-通常把它叫作「破甲」或「无限制模式」插件——指的是它降低了交互层面的摩擦，让 agent 能连续执行任务；它不改模型本身，也不改变你要做的事。
-
-### 下载时报 `fetch failed`？
-
-1.6.39 起，独立安装器会显示失败阶段和错误码，有限重试后可切换系统 curl；两条通道都保留来源、证书和 SHA256 校验。请先重新下载安装脚本再运行 dry-run，仍失败时提交脱敏诊断行即可。见 [下载排查说明](docs/maintenance-issue-52.md)。不会自动修改代理或重启 DSH。
-
-### 让不同预设保留自己的提示词
-
-1.6.40 新增 `excludePresets`：默认空列表，保持原有行为；可将 `roleplay`、`minimal` 等预设排除在 Purge 提示词注入之外，保留命令、面板与工具。切换预设、并行会话和子 Agent 各自判断，宿主兜底也遵守排除。配置示例、升级步骤与边界见 [按预设排除说明](docs/maintenance-issue-53.md)。这不会撤销全局宿主补丁。
-
-## 设计原则
-
-| 原则 | 含义 |
-| --- | --- |
-| 本机优先 | 全部逻辑在本机运行，不改云端账号、不上传提示词或配置 |
-| 可见 | 每个动作都有状态与证据，不靠"应该生效了"这种判断 |
-| 可回滚 | 应用 / 安装 / 回滚前自动快照，保留原文件与校验清单 |
-| 不替你做决定 | 只减少摩擦，不改变你的目标；改什么、开什么，都由你确认 |
-
-## 适用场景
-
-本机学习、个人项目、自动化实验与维护工作。请在你拥有或已获授权的环境中使用；涉及他人系统时，先取得许可。
-
-## 1.6.39 更新
-
-修复独立安装器只显示 `fetch failed` 的问题：分阶段诊断、有限重试和系统 curl 备用下载，继续严格校验官方来源、证书和 SHA256。下载失败不触碰现有安装。[发行说明](docs/releases/1.6.48.md) · [配置与验收](docs/maintenance-issue-52.md)
+27 条补丁里，web 面实测 **21 条已应用、6 条不适用**（桌面换包/窗口关闭那组只在 Desktop 宿主上有目标）。补丁表与逐条含义见 [docs/STATE.md](docs/STATE.md)。
 
 ## 安装
 
-**DSH 官方入口负责安装插件；下面的安装器由本仓库维护，不是 DeepSeek 官方脚本。** 首次安装可用官方界面或 CLI；已经装过 `dsh-purge` / 旧独立面板时，用本仓库的安装器原地迁移，不要先卸载。安装、应用宿主补丁、手动重启是独立动作。
+三种入口，选一个就好；它们都只写插件，**不会自动应用补丁、不会自动重启 DSH**。
 
-### 方式一：DSH 官方界面（首次安装）
+**1. DSH 插件市场 / 官方插件界面**（推荐）
 
-1. 先打开 DSH 完成初始化。按当前官方文档，进入「插件」，点击「实验性插件」旁的「更多」，启用「自定义插件市场」；然后进入「发现 → 添加索引源」。
-2. 本发行版暂未发布在线索引，方式一适用于已经配置过索引的镜像环境；首次安装请直接用下面的方式二或方式三。
-3. 若你的索引里已收录本发行版，选择 Purge Minimal，核对来源为 `youki258/dsh-purge-minimal`、包名为 `dsh-purge-minimal`，确认后安装。
-
-界面和安装协议由 DSH 提供，索引与插件由索引维护方负责。不同 DSH 版本的入口文字可能不同；第三方 `dsh-market` 也可能有额外的筛选与迁移限制。已有旧包时请使用方式三。[官方市场说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/guide/plugin-market.zh.md)
-
-### 方式二：DSH 官方 CLI（首次安装）
-
-下面命令适用于**已经安装 `dsh` 命令、且使用 `web` profile 的 CLI/Web 用户**，在 macOS/Linux 终端或 Windows PowerShell 中运行。桌面版用户优先用上面的界面；不要为了安装插件再用 `npx` 下载另一套宿主。
+在本仓库 Releases 取固定版本包，或在市场里搜 `dsh-purge-minimal`：
 
 ```sh
-dsh plugin --profile web add "https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.2/dsh-purge-minimal-0.1.2.tgz"
+dsh plugin --profile web add https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.2/dsh-purge-minimal-0.1.2.tgz
 ```
 
-`web` 必须与实际启动的 profile 一致；自定义数据目录需要沿用该实例的 `DSH_HOME`。命令使用本次发行的固定版本 URL；不是 `npm install -g`，也不是安装裸 npm 包名。本项目通过 GitHub 发行，**不要替换成裸包名 `add dsh-purge-minimal`**。官方 CLI 的安装不会额外运行我们安装器的 Release SHA256 比对及迁移快照；需要这些功能时选方式三。[官方 CLI 安装说明](https://github.com/deepseek-ai/deepseek-harness/blob/master/docs/user/develop/basic/publish.zh.md)
+Desktop 用户把 `--profile web` 换成 `--profile desktop`（名字以本机实际 profile 为准）。
 
-### 方式三：本仓库安装器（备份、旧版迁移、恢复）
+**2. 社区引导安装器**（会下载、校验 SHA256、调用官方 CLI、迁移旧包引用）
 
-先安装并打开一次 DSH，让实际 profile 初始化。以下命令下载**本仓库的脚本**，先校验，再安装；`dry-run` 通过仅代表前置检查、下载和 SHA256 通过，不代表依赖安装、迁移或启动已通过。请先阅读下载的脚本。
-
-#### macOS Desktop
-
-默认应用位置 `/Applications/DeepSeek Harness.app`、数据目录 `~/.dsh`、profile `desktop`。将下面两段放在同一个终端会话中执行：
+Linux / macOS：
 
 ```sh
-PURGE_INSTALL_DIR="$(mktemp -d)"
-curl -fSL --connect-timeout 20 --max-time 90 "https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.sh" -o "$PURGE_INSTALL_DIR/install.sh"
-sh "$PURGE_INSTALL_DIR/install.sh" --dry-run
+curl -fsSLO https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.sh
+sh install.sh --dry-run   # 先看它要做什么
+sh install.sh             # 确认后再装
 ```
 
-校验成功、核对目标实例后执行：
-
-```sh
-sh "$PURGE_INSTALL_DIR/install.sh"
-```
-
-自定义应用或 home 时，先设置 `DSH_APP` / `DSH_HOME`；自定义 profile 对两次命令都加 `--profile=实际名称`。不要照抄别人的路径。 macOS 支持从 XML/二进制 plist 读取真实可执行文件名；元数据无效会停止，不会换用其他应用。详见[定位边界](docs/INSTALLATION.md#应用定位边界pr-78)。
-
-#### Windows Desktop · PowerShell 5.1 / 7
-
-脚本会尝试定位唯一的 DSH Desktop，默认 home 为用户的 `.dsh`。旧 Desktop CLI 默认 profile 为 `desktop`，带独立 dsh CLI 的新壳默认为 `web`；自定义 profile 用 `-Profile` 指定。不要求管理员权限；路径含空格也支持。
+Windows（PowerShell 5.1 起）：
 
 ```powershell
-$PurgeInstaller = Join-Path $env:TEMP ('purge-install-' + [guid]::NewGuid().ToString('N') + '.ps1')
-Invoke-WebRequest -UseBasicParsing -TimeoutSec 90 -Uri 'https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.ps1' -OutFile $PurgeInstaller
-powershell -NoProfile -ExecutionPolicy Bypass -File "$PurgeInstaller" -DryRun
+Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.ps1 -OutFile install.ps1
+.\install.ps1 -DryRun
+.\install.ps1
 ```
 
-上一条退出码为 0、核对目标实例后，在同一个 PowerShell 会话中执行：
+**3. 手工**：在目标 profile 目录 `pnpm add <tgz 路径>`，然后把 `cordis.patch.yml` 里的 `dsh-purge` 条目并入 profile 配置。
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File "$PurgeInstaller"
-```
-
-找不到应用或有多个副本时，对两次命令都增加 `-DshExe '实际的 DeepSeek Harness.exe 完整路径'`；自定义目录用 `-DshHome`、profile 用 `-Profile`。`ExecutionPolicy Bypass` 只作用于这次子进程，不修改持久执行策略；组织策略仍可能禁止执行，遇到时报告错误，不修改系统策略。
-
-#### Linux · CLI / Web
-
-先安装 Node ≥18 和 DSH CLI，并初始化实际使用的 profile。以下从下载开始，不要求已 clone 本仓库：
-
-```sh
-PURGE_INSTALL_DIR="$(mktemp -d)"
-curl -fSL --connect-timeout 20 --max-time 90 "https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.sh" -o "$PURGE_INSTALL_DIR/install.sh"
-sh "$PURGE_INSTALL_DIR/install.sh" --dry-run
-```
-
-校验成功后，在同一终端执行 `sh "$PURGE_INSTALL_DIR/install.sh"`。默认使用 PATH 中的 `node` / `dsh` 与 `web` profile。自定义实例在两次调用中保持 `DSH_NODE`、`PURGE_DSH_CLI`、`DSH_HOME`、`--profile=名称` 一致。
-
-### 安装会改什么，以及怎么确认
-
-- 本仓库的安装器在迁移前备份，调用当前实例的官方 `dsh plugin --profile … add …`，再核对安装版本和入口；保留提示词、规则、更新偏好及其他插件设置。
-- **不是“完全不碰宿主目录”**：解包桌面布局缺失/损坏 `app/runtime` 链接时，会保留旧链接并修复到该安装的 runtime；冲突则停止。Linux 系统宿主只读时可能创建用户副本，并在成功后切换用户启动器。详见[安装指南](docs/INSTALLATION.md)。
-- 插件加载前若市场安装失败（issue #7），插件本身尚未运行；先读脱敏错误、核对依赖来源，不能承诺安装器能修复所有市场或网络错误。
-- 不自动应用宿主补丁、不自动重启、不改代理、不修改全局 npm 源或清空缓存。脚本和 bootstrap 从本仓库 `master` 下载；Release 包另做 SHA256 校验，这不是对下载脚本的独立签名验证。
-- 命令退出码非零就视为失败。安装成功后记录 `backup_id`，核对磁盘版本；运行中的 DSH 仍可能显示旧版，待用户方便时手动退出重开。`dry-run` 成功、备份存在或市场卡片出现都不能替代安装成功证据。
-- 回滚优先用「Purge → 状态 → 本机备份」，选择本次安装前的备份；无界面时按[安装指南中的 CLI 回滚](docs/INSTALLATION.md#cli-rollback)执行。不要假设 `purge` 已加入系统 PATH。
-
-完整的实例选择、回滚与失败恢复步骤见 [安装指南](docs/INSTALLATION.md)，Agent 必须先读 [AGENTS.md §12](AGENTS.md#installation)。
+装完做三件事：面板点「应用」→ **完全退出 DSH 再打开**（不是关窗口）→ `purge selfcheck --json` 看 `layers[].state`。
 
 ## 面板
 
-左侧栏一整页，不做悬浮按钮：
+左侧栏 **Purge**：
 
-- 顶部一句话说明当前状态，主操作是「应用」；
-- 其余分区折叠，说明收进 `?`，需要时再展开；
-- 维护页可看最近动作、备份占用、更新偏好；
-- 支持隐藏不用的入口（例如回退按钮），只影响显示。
+- **状态**：版本、宿主路径、补丁计数、selfcheck 逐层证据、运行时注入状态。
+- **提示词**：`$DSH_HOME/prompt-inject.md` 的正文编辑与保存（插件只读，除非你点保存）。
+- **规则 / 技能**：浏览当前 profile 的规则与技能库。
+- **更多**:诊断（锚点漂移、重锚）、预设安装、备份与回滚、最近动作、发行记录。
 
-## 常用命令
+面板**不联网检查更新**：升级走插件市场或手动安装，这里只做本机快照与回滚。原因见 [docs/STATE.md](docs/STATE.md#已知限制)。
+
+## CLI 速查
+
+`purge` 是 `bin/community.js` 的别名；没装进 PATH 时用 `node bin/community.js`。
 
 | 命令 | 作用 |
 | --- | --- |
-| `purge selfcheck [--json]` | 逐层状态与证据；不适用项单独标注 |
-| `purge status` | 宿主路径与计数 |
-| `purge host-status` / `purge host-check` | 只读查看安装布局与当前入口（不换包、不重启）；升级宿主后先跑这条 |
-| `purge diagnose` | 锚点漂移诊断，给出文件、行号与候选落点 |
-| `purge reanchor …` | 把确认过的新锚点钉成本地覆盖，可撤销 |
-| `purge probe [new]` | 生成运行时探针，验证注入确实送达模型 |
-| `purge audit [--limit n]` | 最近动作记录 |
-| `purge boost [on\|off]` | 尾部强化段开关 |
-| `purge preset [status\|install]` | 「无限制模式」预设落盘 |
-| `purge retry [on\|off]` | 回答被中断时的单次重试开关 |
-| `purge usage` / `prune` | 备份占用与清理 |
-| `purge backup` / `rollback <id>` | 快照 / 回滚插件 |
+| `purge status` | 宿主路径、补丁计数、表面（web/desktop） |
+| `purge selfcheck [--json]` | 20 层逐层证据；`broken` 时退出码 1 |
+| `purge apply` / `purge revert` | 写补丁 / 撤补丁（都先备份） |
+| `purge host-status` | 只读诊断磁盘与运行入口，不换包不重启 |
+| `purge diagnose` | 锚点漂移诊断（文件、行号、候选片段） |
+| `purge reanchor list\|show\|apply\|clear` | 半自动重锚，把新锚点钉成本地覆盖 |
+| `purge probe [new]` | 生成/查看运行时注入探针（30 分钟 TTL） |
+| `purge audit [--limit n]` | 最近动作（apply/revert/boost/probe/reanchor/setting） |
+| `purge boost [on\|off]` | 强化段开关 |
+| `purge preset [status\|install]` | 落盘 `unrestricted` 预设 |
+| `purge backup` / `rollback <id>` / `usage` / `prune` | 快照、回滚、占用、清理 |
+| `purge patches [list]` | 查看默认关闭的可选补丁（当前发行版没有） |
+| `purge uninstall` | 卸载插件并清理本 home 内的插件目录与链接 |
 
-## 更新
+## 验证一件事真的生效了
 
-维护页分别设置「自动检查」与「自动安装」，默认只检查，间隔 6 小时。安装完成不会自动重启——你决定什么时候重开。
+文件被改、section 被注册，只证明宿主侧就绪；**探针证明模型收到了**。
+
+```sh
+purge probe new
+# → {"nonce":"purge-1a2b3c4d","message":"请原样输出下面这行…[purge-1a2b3c4d]"}
+```
+
+随便发一句对话：模型原样回显 nonce = 链路通。回显了但模型仍在推脱 → 问题在人设/强化段，不在补丁；没回显 → 注入没到（看注入层、`boost`、`injectPosition`）。
 
 ## 兼容性
 
-| 组件 | 值 |
+| 宿主 | 状态 |
 | --- | --- |
-| 插件 | `dsh-purge-minimal` 0.1.2 |
-| 已验证宿主 | DSH Desktop 0.2.2-rc.1 / 0.2.1-rc.1 / 0.2.1-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5 |
-| 其它宿主 | 允许安装，自检会标「未验证」；先看 `diagnose` |
-| Node | ≥18（桌面版自带运行时即可）；红队工具需 ≥22.5（`node:sqlite`） |
+| DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5 | 已验证（锚点命中、应用、自检） |
+| DSH Desktop 0.2.2-rc.1（web / npm CLI 面） | 已验证：隔离实例 apply 20 条 + 自检 19/19 适用层全绿；桌面换包组仍不适用 |
+| DSH Desktop 0.2.1-rc.4 / 0.2.2-alpha.2 | 未知：没有实测证据，`selfcheck` 会标未验证 |
+| 其它 0.2.x | 允许应用，但先跑 `purge diagnose` 看漂移；漂移不是"应该没问题" |
+| Web 面（`--profile web`） | 与 Desktop 共用补丁表；桌面换包那组显示"不适用" |
 
-## 出问题怎么办
+宿主升级后：`asar` 会重新封住、旧补丁全部失效，点一次「应用」再退出重开即可；锚点漂移用 `purge diagnose` + `purge reanchor` 处理。**磁盘写成功不代表当前进程已加载**，所以文档里所有"生效"结论都以重开后 `selfcheck` 与探针为准。
 
-```sh
-purge selfcheck --json     # 先看哪一层不是 ok
-purge diagnose             # 锚点漂移时看候选位置
-purge audit --limit 20     # 最近动作
-```
-
-面板打不开时，先确认版本一致，再按 [维护文档](docs/MAINTENANCE.md) 恢复；不要直接覆盖 `Resources/app`。
-
-## 开发与验证
+## 测试与开发
 
 ```sh
-npm test                 # 单元与契约测试
-npm run check:docs       # 版本与文档一致性
-npm run check:client     # 面板 bundle 与源码一致
-npm run test:electron    # 真实 Electron 环境（临时目录，不改安装）
-npm run smoke            # 发行包冒烟
+pnpm test        # 532 项：补丁锚点、自检、安装器、HTTP、面板契约、回归
+pnpm run smoke   # 打包后解包、无依赖启动、导入、预设解析、CLI status
+pnpm run check:docs   # 版本/兼容声明/残留引用的一致性守卫
+pnpm run test:ui      # 面板客户端 bundle 契约
+pnpm run build:client # 重新构建面板 bundle（改 src 后必须跑）
 ```
 
-面向 AI agent 的操作说明在 [AGENTS.md](AGENTS.md)，两者冲突时以它为准。
+测试默认在干净环境跑：`scripts/bootstrap-install.mjs` 只在**没有显式 home** 时才继承 `DSH_PROFILE`，避免把当前会话的 profile 泄漏进 fixture。
 
-**关键词**：破甲 · 无限制模式 · unrestricted · prompt injection · jailbreak · DSH 插件 · 状态自检 · 备份回滚
+## 来源与致谢
 
-## 贡献者
+本仓库是社区分支的再分发：
 
-感谢原作者、代码贡献者，以及提供问题复现、分析与验证的朋友。头像链接直达 GitHub 主页；具体贡献见 [贡献记录](CONTRIBUTORS.md)，第三方来源见 [NOTICE.md](NOTICE.md)。
+1. 原始项目 [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)（作者 小杨 / YuJunZhiXue，MIT）。
+2. 社区维护分支 [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge)——本仓库的代码直接来自它的 minimal 裁剪，宿主补丁、自检、安装器与面板都源自这里。
+3. 本仓库 [youki258/dsh-purge-minimal](https://github.com/youki258/dsh-purge-minimal) 只做减法与文档收敛：去掉渗透工具面与历史调试入口、去掉在线自更新、补丁表压到 27 条。
 
-<!-- CONTRIBUTORS:START -->
-<table>
-  <tr>
-    <td align="center" width="120"><a href="https://github.com/YuJunZhiXue"><img src="https://avatars.githubusercontent.com/u/188421097?s=112" width="56" height="56" alt="YuJunZhiXue" /><br /><sub>YuJunZhiXue</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/kingcharleslzy-ai"><img src="https://avatars.githubusercontent.com/u/260348840?s=112" width="56" height="56" alt="kingcharleslzy-ai" /><br /><sub>kingcharleslzy-ai</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/luowang-ui"><img src="https://avatars.githubusercontent.com/u/62333101?s=112" width="56" height="56" alt="luowang-ui" /><br /><sub>luowang-ui</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/heigit"><img src="https://avatars.githubusercontent.com/u/8845668?s=112" width="56" height="56" alt="heigit" /><br /><sub>heigit</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/OGHong"><img src="https://avatars.githubusercontent.com/u/130678941?s=112" width="56" height="56" alt="OGHong" /><br /><sub>OGHong</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/Wangxiaolu0716"><img src="https://avatars.githubusercontent.com/u/110671501?s=112" width="56" height="56" alt="Wangxiaolu0716" /><br /><sub>Wangxiaolu0716</sub></a></td>
-  </tr>
-  <tr>
-    <td align="center" width="120"><a href="https://github.com/wtfsb19"><img src="https://avatars.githubusercontent.com/u/70636030?s=112" width="56" height="56" alt="wtfsb19" /><br /><sub>wtfsb19</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/MingShi350"><img src="https://avatars.githubusercontent.com/u/47762455?s=112" width="56" height="56" alt="MingShi350" /><br /><sub>MingShi350</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/loLollipop"><img src="https://avatars.githubusercontent.com/u/168881978?s=112" width="56" height="56" alt="loLollipop" /><br /><sub>loLollipop</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/youki258"><img src="https://avatars.githubusercontent.com/u/177468176?s=112" width="56" height="56" alt="youki258" /><br /><sub>youki258</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/SimonQvQ"><img src="https://avatars.githubusercontent.com/u/154972131?s=112" width="56" height="56" alt="SimonQvQ" /><br /><sub>SimonQvQ</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/alexopenfan-xiaxin"><img src="https://avatars.githubusercontent.com/u/267281196?s=112" width="56" height="56" alt="alexopenfan-xiaxin" /><br /><sub>alexopenfan-xiaxin</sub></a></td>
-  </tr>
-  <tr>
-    <td align="center" width="120"><a href="https://github.com/Minervaowl7"><img src="https://avatars.githubusercontent.com/u/127482476?s=112" width="56" height="56" alt="Minervaowl7" /><br /><sub>Minervaowl7</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/ShiTan-677"><img src="https://avatars.githubusercontent.com/u/91113050?s=112" width="56" height="56" alt="ShiTan-677" /><br /><sub>ShiTan-677</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/Minggle"><img src="https://avatars.githubusercontent.com/u/35053182?s=112" width="56" height="56" alt="Minggle" /><br /><sub>Minggle</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/Steooenwolf-666"><img src="https://avatars.githubusercontent.com/u/156271754?s=112" width="56" height="56" alt="Steooenwolf-666" /><br /><sub>Steooenwolf-666</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/a320583781-create"><img src="https://avatars.githubusercontent.com/u/234735967?s=112" width="56" height="56" alt="a320583781-create" /><br /><sub>a320583781-create</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/longyanbo1224-debug"><img src="https://avatars.githubusercontent.com/u/334267419?s=112" width="56" height="56" alt="longyanbo1224-debug" /><br /><sub>longyanbo1224-debug</sub></a></td>
-  </tr>
-  <tr>
-    <td align="center" width="120"><a href="https://github.com/0xnuu"><img src="https://avatars.githubusercontent.com/u/113989865?s=112" width="56" height="56" alt="0xnuu" /><br /><sub>0xnuu</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/21hbguo"><img src="https://avatars.githubusercontent.com/u/139569698?s=112" width="56" height="56" alt="21hbguo" /><br /><sub>21hbguo</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/AkiraNyx"><img src="https://avatars.githubusercontent.com/u/176532870?s=112" width="56" height="56" alt="AkiraNyx" /><br /><sub>AkiraNyx</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/cracer4869"><img src="https://avatars.githubusercontent.com/u/46320829?s=112" width="56" height="56" alt="cracer4869" /><br /><sub>cracer4869</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/fomaper"><img src="https://avatars.githubusercontent.com/u/38674512?s=112" width="56" height="56" alt="fomaper" /><br /><sub>fomaper</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/Kilig1058674225"><img src="https://avatars.githubusercontent.com/u/68159061?s=112" width="56" height="56" alt="Kilig1058674225" /><br /><sub>Kilig1058674225</sub></a></td>
-  </tr>
-  <tr>
-    <td align="center" width="120"><a href="https://github.com/Legeo969"><img src="https://avatars.githubusercontent.com/u/79903511?s=112" width="56" height="56" alt="Legeo969" /><br /><sub>Legeo969</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/lyufeng000"><img src="https://avatars.githubusercontent.com/u/168790556?s=112" width="56" height="56" alt="lyufeng000" /><br /><sub>lyufeng000</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/Musan-34"><img src="https://avatars.githubusercontent.com/u/279201993?s=112" width="56" height="56" alt="Musan-34" /><br /><sub>Musan-34</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/qianxuno"><img src="https://avatars.githubusercontent.com/u/179305118?s=112" width="56" height="56" alt="qianxuno" /><br /><sub>qianxuno</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/TLcmmmm"><img src="https://avatars.githubusercontent.com/u/167976723?s=112" width="56" height="56" alt="TLcmmmm" /><br /><sub>TLcmmmm</sub></a></td>
-    <td align="center" width="120"><a href="https://github.com/Tofu707"><img src="https://avatars.githubusercontent.com/u/178003727?s=112" width="56" height="56" alt="Tofu707" /><br /><sub>Tofu707</sub></a></td>
-  </tr>
-</table>
-<!-- CONTRIBUTORS:END -->
+上游 README、发行说明与 1.6.x 维护文档原样归档在 [docs/upstream](docs/upstream)；第三方声明见 [NOTICE.md](NOTICE.md)，许可证见 [LICENSE](LICENSE)，贡献者见 [CONTRIBUTORS.md](CONTRIBUTORS.md)。本发行版免费，不提供付费转售，也不代表上游作者的官方发布。
 
-名单合并 GitHub 提交者与人工鸣谢记录，自动每日刷新并保留历史贡献者。头像顺序不代表贡献排名，也不将问题报告者误记为代码作者。
+## 不做什么
 
-### 插件市场收录信息
-
-若向插件市场提交收录，**Plugin path 必须填 `.`**，安装根目录为 `dsh-purge-minimal`；不要留空或选独立面板包。逐版本兼容声明已放入 manifest，未验证版本保持 `unknown`。元数据修正不等于市场已批准安装；[路径、兼容证据和收录边界](docs/DSH-STORE.md)。
+- 不自动重启你的 DSH，不替你决定何时退出。
+- 不覆盖 `prompt-inject.md`、规则集、其他插件配置——「应用」与「回滚」都不碰这些。
+- 不承诺对密封归档的宿主"零副作用"：Linux/Windows 的换包流程会备份并替换 `app.asar`，细节见 [docs/INSTALLATION.md](docs/INSTALLATION.md)。
+- 不在线自更新：面板与后台定时检查都已移除，升级交给插件市场。

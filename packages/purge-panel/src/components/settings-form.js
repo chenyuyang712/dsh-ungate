@@ -27,7 +27,6 @@ import {
   PatchGroups,
 } from "./patch-status.js";
 import { noticeNode, Btn } from "./primitives.js";
-import { HooksDenySection } from "./advanced.js";
 import { RestartAsk, restartDsh, detectHostTheme } from "./restart.js";
 import {
   listedCeiling,
@@ -947,12 +946,6 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
           ),
         ),
         h(PatchGroups, { state: s }),
-      ),
-      h(
-        "details",
-        null,
-        h("summary", null, "高级选项"),
-        h(HooksDenySection, { onSaved: loadAll }),
       ),
       askUninstall
         ? h(

@@ -119,10 +119,10 @@ test("官方 bundled-host + rc.2：仍然判 qualified（回归不受影响）",
   assert.equal(compat.level, "qualified");
 });
 
-test("非桌面路径（npm 全局安装）：家族层不拦，按内核判定", () => {
+test("非桌面路径（npm 全局安装）：家族报 npm-cli，家族层不拦，按内核判定", () => {
   const base = seedHost(path.join(TMP, "c-npm", "node_modules", "@deepseek-ai"));
   const compat = compatibility(base);
-  assert.equal(compat.host_family, "unknown");
+  assert.equal(compat.host_family, "npm-cli");
   assert.equal(compat.kernel.qualified, true);
   assert.equal(compat.qualified, true);
 });

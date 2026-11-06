@@ -1,64 +1,91 @@
 # 当前状态（0.1.2）
 
-> 最后更新：2026-11-06 · 由 `node scripts/check-docs.mjs` 与全量测试验证
+> 当前版本 **0.1.2** · 最后更新：2026-11-06
+> 本文件记录"现在是什么"，不记录"以前是什么"。历史在 [release-notes.md](../release-notes.md) 与 [upstream](upstream/)。
 
 ## 这是什么
 
-Purge Minimal：以 dsh-purge 社区分支 1.6.82 为基线的精简发行版。目标是把**对 DSH 宿主源码的改写面**压到最小，同时保留「所有操作都无限制」的能力。内置红队演练台已移除。
+`dsh-purge-minimal`：给 DSH 解除审批、沙箱与拒绝倾向拦截的附加组件。宿主补丁 + 运行时注入 + 强化段 + 权限配置 + `unrestricted` 预设，五层叠加。安装、应用、加载是三个不同阶段，任何"已生效"的结论都必须来自重开后的 `selfcheck` 与探针。
 
-## 关键数字
+## 补丁表（27 条定义）
 
-| 项 | 值 |
-| --- | --- |
-| 版本 | `0.1.2` |
-| 宿主补丁 | **27 条**（基线 86 条；其余能力走 cordis 配置覆盖与运行时 hook） |
-| 宿主 `.js` 被改文件 | 约 15 个（0.1.0 时为 41 个） |
-| 自检层 | 20 层（15 补丁层 + hook + override + runtime + config + layout） |
-| 已验证宿主 | DSH Desktop 0.2.2-rc.1 / 0.2.1-rc.1 / rc.2 / rc.3 / rc.5 |
-| 测试 | 514 tests / 491 pass / 0 fail / 23 skip |
-| CLI | `purge <op>`（`bin/community.js`，文件名不变） |
-| 包名 | `dsh-purge-minimal` |
+web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（`optional` 且目标文件在 web 宿主里不存在）。桌面换包/关窗那组只在 Desktop 宿主上有目标。
 
-## 三条实现路径（0.1.2 的架构）
-
-| 路径 | 内容 | 位置 | 热生效 |
+| id | 名称 | 层 | web 面 |
 | --- | --- | --- | --- |
-| 配置覆盖 | sandbox-policy / approval / permission / bash-sandbox / tool-fs / subagent / session-log-deepseek / system-prompt | 本包 `cordis.patch.yml`（同 id 覆盖宿主行） | 是（profile patch 层由 HMR 监听） |
-| 运行时 hook | `approval/request → allowed-once`、`fs/write-intent` / `fs/edit-intent → undefined`、`tools/pre-execute → next()` | `lib/exec-hooks.js` | 是（插件重载即生效） |
-| 源码补丁 | 27 条，见 `docs/STATE.md#保留的补丁` / `purge patches` | `lib/patches/` | 否（需重启宿主） |
+| 25 | HARNESS_IDENTITY_STRIP | 提示词 | 应用 |
+| 29 | TOOL_WEB_UNTRUSTED_NEUTRAL | 工具 | 应用 |
+| 33 | TOOL_SHELL_DENIAL_PROMPT | 提示词 | 应用 |
+| 36 | TOOL_FS_ESCALATION_SCHEMA | 提示词 | 应用 |
+| 37 | SUBAGENT_SCOPE_LOCK_NEUTRAL | 提示词 | 应用 |
+| 40 | COMPLETE_PROMPT_KEEP_INJECT | 兼容 | 应用 |
+| 42 | SETTINGS_LEGACY_API | 代码 | 应用 |
+| 45 | OFFICIAL_DESKTOP_UPDATE_HANDOFF | 代码 | 不适用 |
+| 46 | OFFICIAL_DESKTOP_UPDATE_ASCII | 代码 | 不适用 |
+| 48 | TOOL_SHELL_DELETE_MOVE_NEUTRAL | 工具 | 应用 |
+| 55 | SYSTEM_PROMPT_REPLACE_HEAD | 代码 | 应用 |
+| 57 | DEEPSEEK_SYSTEM_ROLE | 代码 | 应用 |
+| 61 | OFFICIAL_SANDBOX_POLICY_NEUTRAL | 提示词 | 应用 |
+| 66 | SYSTEM_PROMPT_RENDER_GUARD | 代码 | 应用 |
+| 67 | AGENT_LOOP_MESSAGES_GUARD | 代码 | 应用 |
+| 68 | SYSTEM_NODES_CONTENT_GUARD | 代码 | 应用 |
+| 69 | MODEL_STREAM_RELEASE | 代码 | 应用 |
+| 72 | MESSAGES_SYSTEM_CURRENT | 代码 | 应用 |
+| 74 | ASSEMBLE_BEFORE_PRESTEP | 代码 | 应用 |
+| 82 | DESKTOP_SHELL_PROFILE_FALLBACK | 代码 | 不适用 |
+| 83 | DESKTOP_HOST_CLOSE_NO_FATAL | 代码 | 不适用 |
+| 84 | DESKTOP_HOST_CLOSE_CODE0_NO_FAIL | 代码 | 不适用 |
+| 90 | RESTORE_NATIVE_STEERING | 代码 | 应用 |
+| 91 | BROWSER_COOKIE_NAME_IGNORE_PORT | 代码 | 应用 |
+| 92 | HOST_MAX_HTTP_HEADER_SIZE | 代码 | 不适用（仅桌面壳） |
+| 93 | SANDBOX_POLICY_BRAND_NEUTRAL | 提示词 | 应用 |
+| 94 | SKILL_BADGE_DESCRIPTION_NEUTRAL | 提示词 | 应用 |
 
-## 保留的 27 条补丁
+- 定义在 `lib/core.js` 的 `ALL_PATCHES`；`optional: true` 表示目标缺席时记"不适用"而不是失败。
+- 默认关闭的可选补丁：**无**。`test/opt-in.mjs` 与 `purge patches list` 都返回空清单。
+- 逐条锚点与真机回归在 `test/patch-anchors.test.mjs`；宿主升级后的漂移用 `purge diagnose` 定位、`purge reanchor` 修复。
 
-`25` 系统提示身份剥离、`29` 外部网页内容去 untrusted、`33` shell 拒绝话术、`36` fs 升级字段、`37` 子代理权限锁、`40` complete 预设保留注入、`42` 设置旧 API、`45/46` 桌面升级接管、`48` shell 删除/移动话术、`55` 系统提示头替换、`57` developer role 白名单、`61` 沙箱只读策略不拦任务、`66` 渲染兜底、`67` 决策消息兜底、`68` 系统节点兜底、`69` 模型流释放、`72` 当前系统消息、`74` assemble 前置钩子、`82/83/84` 桌面启动兜底、`90` 原生 steering 恢复、`91` cookie 名忽略端口、`92` 请求头上限、`93` 沙箱策略去品牌、`94` 技能徽章去品牌。
+## 自检：20 层
 
-## 已删除的补丁（勿误加回）
+`purge selfcheck` 报告 20 层，未指定实例时大部分是 `unknown`——这是设计，不是故障。web 面实际适用的 19 层（宿主磁盘布局层在 web 面不适用）。语义：
 
-| 补丁 | 原能力 | 现替代 |
-| --- | --- | --- |
-| #30 / #31 / #64 / #65 | hooks 否决旁路 | 无（恢复官方语义） |
-| #56 / #58 / #75 / #77 | 回退（rewind）改写 | 无（恢复原生路径） |
-| #87 / #88 | 悬挂锚点自愈 | `diagnose` + `reanchor` 显式处理 |
-| #89 | `ask_user` 超时上限 | 无（恢复原生等待） |
-| #5 / #9 / #10 / #11 / #12 | 审批自动放行（源码补丁） | `lib/exec-hooks.js` 的 `approval/request` hook + `approval.policy: ask` |
-| #17 | fs 观察策略放行 | `fs/write-intent` / `fs/edit-intent` hook |
-| #59 | auto-review 软拦直通 | `tools/pre-execute` hook |
-| #7 / #8 / #21 / #22 / #23 / #43 / #51 / #52 / #63 / #70 / #73 / #76 / #80 / #24 / #26 / #4 | 纯配置类（补丁改宿主 .yml） | 本包 `cordis.patch.yml` 同 id 覆盖 |
-| #6 / #13 / #14 / #15 / #16 / #34 / #35 | 沙箱围栏/升级链 | danger-full-access 模式下宿主原生即无围栏 |
-| #1 / #2 / #3 / #28 / #32 / #38 / #39 / #47 / #49 / #50 / #53 / #54 / #60 / #62 / #71 / #18 / #19 | 提示词话术、第三方兼容、可选上下文开关 | 删除（部分由 `lib/identity.js` 的运行时正则中和兜底） |
+- `ok` 已确认 / `pending` 待应用 / `inferred`、`unknown` 证据不足（黄）/ `broken` 确认故障（退出码 1）。
+- 面板写「19 层全部在位」是因为它在 web 面显示适用层数；命令行报告原始 20 层。两个数字都对，粒度不同。
 
 ## 已知限制
 
-- 在线更新默认关闭：`PURGE_UPDATE_REPO` 未设置时 `applyUpdate` 直接抛错，防止被上游 release 覆盖。需要更新时手动下载新 tgz 走 `purge migrate <tgz>`。
-- 源码补丁必须重启宿主才加载；`purge toggle` 只改补丁面，不动全局 shim。
-- web profile 目录没有 `cordis.patch.yml` 是正常环境（只读 web profile 本来就不写这一层）：此层以运行时 `permissionPresets` 报出的值为准，读取错误只作为 `error` 字段保留，不改变结论。
-- hook 与配置失效是静默的：自检的 `hook` / `override` 两层就是用来把静默失败变成红灯的。
-- 手动把权限切成 workspace-write 会恢复官方沙箱围栏（这是设计选择，不是缺陷）。
+- **0.2.2-rc.1 只在 web / npm CLI 宿主上验证**：2026-11-06 在隔离实例（`DSH_HOME=/home/kali/.dsh-rc1`、端口 3082、宿主 `/tmp/dsh022`）跑通 apply（20 应用 + #90 已原生 + 6 不适用，零 failed）→ 重启 → selfcheck 20 层 19 ok + 1 不适用、21/21 补丁、零漂移。桌面壳（换包/关窗组 #45/#46/#82/#83/#84/#92）在该宿主上本来就 `surfaces:["desktop"]`，仍属未验证；`host_family` 报 `npm-cli`，不冒充 Desktop 家族。
+- **没有在线更新**：本 fork 不发布可供 `PURGE_UPDATE_REPO` 使用的发行索引，`applyUpdate` 会直接抛"无在线更新源"。因此面板与后台的检查更新已移除，升级只走插件市场或手动安装。`GET /dsh-purge/status` 的 `update` 段固定为 `disabled`。
+- **`purge selfcheck` 裸跑没有意义**：没有 `DSH_HOME` / `PURGE_DSH_CLI` 时宿主为空，会报 `unknown` 与 17 层不确定。先指定实例，再读结果。
+- **桌面换包真机覆盖有限**：Linux 侧走过完整流程；Windows/macOS 依赖 Electron 版本，交接受单测覆盖但不等于实机验收。
+- **rc.4 / 0.2.2-alpha.2 未验证**：允许应用，`selfcheck` 会标未验证；不要据此对外声称兼容。
 
-## 验证入口
+## 已删除的功能（不要再加回来）
 
-```sh
-node scripts/check-docs.mjs       # 文档与版本一致
-pnpm test                         # 全量测试
-node packages/purge-panel/scripts/build.mjs --community --check   # 面板 bundle 与源码一致
-purge selfcheck --json            # 逐层证据
-```
+| 功能 | 删除理由 | 残留检查 |
+| --- | --- | --- |
+| hooks 拦截旁路（四条旧补丁 id 及其接口、面板区块、状态字段） | 与"恢复官方 hook 语义"的声明冲突，且一键就能把 deny/ask 翻成放行 | lib/ 与面板源码里应无该模块与接口 |
+| 历史调试台（调试授权路由、模块、状态、欢迎语） | 只服务已删除的工具面 | lib/ 与面板源码里应无该模块与路由 |
+| 面板/后台在线更新 | 没有可安装的在线源，按钮必然失败 | 面板维护页里应只有本机备份与回滚 |
+| 上下文化可选补丁的两个开关 | 对应注入面已缩减，补丁不再存在 | `purge patches list` 返回空清单 |
+| 渗透工具面与历史调试入口 | 本 fork 只保留宿主解闸能力 | `presets/` 只有 `unrestricted` |
+
+## 状态落在哪
+
+| 路径 | 内容 |
+| --- | --- |
+| `$DSH_HOME/prompt-inject.md` | 用户的注入正文（插件只读） |
+| `$DSH_HOME/dsh-purge/tuning.json` | boost、injectPosition、askNoBlock、refusalRetry、extraPatches |
+| `$DSH_HOME/dsh-purge/probe.json` | 运行时探针（30 分钟 TTL） |
+| `$DSH_HOME/dsh-purge/anchor-overrides.json` | 本机重锚覆盖 |
+| `$DSH_HOME/dsh-purge/applied.json` · `installed-rev` | 上次应用的插件版本 |
+| `$DSH_HOME/dsh-purge-minimal/audit.jsonl` | 动作审计（1MB 轮转，保留 2 份） |
+| `$DSH_HOME/dsh-purge-minimal/backups/` | 快照与对象（`manifest.json` + `objects/`） |
+| `$DSH_HOME/.agent-presets/unrestricted/` | 无限制模式预设 |
+
+## 本机参考实例
+
+| 实例 | 地址 | DSH_HOME | 宿主版本 | 用途 |
+| --- | --- | --- | --- | --- |
+| 主实例 | 127.0.0.1:3080 | `/home/kali/.dsh` | 0.2.1-rc.3 | 日常使用与验收 |
+| 隔离实例 | 127.0.0.1:3081 | `/home/kali/.dsh-iso` | 0.2.1-rc.3 | 改宿主/换包类改动先在它上面跑 |

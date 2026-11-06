@@ -35,13 +35,19 @@ try {
   ok("未安装依赖的解压包可以启动引导 CLI");
 
   // Install the packed artifact's declared dependencies, not source-tree node_modules.
-  const installArgs = ["install", "--ignore-scripts", "--legacy-peer-deps", "--omit=dev", "--no-audit", "--no-fund"];
+  // npm 与 pnpm 任选其一：pnpm 环境里 npm 可能都没装（本机就是这样）。
+  const which = (bin) => { try { return execFileSync("sh", ["-c", `command -v ${bin}`], {encoding:"utf8"}).trim(); } catch { return ""; } };
+  const npmArgs = ["install", "--ignore-scripts", "--legacy-peer-deps", "--omit=dev", "--no-audit", "--no-fund"];
+  const pnpmArgs = ["install", "--ignore-scripts", "--config.legacy-peer-deps=true", "--prod", "--no-optional"];
   // Node cannot exec a .cmd file directly. This command contains only fixed arguments;
   // the temporary package path is passed as cwd, never interpolated into shell code.
   if (process.platform === "win32") {
-    execFileSync(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", `npm ${installArgs.join(" ")}`], {cwd:pkgDir,stdio:"pipe",timeout:120000});
+    const cmd = which("npm") ? `npm ${npmArgs.join(" ")}` : `pnpm ${pnpmArgs.join(" ")}`;
+    execFileSync(process.env.ComSpec || "cmd.exe", ["/d", "/s", "/c", cmd], {cwd:pkgDir,stdio:"pipe",timeout:180000});
+  } else if (which("npm")) {
+    execFileSync("npm", npmArgs, {cwd:pkgDir,stdio:"pipe",timeout:180000});
   } else {
-    execFileSync("npm", installArgs, {cwd:pkgDir,stdio:"pipe",timeout:120000});
+    execFileSync("pnpm", pnpmArgs, {cwd:pkgDir,stdio:"pipe",timeout:180000});
   }
 
   // 1) 导出映射指向的文件都存在
@@ -68,7 +74,7 @@ try {
 
   // 4) bundle patch 里的条目名与包名一致
   const yml = fs.readFileSync(path.join(pkgDir, "cordis.patch.yml"), "utf8");
-  for (const needle of ["dsh-purge-minimal", "dsh-purge-minimal/presets-plugin", "dsh-purge-minimal/redteam"])
+  for (const needle of ["dsh-purge-minimal", "dsh-purge-minimal/presets-plugin"])
     if (!yml.includes(needle)) problems.push(`cordis.patch.yml 缺少 ${needle}`);
   if (!problems.length) ok("bundle patch 条目完整");
 

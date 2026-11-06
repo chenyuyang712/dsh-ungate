@@ -322,7 +322,10 @@ export function prepareLinuxHost(cli, { userHome = os.homedir(), log = console.l
 export async function bootstrapInstall(options = {}) {
   const { request = fetch, download = {}, run = exec, log = console.log, executable = process.execPath, platform = process.platform,
     mode = process.env.PURGE_INSTALL_MODE || "desktop",
-    home = process.env.DSH_HOME || path.join(os.homedir(), ".dsh"), profile = process.env.DSH_PROFILE || "", dryRun = false } = options;
+    home = process.env.DSH_HOME || path.join(os.homedir(), ".dsh"), dryRun = false } = options;
+  // 显式传入 home 的调用方（测试、脚本）不该继承当前 DSH 会话的 DSH_PROFILE：
+  // 那是另一个实例的 profile，会让指向 fixture home 的安装去错误的目录里找 package.json。
+  const profile = options.profile ?? (options.home ? "" : process.env.DSH_PROFILE || "");
   if (!["web", "desktop"].includes(mode)) throw Error("Invalid installation mode");
   if (Number(process.versions.node.split(".")[0]) < 18) throw Error("Node >=18 is required");
   let cli = options.cli || (mode === "web" ? webCli() : desktopCli(executable, platform));

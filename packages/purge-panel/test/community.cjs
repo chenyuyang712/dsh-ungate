@@ -60,8 +60,6 @@ const responses = {
     defaultContent: "Default test prompt",
   },
   "/dsh-purge/own-servers": { ok: true, content: "example.test" },
-  "/dsh-purge/hooks-deny": { ok: true, hooksDenyBypass: false },
-  "/dsh-purge/drill-grant": { ok: true, granted: false },
   "/dsh-purge/boost": { ok: true, enabled: true },
   "/dsh-purge/selfcheck": {
     ok: true,
@@ -69,7 +67,7 @@ const responses = {
     host_version: "0.2.1-rc.1",
     qualified: true,
     level: "qualified",
-    patch: { applied: 74, total: 82 },
+    patch: { applied: 21, total: 27 },
     layers: [
       {
         title: "沙箱 confine 直通",
@@ -245,8 +243,8 @@ win.confirm = () => true;
   );
   assert(button("刷新"), "original status page renders in the community build");
   assert(
-    JSON.stringify(tree.toJSON()).includes("Hooks 拦截"),
-    "original hooks deny section renders in the community build",
+    !JSON.stringify(tree.toJSON()).includes("Hooks 拦截"),
+    "the removed hooks override section no longer renders",
   );
   const selfcheckTree = JSON.stringify(tree.toJSON());
   assert(selfcheckTree.includes("破甲自检"), "self-check block renders");

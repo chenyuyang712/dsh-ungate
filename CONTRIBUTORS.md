@@ -27,13 +27,8 @@
 
 第三方代码来源另见 [NOTICE.md](NOTICE.md)。欢迎通过 issue 提供复现与验证反馈，或通过 PR 贡献代码。
 
-## 头像名单维护
+## 说明
 
-README 中的头像由 `scripts/update-contributors.mjs` 生成，合并本页的个人主页链接与 GitHub contributors API，并在 `.github/contributors.json` 保留历史名单。原作者、上游提交者及人工鸣谢均会保留。
-
-- 新的问题分析或验证贡献者：在上表补充个人主页和具体贡献；合入后自动刷新。
-- 新的代码贡献者：每日计划任务从默认分支的 GitHub contributors 数据补入；GitHub 统计可能延迟。
-- 手动刷新：Actions → **Update contributor avatars** → **Run workflow**；也可在本地设置 `GH_TOKEN` 后运行 `node scripts/update-contributors.mjs`。
-- 离线核对：`node scripts/update-contributors.mjs --check`。不要手改 README 的 `CONTRIBUTORS:START/END` 区块。
-
-工作流计划每日北京时间 10:23 执行（GitHub 调度可能延迟），仅提交生成的名单和 README；API 异常或名单不完整时失败退出，不清空现有鸣谢。若要更正历史署名，请同时核对本页与名单快照。
+- 上表记录的是上游与社区分支的贡献；本仓库（youki258/dsh-purge-minimal）在上游基础上做减法与文档收敛，新增改动见提交历史与 [release-notes.md](release-notes.md)。
+- 本仓库**未启用**自动头像同步工作流（没有 `.github/`），因此 README 不展示由脚本生成的名单；署名以上表与 git 历史为准。
+- 发现遗漏或署名需要更正时，直接提 issue 或 PR，不必先跑任何生成脚本。

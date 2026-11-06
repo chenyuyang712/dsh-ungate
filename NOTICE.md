@@ -1,6 +1,9 @@
 # Attribution
 
-Purge Minimal (`dsh-purge-minimal`) is an independently maintained distribution derived from **dsh-purge**, original author **小杨 / YuJunZhiXue**:
+Purge Minimal (`dsh-purge-minimal`) is an independently maintained distribution. Its code comes from the community branch **kingcharleslzy-ai/dsh-purge** (the minimal cut of that project):
+https://github.com/kingcharleslzy-ai/dsh-purge
+
+That branch derives from **dsh-purge**, original author **小杨 / YuJunZhiXue**:
 https://github.com/YuJunZhiXue/dsh-purge
 
 Original copyright and MIT license remain in LICENSE. The repository preserves upstream source attribution. Upstream README text is retained under docs/upstream. This distribution is free and not offered for paid resale; it is not endorsed by or an official release of the upstream author.
