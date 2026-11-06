@@ -1,6 +1,6 @@
-# 当前状态（0.2.0）
+# 当前状态（0.2.1）
 
-> 当前版本 **0.2.0** · 最后更新：2026-11-06
+> 当前版本 **0.2.1** · 最后更新：2026-11-06
 > 本文件记录"现在是什么"，不记录"以前是什么"。历史在 [release-notes.md](../release-notes.md) 与 [upstream](upstream/)。
 
 ## 这是什么
@@ -79,9 +79,9 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 | `$DSH_HOME/dsh-purge/probe.json` | 运行时探针（30 分钟 TTL） |
 | `$DSH_HOME/dsh-purge/anchor-overrides.json` | 本机重锚覆盖 |
 | `$DSH_HOME/dsh-purge/applied.json` · `installed-rev` | 上次应用的插件版本 |
-| `$DSH_HOME/dsh-ungate/audit.jsonl` | 动作审计（1MB 轮转，保留 2 份） |
-| `$DSH_HOME/dsh-ungate/backups/` | 快照与对象（`manifest.json` + `objects/`） |
-| `$DSH_HOME/dsh-ungate/` | 0.2.0 起的数据目录；首次运行若只剩旧目录 `dsh-purge-minimal/`，自动改名迁移（审计、备份、快照一起搬；迁移失败则回退到旧目录继续读写） |
+| `$DSH_HOME/dsh-purge-minimal/audit.jsonl` | 动作审计（1MB 轮转，保留 2 份） |
+| `$DSH_HOME/dsh-purge-minimal/backups/` | 快照与对象（`manifest.json` + `objects/`） |
+| `$DSH_HOME/dsh-purge-minimal/` | 数据目录，**沿用历史目录名、不随包改名、不做任何迁移**：项目不读写用户 home 的结构 |
 | `$DSH_HOME/.agent-presets/unrestricted/` | 无限制模式预设 |
 
 ## 本机参考实例

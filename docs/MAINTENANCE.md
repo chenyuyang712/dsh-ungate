@@ -1,6 +1,6 @@
-# 维护手册（0.2.0）
+# 维护手册（0.2.1）
 
-> 当前版本 **0.2.0**。面向维护这个插件本体的人：改补丁、修锚点、看审计、发版。
+> 当前版本 **0.2.1**。面向维护这个插件本体的人：改补丁、修锚点、看审计、发版。
 
 ## 1. 应用与还原
 
@@ -50,8 +50,8 @@ token 在服务日志里：`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | tail -
 
 ## 5. 备份与审计
 
-- 快照：`$DSH_HOME/dsh-ungate/backups/<id>/manifest.json` + `objects/` 里的大文件（宿主源码副本按内容寻址）。快照不包含用户提示词正文的额外副本。
-- 审计：`$DSH_HOME/dsh-ungate/audit.jsonl`，1MB 轮转保留 2 份。事件：`apply`、`revert`、`boost`、`probe`、`preset`、`reanchor`、`tuning_setting`、`refusal_retry`、`refusal_retry_outcome`。
+- 快照：`$DSH_HOME/dsh-purge-minimal/backups/<id>/manifest.json` + `objects/` 里的大文件（宿主源码副本按内容寻址）。快照不包含用户提示词正文的额外副本。
+- 审计：`$DSH_HOME/dsh-purge-minimal/audit.jsonl`，1MB 轮转保留 2 份。事件：`apply`、`revert`、`boost`、`probe`、`preset`、`reanchor`、`tuning_setting`、`refusal_retry`、`refusal_retry_outcome`。
 - `purge audit --limit 20` 是最快的"刚才发生了什么"。
 
 ## 6. 拒绝重试层

@@ -6,7 +6,6 @@ import os from "node:os";
 import path from "node:path";
 import { execFileSync } from "node:child_process";
 import { REFUSAL_PATTERNS } from "../lib/refusal-retry.js";
-import { dataDir } from "../lib/data-dir.js";
 
 const args = process.argv.slice(2);
 const opt = (name, fallback) => {
@@ -18,7 +17,7 @@ const days = Number(opt("days", "7"));
 const since = Date.now() - days * 86400000;
 
 function readAudit() {
-  const file = path.join(dataDir(home), "audit.jsonl");
+  const file = path.join(home, "dsh-purge-minimal", "audit.jsonl");
   if (!fs.existsSync(file)) return [];
   return fs
     .readFileSync(file, "utf8")

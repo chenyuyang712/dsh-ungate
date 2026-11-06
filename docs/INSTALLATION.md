@@ -1,6 +1,6 @@
-# 安装与升级（0.2.0）
+# 安装与升级（0.2.1）
 
-> 当前版本 **0.2.0**。安装不应用补丁、不重启 DSH；应用与加载是另外两步，见文末「装完必做」。
+> 当前版本 **0.2.1**。安装不应用补丁、不重启 DSH；应用与加载是另外两步，见文末「装完必做」。
 
 ## 0. 先确认你面对的是哪个实例
 
@@ -20,7 +20,7 @@ echo "$DSH_HOME"        # 数据目录
 本仓库的 Releases 提供固定版本包。市场里搜 `dsh-ungate`，或直接用 CLI：
 
 ```sh
-dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.0/dsh-ungate-0.2.0.tgz
+dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.1/dsh-ungate-0.2.1.tgz
 ```
 
 Desktop：把 `web` 换成 `desktop`。官方插件管理器维护 `dsh.bundle`；装完它会出现在左侧栏「Purge」。
@@ -35,7 +35,7 @@ sh install.sh --dry-run     # 只验证前置条件、下载与 SHA256
 sh install.sh               # 正式安装：备份、调用官方 CLI、迁移旧包引用、验证磁盘版本
 ```
 
-可显式指定：`DSH_NODE` / `PURGE_DSH_CLI` / `DSH_HOME` / `--profile=名称` / `--version=0.2.0`。
+可显式指定：`DSH_NODE` / `PURGE_DSH_CLI` / `DSH_HOME` / `--profile=名称` / `--version=0.2.1`。
 
 Windows（PowerShell 5.1+）：
 
@@ -53,7 +53,7 @@ Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/youki258/ds
 
 ```sh
 cd "$DSH_HOME/profiles/web"
-pnpm add /path/to/dsh-ungate-0.2.0.tgz
+pnpm add /path/to/dsh-ungate-0.2.1.tgz
 ```
 
 然后把本包 `cordis.patch.yml` 里的 `dsh-purge` 与 `dsh-purge-presets` 两条 insert 合并进 profile 的 `cordis.yml`（不要整份覆盖），再重启服务。
@@ -112,6 +112,6 @@ purge uninstall         # 卸载插件，清理本 home 内的插件目录与链
 
 ## 7. 测试与验收边界
 
-- `pnpm test`：536 项，干净环境 0 失败；从 DSH 会话里跑也成立（安装器不再继承会话 profile）。
+- `pnpm test`：533 项，干净环境 0 失败；从 DSH 会话里跑也成立（安装器不再继承会话 profile）。
 - `pnpm run smoke`：打包 → 解包 → 无依赖启动 → 导入 → 预设解析。
 - 真机验收（Electron / Windows 换包 / macOS 交接）使用隔离实例，不能拿 Node 单测冒充。

@@ -1,7 +1,7 @@
 # AGENTS.md — 给 AI agent 的 Ungate 使用说明书
 
 > 写给**在 DSH 里干活的 agent**，不是营销文档。
-> 当前版本：**0.2.0** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
+> 当前版本：**0.2.1** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
 > 版本号与兼容声明由 `pnpm run check:docs` 对照 `package.json` 校验。
 
 ---
@@ -87,12 +87,14 @@ purge probe new
 | `$DSH_HOME/dsh-purge/tuning.json` | `{boost, injectPosition, askNoBlock, refusalRetry, extraPatches}` |
 | `$DSH_HOME/dsh-purge/probe.json` | 探针 nonce（30 分钟 TTL） |
 | `$DSH_HOME/dsh-purge/anchor-overrides.json` | 本地重锚覆盖（删掉即恢复出厂锚点） |
-| `$DSH_HOME/dsh-ungate/audit.jsonl` | 动作审计（1MB 轮转，保留 2 份） |
+| `$DSH_HOME/dsh-purge-minimal/audit.jsonl` | 动作审计（1MB 轮转，保留 2 份） |
 | `$DSH_HOME/dsh-purge/applied.json` · `installed-rev` | 上次应用的插件版本 |
-| `$DSH_HOME/dsh-ungate/backups/<id>/` | 快照（`manifest.json` + 小文件，大文件在 `objects/`） |
+| `$DSH_HOME/dsh-purge-minimal/backups/<id>/` | 快照（`manifest.json` + 小文件，大文件在 `objects/`） |
 | `$DSH_HOME/.agent-presets/unrestricted/` | 无限制模式预设 |
 
 **不变量**：`prompt-inject.md`、规则集、其他插件配置，任何时候都不该被「应用」或「回滚」覆盖。
+
+**目录名与 id 都不跟包名走**：包叫 `dsh-ungate`，但插件 id 仍是 `dsh-purge`（`cordis.patch.yml` 的 key、HTTP 前缀、设置段都靠它，改了等于让已有配置失效），数据目录仍是 `$DSH_HOME/dsh-purge-minimal/`（项目不碰用户 home 的目录结构，也不做自动迁移）。
 
 ## 7. 补丁表：27 条
 
@@ -112,7 +114,7 @@ purge probe new
 
 | 组件 | 值 |
 | --- | --- |
-| 插件 | `dsh-ungate` 0.2.0 |
+| 插件 | `dsh-ungate` 0.2.1 |
 | 已验证宿主 | DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5 |
 | 已验证宿主（限定 web / npm CLI 面） | DSH Desktop 0.2.2-rc.1：apply 20 + selfcheck 19/19 适用层；桌面换包/关窗组不适用 |
 | 未验证 | 0.2.1-rc.4、0.2.2-alpha.2（selfcheck 标未验证，不猜） |
@@ -146,7 +148,7 @@ token 在服务启动日志里（`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | 
 ## 12. 测试入口
 
 ```sh
-pnpm test            # 536 项
+pnpm test            # 533 项
 pnpm run smoke       # 打包后验证（pnpm 环境自动回退）
 pnpm run check:docs  # 版本/兼容/残留引用一致性
 pnpm run test:ui

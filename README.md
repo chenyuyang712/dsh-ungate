@@ -1,6 +1,6 @@
 # dsh-ungate
 
-**0.2.0** · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。
+**0.2.1** · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。
 
 > **来源声明（请先看这段）**
 > - 上游原始项目：[YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)（作者 小杨 / YuJunZhiXue，MIT）。
@@ -27,7 +27,7 @@
 
 ```sh
 # 1) 装（固定版本 tgz，任意一种入口都行）
-dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.0/dsh-ungate-0.2.0.tgz
+dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.1/dsh-ungate-0.2.1.tgz
 
 # 2) 应用补丁（面板点「应用」等价）
 node bin/community.js apply
@@ -90,7 +90,7 @@ purge probe new
 
 ```sh
 pnpm install --frozen-lockfile --allow-build=esbuild   # 面板构建需要 esbuild 的二进制
-pnpm test              # 536 项：补丁锚点、自检、安装器、HTTP、面板契约、回归
+pnpm test              # 533 项：补丁锚点、自检、安装器、HTTP、面板契约、回归
 pnpm run smoke         # 打包后：无依赖启动、模块导入、预设解析、status
 pnpm run check:docs    # 版本/兼容声明/残留引用一致性
 pnpm run test:ui       # 面板客户端 bundle 契约
@@ -99,7 +99,7 @@ pnpm run build:client  # 改面板源码后重建 bundle
 
 测试在干净环境跑：`scripts/bootstrap-install.mjs` 只在没有显式 home 时才继承 `DSH_PROFILE`，避免把当前会话的 profile 泄漏进 fixture。真机验收（Electron、换包）另用隔离实例，不拿组件测试冒充。
 
-CI 在 `.github/workflows/ci.yml`（Node 22/24 矩阵：`check:docs` → 面板 bundle 校验 → 面板契约 → 536 项测试 → 打包并断言包里不含 `docs/upstream/`）；`release.yml` 在 `v*.*.*` tag 上重复同一套检查、打包并建 release，带 fork 保险丝。
+CI 在 `.github/workflows/ci.yml`（Node 22/24 矩阵：`check:docs` → 面板 bundle 校验 → 面板契约 → 533 项测试 → 打包并断言包里不含 `docs/upstream/`）；`release.yml` 在 `v*.*.*` tag 上重复同一套检查、打包并建 release，带 fork 保险丝。
 
 ## 文档地图
 

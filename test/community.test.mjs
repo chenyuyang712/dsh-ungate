@@ -372,12 +372,12 @@ test("large files are stored once and restored byte-for-byte", async () => {
     fs.writeFileSync(path.join(f.root, "client.js"), big);
     const a = await f.manager.backup("dedupe-a");
     const b = await f.manager.backup("dedupe-b");
-    const objects = path.join(f.home, "dsh-ungate", "objects");
+    const objects = path.join(f.home, "dsh-purge-minimal", "objects");
     assert.equal(fs.readdirSync(objects).length, 1, "same content -> one object");
     // 备份目录里不再重复放这份大文件
     assert(
       !fs.existsSync(
-        path.join(f.home, "dsh-ungate", "backups", a.id, "plugins", PACKAGE, "client.js"),
+        path.join(f.home, "dsh-purge-minimal", "backups", a.id, "plugins", PACKAGE, "client.js"),
       ),
       "deduped file is not copied into the snapshot folder",
     );

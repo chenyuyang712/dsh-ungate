@@ -1,6 +1,6 @@
 # dsh-ungate
 
-**Current version 0.2.0** — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.
+**Current version 0.2.1** — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.
 
 > **Provenance**
 > - Original upstream: [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (author YuJunZhiXue, MIT).
@@ -22,7 +22,7 @@ It does **not** touch your prompt text, rule sets or other plugin configs, and i
 ## Quick start
 
 ```sh
-dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.0/dsh-ungate-0.2.0.tgz
+dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.1/dsh-ungate-0.2.1.tgz
 node bin/community.js apply
 # fully quit DSH, reopen, then:
 node bin/community.js selfcheck --json
