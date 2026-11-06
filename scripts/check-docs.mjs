@@ -72,6 +72,26 @@ if (!pkg.dshTarget) problems.push("package.json 缺少 dshTarget（当前主验�
 const targetRelease = String(pkg.dshTarget).split(/[\s(]/)[0];
 if (targetRelease && !(targetRelease in declared)) problems.push(`dshTarget ${targetRelease} 不在 dshReleases 里`);
 
+// 4b) 宿主门禁只认 engines.dsh；写了 compatible 的版本必须真的被它放行。
+const dshRange = pkg.engines?.dsh || "";
+if (!dshRange) problems.push("package.json 缺少 engines.dsh：宿主不会对插件做版本门禁");
+else {
+  let semver = null;
+  try {
+    semver = (await import("semver")).default ?? (await import("semver"));
+  } catch {
+    try {
+      semver = (await import("/usr/lib/node_modules/@deepseek-ai/dsh/node_modules/semver/index.js")).default;
+    } catch {
+      problems.push("无法加载 semver，跳过 engines.dsh 与 dshReleases 的一致性核对");
+    }
+  }
+  if (semver)
+    for (const [v, state] of Object.entries(declared))
+      if (state === "compatible" && !semver.satisfies(v, dshRange))
+        problems.push(`dshReleases 把 ${v} 标为 compatible，但 engines.dsh（${dshRange}）不放行它`);
+}
+
 // 5) 安装包链接必须指向当前版本，且 install.tarball 同源。
 const tarball = pkg.dsh?.install?.tarball || "";
 if (!tarball.includes(`/releases/download/v${version}/dsh-purge-minimal-${version}.tgz`))

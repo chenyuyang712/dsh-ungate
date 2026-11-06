@@ -1,6 +1,6 @@
 {
   "name": "dsh-purge-minimal",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "DSH 附加组件：用宿主补丁与提示词注入解除审批、沙箱和拒绝倾向拦截，附带状态自检、规则管理与本机备份回滚。源自 kingcharleslzy-ai/dsh-purge 的 minimal 分支。",
   "type": "module",
   "main": "lib/index.js",
@@ -78,7 +78,8 @@
   },
   "dsh": {
     "bundle": {
-      "patch": "./cordis.patch.yml"
+      "patch": "./cordis.patch.yml",
+      "listedByDefault": true
     },
     "client": {
       "platform": "web",
@@ -92,12 +93,10 @@
       ]
     },
     "install": {
-      "preferred": "tarball",
-      "tarball": "https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.2/dsh-purge-minimal-0.1.2.tgz",
-      "git": "https://github.com/youki258/dsh-purge-minimal.git"
+      "tarball": "https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.3/dsh-purge-minimal-0.1.3.tgz"
     },
     "compatibility": {
-      "dsh": ">=0.2.1-rc.1 <0.3.0",
+      "dsh": ">=0.2.1-rc.1 <0.3.0 || >=0.2.2-rc.1 <0.3.0",
       "profiles": [
         "desktop",
         "web"
@@ -111,7 +110,8 @@
         "0.2.2-alpha.2": "unknown",
         "0.2.2-rc.1": "compatible"
       }
-    }
+    },
+    "manifestVersion": 1
   },
   "publishConfig": {
     "access": "public"
@@ -120,7 +120,8 @@
     "@deepseek-ai/cordis": "^4.0.1"
   },
   "engines": {
-    "node": ">=18"
+    "node": ">=18",
+    "dsh": ">=0.2.1-rc.1 <0.3.0 || >=0.2.2-rc.1 <0.3.0"
   },
   "dshTarget": "0.2.2-rc.1 (web/npm-CLI surface: apply + selfcheck verified; desktop shell untested)",
   "contributors": [

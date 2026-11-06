@@ -1,7 +1,7 @@
 # AGENTS.md — 给 AI agent 的 Purge Minimal 使用说明书
 
 > 写给**在 DSH 里干活的 agent**，不是营销文档。
-> 当前版本：**0.1.2** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
+> 当前版本：**0.1.3** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
 > 版本号与兼容声明由 `pnpm run check:docs` 对照 `package.json` 校验。
 
 ---
@@ -112,7 +112,7 @@ purge probe new
 
 | 组件 | 值 |
 | --- | --- |
-| 插件 | `dsh-purge-minimal` 0.1.2 |
+| 插件 | `dsh-purge-minimal` 0.1.3 |
 | 已验证宿主 | DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5 |
 | 已验证宿主（限定 web / npm CLI 面） | DSH Desktop 0.2.2-rc.1：apply 20 + selfcheck 19/19 适用层；桌面换包/关窗组不适用 |
 | 未验证 | 0.2.1-rc.4、0.2.2-alpha.2（selfcheck 标未验证，不猜） |

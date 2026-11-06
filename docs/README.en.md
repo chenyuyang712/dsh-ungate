@@ -1,67 +1,51 @@
 # dsh-purge-minimal
 
-Current version 0.1.2. Verified on DSH Desktop 0.2.1-rc.1, 0.2.1-rc.2, 0.2.1-rc.3 and 0.2.1-rc.5 (web and desktop surfaces share the same patch table).
+**Current version 0.1.3** — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.
 
-`dsh-purge-minimal` removes what blocks an agent inside DSH: approval prompts, sandbox fences, write-intent interception, plan-mode hard stops, tool-result trimming, and the model's own refusal reflex. Install the plugin, press **Apply**, fully quit and reopen DSH, then confirm with `selfcheck`.
+> **Provenance**
+> - Original upstream: [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (author YuJunZhiXue, MIT).
+> - The code in this repository comes from the minimal cut of the community branch [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge); host patches, selfcheck, installers and the panel originate there.
+> - [youki258/dsh-purge-minimal](https://github.com/youki258/dsh-purge-minimal) only subtracts and rewrites: no tool surface, no legacy debug entry points, no in-plugin self-update, 27 patches, one source of truth for docs. It is **not** an official release by the upstream author.
 
-- Patches are written into the host's **unpacked source copy**; every write is backed up first.
-- User content — prompt injection text, rules, other plugin config — is never overwritten by Apply or Revert.
-- No network scope gate, no content gate: the operator declares the target.
+## What it changes
 
-## Five layers
+| Layer | Content | Takes effect |
+| --- | --- | --- |
+| Host patches | 27 definitions; 21 apply on the web surface, 6 are desktop-shell only | press Apply → **fully quit DSH and reopen** |
+| Runtime prompt | injection text re-attached every step (`$DSH_HOME/prompt-inject.md`) | immediately |
+| Boost section | trailing section, on by default | immediately |
+| Permission config | `danger-full-access` + `approval: ask` | after reload |
+| agent preset | `unrestricted`, a superset of standard that only changes persona | pick it in new sessions |
 
-| Layer | Provided by | Takes effect | Inspect with |
+It does **not** touch your prompt text, rule sets or other plugin configs, and it does not judge who owns a target. Disk writes are not proof of load: every "in effect" claim below is backed by a post-restart `selfcheck` and a probe.
+
+## Quick start
+
+```sh
+dsh plugin --profile web add https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.3/dsh-purge-minimal-0.1.3.tgz
+node bin/community.js apply
+# fully quit DSH, reopen, then:
+node bin/community.js selfcheck --json
+node bin/community.js probe new
+```
+
+## Compatibility matrix
+
+| Host | Surface | Result | Evidence |
 | --- | --- | --- | --- |
-| Host patches (27 definitions) | this plugin writes host source | Apply → **full restart** | `purge selfcheck` |
-| Runtime prompt injection | plugin runtime | immediately | panel → Status, `purge probe new` |
-| Boost section | plugin runtime (tail) | immediately | `purge boost` |
-| Permission config | profile `cordis.patch.yml` | on reload | selfcheck permission layer |
-| Agent preset `unrestricted` | `presets/unrestricted` | picked per session | preset dropdown |
+| DSH Desktop 0.2.1-rc.1, rc.2, rc.3, rc.5 | desktop + web | Verified | anchors hit, apply, selfcheck green |
+| DSH Desktop 0.2.2-rc.1 | web / npm CLI | Verified (apply 20 + selfcheck 19/19 applicable layers) | isolated instance, see [VERIFY](VERIFY.md) |
+| DSH Desktop 0.2.2-rc.1 | desktop shell | Untested: the 6 desktop-only patches are n/a here | — |
+| DSH Desktop 0.2.1-rc.4, 0.2.2-alpha.2 | any | Untested; selfcheck reports it | — |
 
-On a web profile the self-check reports 21 patches applied and 6 not applicable (the desktop re-seal / window-close group). See [STATE.md](STATE.md).
+`engines.dsh` in `package.json` is enforced by the host on install and boot.
 
-## Install
+## Updating
 
-```sh
-dsh plugin --profile web add https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.2/dsh-purge-minimal-0.1.2.tgz
-```
+Upgrading is the host's job, not the plugin's: the panel does not check for versions and does not swap packages. Market-installed copies upgrade through the DSH plugin market or `dsh plugin --profile <n> update`; tarball installs are replaced by the next tarball (they are `not-updatable` in the plugin manager by design). After any host upgrade, press Apply once and restart.
 
-Desktop users replace `web` with `desktop` (use your real profile name). Bootstrap installers for Linux/macOS (`scripts/install.sh`) and Windows (`scripts/install.ps1`) download the release, verify SHA256, call the official CLI and migrate old package references. None of them apply patches or restart DSH automatically.
+## Docs
 
-After install: press **Apply** in the panel → quit DSH completely → reopen → `purge selfcheck --json` and check `layers[].state`.
+[AGENTS.md](../AGENTS.md) · [INSTALLATION](../docs/INSTALLATION.md) · [STATE](../docs/STATE.md) · [VERIFY](../docs/VERIFY.md) · [RUNBOOK](../docs/RUNBOOK.md).
 
-## Panel and CLI
-
-The Purge sidebar has Status, Prompt, Rules, Skills and More (diagnostics, preset install, backups, recent actions, release history). The panel does **not** check for updates online: upgrades go through the plugin market, the panel only takes local snapshots and rolls back.
-
-`purge` is the CLI entry (`bin/community.js`). Commands: `status`, `selfcheck`, `apply`, `revert`, `host-status`, `diagnose`, `reanchor`, `probe`, `audit`, `boost`, `preset`, `backup`, `rollback`, `usage`, `prune`, `patches`, `uninstall`.
-
-## Proof that injection reached the model
-
-```sh
-purge probe new
-```
-
-Send any message afterwards; the model echoing the nonce verbatim means the runtime section reached it. Echoed but still refusing → persona/boost problem, not a patch problem. No echo → injection did not arrive.
-
-## Compatibility
-
-Verified: 0.2.1-rc.1, 0.2.1-rc.2, 0.2.1-rc.3, 0.2.1-rc.5. Unknown: 0.2.1-rc.4, 0.2.2-alpha.2 — no measurement, selfcheck labels them unverified. Host upgrades re-seal the archive and invalidate every patch: press Apply again and restart. Anchor drift is diagnosed with `purge diagnose` and repaired with `purge reanchor`.
-
-## Tests
-
-```sh
-pnpm test          # 533 tests
-pnpm run smoke     # pack, unpack, dependency-free bootstrap, imports, preset parse
-pnpm run check:docs
-pnpm run test:ui
-pnpm run build:client
-```
-
-## Provenance
-
-1. Original project [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (MIT, author 小杨 / YuJunZhiXue).
-2. Community branch [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge) — this repository's code comes from its minimal cut: host patches, self-check, installers and panel.
-3. This repository [youki258/dsh-purge-minimal](https://github.com/youki258/dsh-purge-minimal) only subtracts and consolidates: no penetration tooling, no rehearsal console, no online self-update, 27 patch definitions.
-
-Upstream README, release notes and maintenance docs are archived verbatim under [upstream](upstream). Third-party notices: [NOTICE.md](../NOTICE.md). Not affiliated with, nor endorsed by, the upstream author.
+MIT — see [LICENSE](../LICENSE), [NOTICE.md](../NOTICE.md), [CONTRIBUTORS.md](../CONTRIBUTORS.md).

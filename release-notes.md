@@ -1,3 +1,28 @@
+# 0.1.3
+
+> 2026-11-07 · `dsh-purge-minimal` 0.1.3 · 已实测宿主不变：DSH Desktop 0.2.1-rc.1 / rc.2 / rc.3 / rc.5，0.2.2-rc.1 仅 web / npm CLI 面
+
+这一版对齐 DSH 官方插件规范，并把 README 重写成本发行版自己的叙事。
+
+## 变更
+
+- `package.json` 补官方字段：`engines.dsh`（宿主安装与启动时的版本门禁）、`dsh.manifestVersion: 1`、`dsh.bundle.listedByDefault: true`。此前只有 `@deepseek-ai/cordis` peer，而宿主不计入该 peer，等于没有版本约束。
+- `engines.dsh` 取值 `>=0.2.1-rc.1 <0.3.0 || >=0.2.2-rc.1 <0.3.0`：第二段是为了让 0.2.2 的预发布版本参与匹配（SemVer 预发布按三元组对齐）；未验证版本仍可用宿主的 `allow-version --accept-risk` 豁免。
+- README 重写：首屏来源声明、五层模型、30 秒上手、兼容矩阵、更新策略（交给宿主）、文档地图。`README.zh-CN.md` 与英文 README 同步。
+- 新增 `docs/VERIFY.md`：0.2.2-rc.1 web 面的逐环节证据与边界说明。
+- 发行包链接从 `/releases/latest/download/` 固定文件名改为 `/releases/download/v0.1.3/` 版本化路径。
+
+## 验证
+
+- `pnpm test`：533 项，0 失败（509 通过 / 24 跳过）。
+- `pnpm run check:docs`：通过（版本、兼容声明、补丁条数、残留引用、安装示例）。
+- `node packages/purge-panel/scripts/build.mjs --community --check`：bundle 与源码一致。
+
+## 已知限制
+
+- 桌面壳 0.2.2-rc.1 的换包流程未验证；web 面已跑通安装→应用→重启→自检。
+- tgz 手工安装的副本在插件管理器中不可自动更新，升级需换新 tgz。
+
 # 0.1.2
 
 > 2026-11-06 · 主干：`dsh-purge-minimal` 0.1.2 · 已实测 DSH Desktop 0.2.1-rc.1 / rc.2 / rc.3 / rc.5
