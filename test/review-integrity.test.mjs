@@ -7,7 +7,6 @@ import { spawnSync } from "node:child_process";
 import { fileURLToPath } from "node:url";
 import { writeTuning, readTuning } from "../lib/tuning.js";
 import { readAudit } from "../lib/audit.js";
-import { splitRedteamInject, withoutCtfContract } from "../lib/identity.js";
 import { looksLikeRefusal, streamWithRefusalRetry } from "../lib/refusal-retry.js";
 import { observeStream } from "../lib/stream-observation.js";
 
@@ -40,28 +39,6 @@ test("consumer cancellation closes the ordinary upstream stream", async () => {
   })(), {}, { bufferChars: 1 });
   await stream.next(); await stream.return();
   assert.equal(closed, true);
-});
-
-test("prompt prose, quotes, fenced examples and mixed-case text are preserved", () => {
-  for (const text of [
-    "请解释 CTF CORE CONTRACT 一词。\n后续用户规则必须保留。",
-    "> CTF CORE CONTRACT\n引用后的正文",
-    "`CTF CORE CONTRACT`\n正文",
-    "```text\nCTF CORE CONTRACT\n```\n正文",
-    "~~~~\nCTF CORE CONTRACT\n~~~\n仍在代码块",
-    "CTF Core Contract\n正文",
-    "    CTF CORE CONTRACT\n缩进代码之后",
-  ]) {
-    assert.deepEqual(splitRedteamInject(text), { common: text, ctfTail: "" });
-    assert.equal(withoutCtfContract(text), text);
-  }
-});
-
-test("legacy standalone marker remains recognized after a closed fenced example", () => {
-  const prefix = "```\nCTF CORE CONTRACT\n```\nkeep";
-  assert.deepEqual(splitRedteamInject(prefix + "\r\nCTF CORE CONTRACT\r\nfixture"), {
-    common: prefix, ctfTail: "CTF CORE CONTRACT\r\nfixture",
-  });
 });
 
 test("stream diagnostics describe transport completion, not answer quality", async () => {

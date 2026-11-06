@@ -7,7 +7,7 @@ const example = (name, fence = '```yaml') => `${fence}\n- insert:\n    - id: dsh
 const notice = `${LEGACY_NOTICE}\n> [!WARNING]\n> Historical example; use community installation instructions.\n\n`;
 
 test('legacy imports are found with all YAML quoting styles and module subpaths', () => {
-  for (const name of ['dsh-purge', "'dsh-purge'", '"dsh-purge"', 'dsh-purge/redteam'])
+  for (const name of ['dsh-purge', "'dsh-purge'", '"dsh-purge"', 'dsh-purge/presets-plugin'])
     assert.equal(checkInstallExamples(example(name)).length, 1, name);
   assert.equal(checkInstallExamples('```yml\n- group:\n  - name: dsh-purge\n```').length, 1);
   assert.equal(checkInstallExamples(example('dsh-purge', '~~~yaml')).length, 1);

@@ -20,8 +20,8 @@ test('unrelated names, prompt mentions, current package names and custom user ch
   assert.equal(migrateReferences(changed,yaml,[{id:'dsh-purge',from:'dsh-purge',to:'dsh-purge-community'}]).text,changed);
 });
 test('known legacy submodule overrides migrate; malformed, dynamic and ambiguous registrations stop',()=>{
-  const text='- id: dsh-purge-redteam-ui\n  name: dsh-purge/redteam/ui\n';
-  assert.match(migrateReferences(text,yaml).text,/"dsh-purge-community\/redteam\/ui"/);
+  const text='- id: dsh-purge-presets\n  name: dsh-purge/presets-plugin\n';
+  assert.match(migrateReferences(text,yaml).text,/"dsh-purge-community\/presets-plugin"/);
   for(const text of ['- id: dsh-purge\n  name: [', '- id: custom\n  name: dsh-purge\n','- id: dsh-purge\n  name: !!js dsh-purge\n','- insert:\n    - id: dsh-purge\n      name: dsh-purge\n']) assert.throws(()=>migrateReferences(text,yaml));
 });
 

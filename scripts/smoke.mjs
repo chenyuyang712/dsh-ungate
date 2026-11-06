@@ -60,7 +60,7 @@ try {
   ok("核心模块可从发行包导入");
 
   // 3) 自带预设能被 registry 的解析器读成合法定义
-  const composition = await import(pathToFileURL(path.join(pkgDir, "lib/redteam/preset-composition.js")).href);
+  const composition = await import(pathToFileURL(path.join(pkgDir, "lib/preset-composition.js")).href);
   const def = composition.readPresetDefinition("unrestricted", path.join(pkgDir, "presets/unrestricted"));
   if (def.id !== "unrestricted" || !Array.isArray(def.plugins) || def.plugins.length < 15)
     problems.push(`预设解析异常：${def.id} / ${def.plugins?.length} 行`);

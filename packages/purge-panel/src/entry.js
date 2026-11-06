@@ -1,8 +1,6 @@
 // UI derived from YuJunZhiXue/dsh-purge 1.1.71 (MIT). See LICENSE.
 import { h, react } from "./shared/react.js";
 import { PURGE_CSS } from "./styles/index.js";
-import { useDock, startGrantSync } from "./state/dock.js";
-import { AuthGate } from "./components/auth.js";
 import { NS, setTranslate, zh, en } from "./shared/locale.js";
 import { SettingsRoot } from "./components/settings-shell.js";
 import { PurgePage, PurgeGlyph } from "./components/page.js";
@@ -10,7 +8,6 @@ import { bindSessionContext } from "./state/session-context.js";
 import { installLegacyVisibility } from "./state/legacy-visibility.js";
 import { installRewindUi } from "./components/rewind.js";
 import { WelcomeNotice } from "./components/welcome.js";
-import { EnvAdaptSendGate } from "./components/env-gate.js";
 
 export const name = __MODULE_ID__;
 
@@ -39,20 +36,16 @@ function PurgeGlyphIcon({ size = 16 } = {}) {
 }
 
 export function PanelOverlays() {
-  const st = useDock();
   return h(
     react.Fragment,
     null,
     h("style", null, PURGE_CSS),
-    // Restored from 1.1.71 apply(): shell.overlay carried the welcome notice
-    // and the red-team environment gate next to the dock.
+    // Restored from 1.1.71 apply(): shell.overlay carried the welcome notice.
     h(WelcomeNotice, {
       repo: __COMMUNITY__
         ? "https://github.com/youki258/dsh-purge-minimal"
         : undefined,
     }),
-    h(EnvAdaptSendGate),
-    st.authOpen ? h(AuthGate, { pending: st.pending }) : null,
   );
 }
 
@@ -61,7 +54,6 @@ export function apply(ctx) {
   ctx.inject(["sessions", "uiWorkspace"], (host) => {
     host.effect(() => bindSessionContext(host), "panel session context");
   });
-  ctx.effect(startGrantSync, "panel grant sync");
   // Restored from 1.1.71 apply(): conversation.input.right rewind button.
   ctx.inject(["sessions", "uiWorkspace", "conversation"], (host) =>
     installRewindUi(host),

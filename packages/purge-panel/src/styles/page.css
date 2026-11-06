@@ -360,13 +360,6 @@
 }
 
 /* 演练台占满剩余高度 */
-.dshpp-page-drill {
-  min-height: 60vh;
-}
-.dshpp-page-drill .rt-dock.rt-embedded {
-  width: 100%;
-  min-width: 0;
-}
 
 .dshpp-page-foot {
   margin-top: 28px;

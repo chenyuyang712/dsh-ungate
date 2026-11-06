@@ -16,7 +16,7 @@ const load = async (n) =>
 const repo = process.env.PURGE_TEST_PLUGIN_ROOT || path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..");
 const { boot, initProfile, readProfilePatches } = await load("dsh-app-boot");
 const { readPresetDefinition } = await import(
-  pathToFileURL(path.join(repo, "lib/redteam/preset-composition.js"))
+  pathToFileURL(path.join(repo, "lib/preset-composition.js"))
 );
 const { migratePresetDefinition, registerPresetDefinitions } = await import(
   pathToFileURL(path.join(repo, "lib/preset-compat.js"))

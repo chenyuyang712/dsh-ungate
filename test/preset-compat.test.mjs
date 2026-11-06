@@ -4,7 +4,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { bundledPresetDir } from "../lib/presets.js";
-import { readPresetDefinition } from "../lib/redteam/preset-composition.js";
+import { readPresetDefinition } from "../lib/preset-composition.js";
 import {
   migratePresetDefinition,
   backupPresetMigration,

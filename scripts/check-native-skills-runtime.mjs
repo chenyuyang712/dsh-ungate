@@ -1,7 +1,7 @@
 // Real host provider, isolated ordinary fixtures; no model calls or live profile.
 import fs from 'node:fs';import os from 'node:os';import path from 'node:path';import assert from 'node:assert/strict';import {pathToFileURL} from 'node:url';
 import {installPreset} from '../lib/presets.js';
-import {readPresetDefinition} from '../lib/redteam/preset-composition.js';
+import {readPresetDefinition} from '../lib/preset-composition.js';
 const base=process.env.PURGE_TEST_HOST;if(!base)throw Error('Explicit isolated host components required');
 const {FileSystemSkillProvider}=await import(pathToFileURL(path.join(base,'dsh-skill-filesystem/lib/index.js')));
 const root=fs.mkdtempSync(path.join(os.tmpdir(),'purge-native-skills-'));

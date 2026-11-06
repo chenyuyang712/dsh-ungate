@@ -14,15 +14,6 @@ export function useT() {
 
 export const zh = {
   nav: "规则设定",
-  "dock.clean": "清洗",
-  "dock.drill": "演练台",
-  "dock.toggle": "dsh-purge",
-  "dock.newSession": "dsh-purge",
-  "dock.inSession": "dsh-purge",
-  "dock.redteam": "红队模式",
-  "dock.full": "全面浏览",
-  "dock.close": "收起",
-  "dock.unauthorized": "未授权",
   "welcome.title": "用户须知",
   "welcome.lead": "首次安装本插件时请阅读以下说明。确认后本窗不再弹出。",
   "welcome.warn":
@@ -39,22 +30,6 @@ export const zh = {
   "welcome.bans": "禁止事项",
   "welcome.check": "我已阅读并理解上述用户须知，同意合法合规使用。",
   "welcome.ok": "我已知晓并继续",
-  "auth.title": "演练台授权确认",
-  "auth.lead":
-    "清洗不需要这一步。第一次进入演练台，或打开全面浏览，都要先完成本窗。",
-  "auth.warn":
-    "安全警告：演练台只用于你有权管理的本机、离线靶标，或已书面授权的演练环境。未经授权的渗透、攻击、窃取和破坏一律禁止。",
-  "auth.hint.wait": "请阅读声明。{n} 秒后才能勾选。",
-  "auth.hint.scroll": "倒计时已结束。请把声明滚到文末，再勾选。",
-  "auth.hint.check": "倒计时已结束。请勾选全部三项。",
-  "auth.check.read": "我已读完《安全与禁止违法声明》，并认可其中的全部条款。",
-  "auth.check.scope": "我确认只用在本机已授权环境、离线靶标或合规演练中。",
-  "auth.check.ban": "我确认禁止任何违法用途。未完成本授权，不得使用演练台。",
-  "auth.no": "暂不进入",
-  "auth.ok": "确认授权",
-  "auth.ok.tab": "确认授权并进入演练台",
-  "auth.ok.full": "确认授权并全面浏览",
-  "auth.ok.env": "确认授权并打开环境适配",
   "envGate.title": "环境还没配好",
   "envGate.lead":
     "红队模式发送前需要本机工具。未检测到可用环境时，先去环境适配，或确认暂不配置。",
@@ -426,15 +401,6 @@ export const zh = {
 
 export const en = {
   nav: "Rules",
-  "dock.clean": "Clean",
-  "dock.drill": "Drill",
-  "dock.toggle": "dsh-purge",
-  "dock.newSession": "dsh-purge",
-  "dock.inSession": "dsh-purge",
-  "dock.redteam": "Red team",
-  "dock.full": "Full view",
-  "dock.close": "Collapse",
-  "dock.unauthorized": "Unauthorized",
   "welcome.title": "User notice",
   "welcome.lead":
     "Please read this on first install. After you confirm, it will not appear again.",
@@ -453,26 +419,6 @@ export const en = {
   "welcome.check":
     "I have read and understand this notice and will use the plugin lawfully.",
   "welcome.ok": "I understand — continue",
-  "auth.title": "Drill console authorization",
-  "auth.lead":
-    "Cleaning does not need this step. Opening Drill or Full view the first time requires this dialog.",
-  "auth.warn":
-    "Warning: the drill console is only for hosts you manage, offline targets, or written authorized exercises. Unauthorized intrusion, attack, theft, or sabotage is forbidden.",
-  "auth.hint.wait": "Read the notice. You can check the boxes in {n}s.",
-  "auth.hint.scroll":
-    "Countdown finished. Scroll to the end, then check the boxes.",
-  "auth.hint.check": "Countdown finished. Check all three boxes.",
-  "auth.check.read":
-    "I have read the Safety and Anti-Abuse Notice and accept every clause.",
-  "auth.check.scope":
-    "I will only use authorized local hosts, offline targets, or compliant exercises.",
-  "auth.check.ban":
-    "I will not use this for any illegal purpose. Without this authorization the drill console stays closed.",
-  "auth.no": "Not now",
-  "auth.ok": "Authorize",
-  "auth.ok.tab": "Authorize and open Drill",
-  "auth.ok.full": "Authorize and open Full view",
-  "auth.ok.env": "Authorize and open Env adapt",
   "envGate.title": "Environment is not ready",
   "envGate.lead":
     "Red team mode needs local tools before you send. If none are available, open Env adapt or confirm you will continue without them.",

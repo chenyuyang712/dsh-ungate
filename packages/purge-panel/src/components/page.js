@@ -10,15 +10,12 @@ import { PurgifySection } from "./settings-form.js";
 import { RulesSection } from "./rules.js";
 import { SkillsSection } from "./skills.js";
 import { CommunityMaintenance, StatusExtras } from "./maintenance.js";
-import { __dshPurgeDrill } from "../vendor/drill.js";
-import { readDrillAuth, setDock, requestDrill } from "../state/dock.js";
 
 const TABS = [
   ["status", "状态", "宿主兼容、补丁、破甲自检"],
   ["prompt", "提示词", "注入正文与破甲强化段"],
   ["rules", "规则", "规则集与工作区策略"],
   ["skills", "技能", "DSH 技能目录"],
-  ["drill", "演练台", "红队演练与环境适配"],
   ["more", "更多", "服务器名单、更新与维护"],
 ];
 
@@ -277,37 +274,6 @@ export function PurgePage() {
         { hidden: tab !== "more", className: "dshpp-sec" },
         visited.more ? h(PurgifySection, { page: "more" }) : null,
       ),
-      tab === "drill"
-        ? h(
-            "div",
-            { className: "dshpp-sec dshpp-page-drill" },
-            __dshPurgeDrill && __dshPurgeDrill.CSS
-              ? h("style", { "data-dsh-purge-drill": "1" }, __dshPurgeDrill.CSS)
-              : null,
-            readDrillAuth()
-              ? h(__dshPurgeDrill.Panel, { embedded: true })
-              : h(
-                  "div",
-                  { className: "dshpp-card" },
-                  h(
-                    "p",
-                    { className: "dshpp-muted" },
-                    "演练台需要先完成一次授权。",
-                  ),
-                  h(
-                    Btn,
-                    {
-                      kind: "primary",
-                      onClick: () => {
-                        setDock({ tab: "drill", authOpen: true });
-                        requestDrill("auth");
-                      },
-                    },
-                    "去授权",
-                  ),
-                ),
-          )
-        : null,
     ),
     h(
       "footer",

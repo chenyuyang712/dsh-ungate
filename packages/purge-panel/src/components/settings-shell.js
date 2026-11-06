@@ -8,13 +8,6 @@ import { Btn } from "./primitives.js";
 import { PurgifySection } from "./settings-form.js";
 import { RulesSection } from "./rules.js";
 import { SkillsSection } from "./skills.js";
-import { __dshPurgeDrill } from "../vendor/drill.js";
-import {
-  readDrillAuth,
-  setDock,
-  useDock,
-  requestDrill,
-} from "../state/dock.js";
 
 export function compatibilityLevelText(t, level) {
   const key = "compat.level." + (level || "unknown");
@@ -87,15 +80,11 @@ export function SettingsRoot(props = {}) {
   const t = typeof props.t === "function" ? props.t : useT();
   const [page, setPage] = useState("status");
   const [backendStatus, setBackendStatus] = useState(null);
-  const st = useDock();
   const [visited, setVisited] = useState({ status: true });
   const select = (id) => {
     setPage(id);
     setVisited((v) => ({ ...v, [id]: true }));
   };
-  useEffect(() => {
-    if (st.tab === "drill" && st.open) select("drill");
-  }, [st.tab, st.open]);
   setTranslate(t);
   return h(
     "div",
@@ -152,18 +141,6 @@ export function SettingsRoot(props = {}) {
       h(
         "div",
         { hidden: page !== "more", className: "dshpp-more" },
-        h("h3", null, "演练台"),
-        h("p", null, "打开插件原有的演练工具与环境设置。"),
-        h(
-          Btn,
-          {
-            onClick: () => {
-              select("drill");
-              requestDrill("tab");
-            },
-          },
-          "打开演练台",
-        ),
         h(
           "p",
           { className: "dshpp-attribution" },
@@ -172,30 +149,6 @@ export function SettingsRoot(props = {}) {
             : "界面独立维护；官方 Purge 可单独更新。基于 YuJunZhiXue/dsh-purge 1.1.71（MIT）。",
         ),
       ),
-      page === "drill"
-        ? h(
-            "div",
-            { className: "dshpp-native-drill" },
-            // 演练台自带一套 CSS（.rt-*）；旧版由 dock 注入 <head>，重构时丢了，
-            // 结果面板在右侧栏里完全没样式、文字被挤成一列。这里随组件一起挂上。
-            __dshPurgeDrill && __dshPurgeDrill.CSS
-              ? h("style", { "data-dsh-purge-drill": "1" }, __dshPurgeDrill.CSS)
-              : null,
-            h(
-              Btn,
-              {
-                onClick: () => {
-                  setDock({ tab: "clean" });
-                  select("more");
-                },
-              },
-              "返回设置",
-            ),
-            readDrillAuth()
-              ? h(__dshPurgeDrill.Panel, { embedded: true })
-              : h("p", null, "请先完成演练台授权。"),
-          )
-        : null,
     ),
   );
 }
