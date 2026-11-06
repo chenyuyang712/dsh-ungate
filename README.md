@@ -98,6 +98,8 @@ pnpm run build:client  # 改面板源码后重建 bundle
 
 测试在干净环境跑：`scripts/bootstrap-install.mjs` 只在没有显式 home 时才继承 `DSH_PROFILE`，避免把当前会话的 profile 泄漏进 fixture。真机验收（Electron、换包）另用隔离实例，不拿组件测试冒充。
 
+CI 在 `.github/workflows/ci.yml`（Node 22/24 矩阵：`check:docs` → 面板 bundle 校验 → 面板契约 → 533 项测试 → 打包并断言包里不含 `docs/upstream/`）；`release.yml` 在 `v*.*.*` tag 上重复同一套检查、打包并建 release，带 fork 保险丝。
+
 ## 文档地图
 
 | 文件 | 给谁看 |

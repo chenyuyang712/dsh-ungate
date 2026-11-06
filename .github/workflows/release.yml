@@ -1,0 +1,77 @@
+name: Release
+
+on:
+  push:
+    tags: ["v*.*.*"]
+  workflow_dispatch:
+    inputs:
+      dry_run:
+        description: 只打包，不建 release
+        type: boolean
+        default: true
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    # 保险丝：在 fork 上打 tag 不会去动上游 release。
+    if: github.repository == 'youki258/dsh-purge-minimal'
+    runs-on: ubuntu-latest
+    env:
+      NPM_TOKEN: ${{ secrets.NPM_TOKEN }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 10
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+          cache: pnpm
+
+      - name: Install
+        run: pnpm install --frozen-lockfile
+
+      - name: Check (docs + panel + tests)
+        run: |
+          pnpm run check:docs
+          pnpm run check:client
+          pnpm test
+
+      - name: Pack
+        run: pnpm pack --pack-destination dist
+
+      - name: Verify tarball
+        run: |
+          node -e '
+            const { execFileSync } = require("node:child_process");
+            const fs = require("node:fs");
+            const pkg = require("./package.json");
+            const tgz = fs.readdirSync("dist").find((f) => f.endsWith(".tgz"));
+            if (tgz !== `${pkg.name}-${pkg.version}.tgz`) {
+              console.error(`包名/版本不符：${tgz} vs ${pkg.name}-${pkg.version}.tgz`);
+              process.exit(1);
+            }
+            const list = execFileSync("tar", ["-tzf", `dist/${tgz}`], { encoding: "utf8" });
+            if (list.includes("package/docs/upstream/")) {
+              console.error("docs/upstream 不应进发行包");
+              process.exit(1);
+            }
+            console.log(`tarball ok: ${tgz} (${list.split("\n").length - 1} files)`);
+          '
+
+      - name: Publish to npm
+        if: env.NPM_TOKEN != ''
+        run: |
+          printf '//registry.npmjs.org/:_authToken=%s\n' "$NPM_TOKEN" > "$HOME/.npmrc"
+          pnpm publish --no-git-checks --access public
+
+      - name: GitHub release
+        if: ${{ !inputs.dry_run }}
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/*.tgz
+          generate_release_notes: true
