@@ -1,0 +1,9 @@
+node_modules/
+backups/
+objects/
+pkgs/
+audit.jsonl
+*.log
+*.tgz
+.dshpurge.bak
+lib/default-prompt-inject.md
