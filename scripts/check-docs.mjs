@@ -80,11 +80,7 @@ else {
   try {
     semver = (await import("semver")).default ?? (await import("semver"));
   } catch {
-    try {
-      semver = (await import("/usr/lib/node_modules/@deepseek-ai/dsh/node_modules/semver/index.js")).default;
-    } catch {
-      problems.push("无法加载 semver，跳过 engines.dsh 与 dshReleases 的一致性核对");
-    }
+    problems.push("缺少 semver（devDependency），无法核对 engines.dsh 与 dshReleases 的一致性");
   }
   if (semver)
     for (const [v, state] of Object.entries(declared))
