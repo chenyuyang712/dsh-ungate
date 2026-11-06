@@ -192,6 +192,9 @@
       name: '@deepseek-ai/dsh-tool-subagent-control'
       disabled: false
 
+    # 0.2.2 起 list_agents 并入主入口，`./list-agents` 出口被删；
+    # 注册期由 lib/preset-compat.js 的 adaptListAgents 摘掉这条，
+    # 所以下面这行在旧宿主上仍生效，在新宿主上不会让 preset 判 invalid。
     - id: tool-subagent-list-agents
       name: '@deepseek-ai/dsh-tool-subagent-control/list-agents'
       disabled: false

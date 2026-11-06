@@ -43,9 +43,28 @@ sudo systemd-run --unit=dsh-web-restart --collect \
 ## 3. 改宿主类改动的流程
 
 1. 先在**隔离实例**上做（独立 `DSH_HOME`、独立端口、独立 unit），绝不先动主实例。
-2. 隔离实例里跑完整链路：装插件 → 应用 → 重启 → `selfcheck` → 探针。
+2. 隔离实例里跑完整链路：装插件 → 应用 → 重启 → `selfcheck` → 探针 → **新建一个会话并打开一个历史会话**（`--dump-config` 不看模块出口，证明不了 preset 能实例化）。
 3. 证据齐了再动主实例；主实例改完同样走「应用 → 退出 → 重开 → 自检」。
 4. 每一步都留输出（`status`/`selfcheck --json`/`audit`），别只留一句"好了"。
+
+### 3.1 升级宿主后的第一坑：profile preset 引了被删的子路径出口
+
+**症状**：重启后每个会话都「不可用」，历史会话从侧栏消失（看着像数据丢了），前端 console 一串 `entries did not activate`。
+
+**根因**：profile 的 `cordis.patch.yml` 里 preset 条目不只写包名，还写子路径出口，例如
+`@deepseek-ai/dsh-tool-subagent-control/list-agents`。宿主 0.2.2 起把 `list_agents` 并回主入口、
+删掉 `./list-agents` 出口 → 该 entry 永不 start → preset 判 invalid → 会话 create/restore 全失败。
+会话数据没坏，坏的是配置里那条引用。
+
+**处置**：
+
+1. 先备份：`cp cordis.patch.yml cordis.patch.yml.bak-listagents-$(date +%s)`。
+2. 删除失效条目的 `id` 与 `name` 两行（连带 `disabled` 行）。
+3. **不要**把它改成指主入口——主入口已经带这个工具，再指一次会重复注册同名工具。
+4. 重启（见 §2），`curl -o /dev/null -w '%{http_code}' localhost:3080/` 得 401 即服务起来了。
+5. 验收看行为，不看日志措辞：新建会话正常、打开历史会话不丢、console 无 agent-preset 报错。
+
+本 fork 的 `lib/preset-compat.js:adaptListAgents` 已在注册期处理这条：只要「子路径不可解析 + 宿主版本 ≥ 0.2.2」，就摘掉自带 `unrestricted` 预设里的那一行（判定按版本而非写死 rc 号，rc.2/0.3 不会再犯）。**用户自己复制出去的预设、或别的 profile 里的旧条目仍需人工清。**
 
 ## 4. 隔离实例速查
 

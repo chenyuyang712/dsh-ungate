@@ -195,3 +195,30 @@ test("list_agents is adapted only for the verified merged provider in the same g
   fs.writeFileSync(path.join(opaquePackage, "package.json"), JSON.stringify({name, exports:{".":"./index.js"}}));
   assert.equal(adaptListAgents(before, path.join(opaqueRoot, "package.json")), before);
 });
+
+test("list_agents 合并判定覆盖后续宿主版本，不只 0.2.2-rc.1", async (t) => {
+  const { adaptListAgents, listAgentsMerged } = await import("../lib/preset-compat.js");
+  assert.equal(listAgentsMerged("0.2.0"), false);
+  assert.equal(listAgentsMerged("0.2.1-rc.3"), false);
+  assert.equal(listAgentsMerged("0.2.2-rc.1"), true);
+  assert.equal(listAgentsMerged("0.2.3"), true);
+  assert.equal(listAgentsMerged("0.3.0-rc.1"), true);
+  assert.equal(listAgentsMerged(""), false);
+
+  const name = "@deepseek-ai/dsh-tool-subagent-control";
+  const legacy = { id: "tool-subagent-list-agents", name: name + "/list-agents", disabled: false };
+  const main = { id: "tool-subagent-control", name, disabled: false };
+  const input = { plugins: [main, legacy] };
+  for (const [version, dropped] of [["0.2.2", true], ["0.2.3-rc.2", true], ["0.2.1-rc.5", false]]) {
+    const root = fs.mkdtempSync(path.join(os.tmpdir(), "preset-merged-"));
+    t.after(() => fs.rmSync(root, { recursive: true, force: true }));
+    const dir = path.join(root, "node_modules", name);
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, "package.json"), JSON.stringify({
+      name, version, exports: { ".": "./index.js", "./package.json": "./package.json" },
+    }));
+    fs.writeFileSync(path.join(dir, "index.js"), "");
+    const out = adaptListAgents(input, path.join(root, "package.json"));
+    assert.deepEqual(out.plugins, dropped ? [main] : [main, legacy], version);
+  }
+});
