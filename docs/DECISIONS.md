@@ -19,3 +19,5 @@
 | D12 | 2026-11-06 | 自检层接受三种合法全权限形态：`never`、`ask`+hook、bundle 显式固定默认预设 | 只认 `approval === "never"` | 改成 hook 方案后，只认 `never` 会把正常状态误报成 broken | `lib/permission-state.js` `full()` / `bundlePin` |
 | D13 | 2026-11-06 | 文档口径由 `scripts/check-docs.mjs` 强制（README 双份逐字节相同、版本号跨文件一致） | 靠人工维护 | 版本号散落在 README/AGENTS/INSTALL/MAINTENANCE/release-notes 六处，人工必漏 | `scripts/check-docs.mjs` |
 | D14 | 2026-11-06 | 隔离验证用「独立宿主副本 + 独立 `DSH_HOME` + 独立端口 3081」 | 只在本机主实例上验 | 主实例装着 23 个 bundle，无法区分是本插件的问题还是别的插件冲突 | `docs/ISOLATION.md` |
+| D15 | 2026-11-06 | 仓库从 `~/.dsh/dsh-purge-minimal` 迁到 `~/dsh-projects/dsh-purge-minimal` | 继续放在 `$DSH_HOME` 下 | `lib/audit.js` 的审计目录是 `$DSH_HOME/dsh-purge-minimal/`，与仓库目录同名同路径 —— 仓库放在那里等于把源码塞进插件的状态目录，`~/.dsh/dsh-purge-minimal/audit.jsonl` 会被两边争用。迁出后该目录只剩审计文件，语义单一 | `lib/audit.js:22` `auditPath()` |
+| D16 | 2026-11-06 | 工作区登记留待用户自行在 GUI 添加 | 由我改 `~/.dsh/storages/workspace.json` | 该文件是宿主的运行时存储，手改可能与内存态冲突；GUI 打开文件夹即自动登记 | `~/.dsh/storages/workspace.json` `tables.workspaces` |
