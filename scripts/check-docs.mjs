@@ -21,7 +21,7 @@ if (readmeZh !== readme) problems.push("README.zh-CN.md 必须与 README.md 保�
 if (notesFirst !== `# ${version}`) problems.push(`release-notes.md 首行应为 "# ${version}"，实际是 "${notesFirst}"`);
 if (!new RegExp(`当前版本[：:]\\s*\\*\\*${version.replaceAll(".", "\\.")}\\*\\*`).test(agents))
   problems.push(`AGENTS.md 缺少 "当前版本：**${version}**"`);
-if (!agents.includes(`\`dsh-purge-minimal\` ${version}`))
+if (!agents.includes(`\`dsh-ungate\` ${version}`))
   problems.push(`AGENTS.md 版本表未同步到 ${version}`);
 
 // 3) 当前事实文档：都写着同一个版本，且不再引用上游 1.6.x 或已删除功能。
@@ -94,10 +94,10 @@ else {
 
 // 5) 安装包链接必须指向当前版本，且 install.tarball 同源。
 const tarball = pkg.dsh?.install?.tarball || "";
-if (!tarball.includes(`/releases/download/v${version}/dsh-purge-minimal-${version}.tgz`))
+if (!tarball.includes(`/releases/download/v${version}/dsh-ungate-${version}.tgz`))
   problems.push(`package.json install.tarball 应指向 v${version} 的发行包，实际是 ${tarball || "(空)"}`);
 for (const [file, doc] of [["README.md", readme], ["docs/README.en.md", readmeEn]]) {
-  const links = [...doc.matchAll(/releases\/download\/v([0-9.]+)\/dsh-purge-minimal-([0-9.]+)\.tgz/g)];
+  const links = [...doc.matchAll(/releases\/download\/v([0-9.]+)\/dsh-ungate-([0-9.]+)\.tgz/g)];
   if (!links.length) problems.push(`${file} 缺少固定版本的发行包链接`);
   for (const [, tag, archive] of links)
     if (tag !== version || archive !== version) problems.push(`${file} 发行包链接版本必须为 ${version}`);

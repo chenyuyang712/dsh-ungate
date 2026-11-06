@@ -118,15 +118,15 @@ test("an uninstalled file: dependency is reported as skipped, not silently ignor
       JSON.stringify({
         name: "profile",
         private: true,
-        dependencies: { "dsh-purge-minimal": `file:${path.join(home, "x.tgz")}` },
-        dsh: { profile: { bundles: ["dsh-purge-minimal"] } },
+        dependencies: { "dsh-ungate": `file:${path.join(home, "x.tgz")}` },
+        dsh: { profile: { bundles: ["dsh-ungate"] } },
       }),
     );
     process.env.DSH_HOME = home;
     const { planUpdates } = await import("../lib/update.js");
     const plan = planUpdates();
     assert(Array.isArray(plan.skipped), "plan exposes skipped sites");
-    const hit = plan.skipped.find((s) => s.package === "dsh-purge-minimal");
+    const hit = plan.skipped.find((s) => s.package === "dsh-ungate");
     assert(hit, "the file: dependency is surfaced");
     assert.match(hit.reason, /没有安装目录/);
     assert(hit.spec.startsWith("file:"), "the offending spec is included");

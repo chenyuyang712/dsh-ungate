@@ -39,11 +39,11 @@ test('missing, wrong identity, damaged metadata and absent selected package stay
   fs.writeFileSync(path.join(root,'package.json'),'{broken');assert.throws(()=>installedCommunityPackage(f.profile),SyntaxError);
 });
 test('alias backup records actual package identity and preserves user files',async t=>{
-  const f=fixture(t);f.manifest(['dsh-purge']);f.add('dsh-purge','0.1.2','dsh-purge-minimal');
+  const f=fixture(t);f.manifest(['dsh-purge']);f.add('dsh-purge','0.1.2','dsh-ungate');
   fs.writeFileSync(path.join(f.home,'prompt-inject.md'),'PRIVATE KEEP');
   const m=new Maintenance({home:f.home,profile:f.profile});const saved=await m.backup();
   const {m:manifest}=m.verify(saved.id);
-  assert.equal(manifest.plugins[0].name,'dsh-purge');assert.equal(manifest.plugins[0].packageName,'dsh-purge-minimal');
+  assert.equal(manifest.plugins[0].name,'dsh-purge');assert.equal(manifest.plugins[0].packageName,'dsh-ungate');
   assert.equal(fs.readFileSync(path.join(f.home,'prompt-inject.md'),'utf8'),'PRIVATE KEEP');
 });
 test('selected missing alias is not masked by an inactive canonical installation',t=>{

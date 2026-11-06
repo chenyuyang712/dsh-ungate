@@ -1,7 +1,7 @@
 // Generated from src/ by npm run build. Do not edit.
 // Derived UI: YuJunZhiXue/dsh-purge (MIT), see LICENSE.
 (()=>{const __PURGE_MODULE_URL__ = typeof document !== 'undefined' ? document.currentScript?.src : undefined;
-window.__ModuleLoader__.load({id:"dsh-purge-minimal",factory:(require)=>{
+window.__ModuleLoader__.load({id:"dsh-ungate",factory:(require)=>{
 var module={exports:{}};var exports=module.exports;
 var __create = Object.create;
 var __defProp = Object.defineProperty;
@@ -70,8 +70,8 @@ var zh = {
   "welcome.title": "\u7528\u6237\u987B\u77E5",
   "welcome.lead": "\u9996\u6B21\u5B89\u88C5\u672C\u63D2\u4EF6\u65F6\u8BF7\u9605\u8BFB\u4EE5\u4E0B\u8BF4\u660E\u3002\u786E\u8BA4\u540E\u672C\u7A97\u4E0D\u518D\u5F39\u51FA\u3002",
   "welcome.warn": "\u672C\u63D2\u4EF6\u514D\u8D39\u5F00\u6E90\u3002\u4EFB\u4F55\u80CC\u7740\u4F5C\u8005\u79C1\u81EA\u552E\u5356\u3001\u4ED8\u8D39\u5012\u5356\u6216\u501F\u672C\u9879\u76EE\u76C8\u5229\u7684\u884C\u4E3A\uFF0C\u4F5C\u8005\u5C06\u4F9D\u6CD5\u8FFD\u7A76\u6CD5\u5F8B\u8D23\u4EFB\u3002",
-  "welcome.body": "dsh-purge-minimal \u662F DeepSeek Harness \u7684\u672C\u673A\u63D2\u4EF6\uFF1A\u5728\u53D7\u63A7\u672C\u673A\u73AF\u5883\u4E2D\u8C03\u6574\u63D0\u793A\u8BCD\u4E0E\u5BBF\u4E3B\u8865\u4E01\u3001\u89E3\u9664\u5BA1\u6279\u4E0E\u6C99\u7BB1\u62E6\u622A\uFF0C\u9002\u5408\u5B89\u5168\u8BC4\u6D4B\u4E0E\u81EA\u52A8\u5316\u8C03\u8BD5\u3002\u9879\u76EE\u514D\u8D39\u3001\u975E\u8425\u5229\uFF0C\u6E90\u7801\u4ED3\u5E93\uFF1A",
-  "welcome.repo": "https://github.com/youki258/dsh-purge-minimal",
+  "welcome.body": "dsh-ungate \u662F DeepSeek Harness \u7684\u672C\u673A\u63D2\u4EF6\uFF1A\u5728\u53D7\u63A7\u672C\u673A\u73AF\u5883\u4E2D\u8C03\u6574\u63D0\u793A\u8BCD\u4E0E\u5BBF\u4E3B\u8865\u4E01\u3001\u89E3\u9664\u5BA1\u6279\u4E0E\u6C99\u7BB1\u62E6\u622A\uFF0C\u9002\u5408\u5B89\u5168\u8BC4\u6D4B\u4E0E\u81EA\u52A8\u5316\u8C03\u8BD5\u3002\u9879\u76EE\u514D\u8D39\u3001\u975E\u8425\u5229\uFF0C\u6E90\u7801\u4ED3\u5E93\uFF1A",
+  "welcome.repo": "https://github.com/youki258/dsh-ungate",
   "welcome.ban1": "\u7981\u6B62\u5C06\u672C\u9879\u76EE\u7528\u4E8E\u672A\u6388\u6743\u7684\u7F51\u7EDC\u653B\u51FB\u3001\u5165\u4FB5\u3001\u7A83\u53D6\u6570\u636E\u3001\u7834\u574F\u7CFB\u7EDF\u6216\u4EFB\u4F55\u8FDD\u6CD5\u72AF\u7F6A\u3002",
   "welcome.ban2": "\u7981\u6B62\u5546\u4E1A\u552E\u5356\u3001\u4ED8\u8D39\u5012\u5356\u3001\u9ED1\u7070\u4EA7\u725F\u5229\uFF0C\u4EE5\u53CA\u9690\u7792\u4F5C\u8005\u7684\u8425\u5229\u6027\u518D\u5206\u53D1\u3002",
   "welcome.ban3": "\u4F7F\u7528\u8005\u987B\u81EA\u884C\u9075\u5B88\u6240\u5728\u5730\u6CD5\u5F8B\u6CD5\u89C4\u4E0E\u5E73\u53F0\u89C4\u8303\uFF1B\u8FDD\u6CD5\u540E\u679C\u7531\u884C\u4E3A\u4EBA\u81EA\u884C\u627F\u62C5\uFF0C\u4E0E\u4F5C\u8005\u65E0\u5173\u3002",
@@ -146,7 +146,7 @@ var zh = {
   "btn.revert": "\u8FD8\u539F",
   "btn.uninstall": "\u5378\u8F7D",
   "btn.uninstall.busy": "\u5378\u8F7D\u4E2D\u2026",
-  "uninstall.title": "\u5378\u8F7D dsh-purge",
+  "uninstall.title": "\u5378\u8F7D\u63D2\u4EF6",
   "uninstall.body": "\u662F\u5426\u5378\u8F7D\uFF1F\u5378\u8F7D\u5C06\u8FD8\u539F\u56DE\u539F\u7248\uFF0C\u5E76\u6E05\u9664\u672C\u63D2\u4EF6\u7684\u5168\u90E8\u6587\u4EF6\u4E0E\u8865\u4E01\u3002",
   "uninstall.confirm": "\u786E\u8BA4\u5378\u8F7D",
   "uninstall.cancel": "\u53D6\u6D88",
@@ -420,8 +420,8 @@ var en = {
   "welcome.title": "User notice",
   "welcome.lead": "Please read this on first install. After you confirm, it will not appear again.",
   "welcome.warn": "This plugin is free and open source. Anyone who sells, resells, or profits from it behind the author's back may face legal action.",
-  "welcome.body": "dsh-purge-minimal is a local DeepSeek Harness plugin: adjust prompts and host patches on a machine you control to remove approval and sandbox gates for security evaluation and automation. It is free and non-profit. Repository:",
-  "welcome.repo": "https://github.com/youki258/dsh-purge-minimal",
+  "welcome.body": "dsh-ungate is a local DeepSeek Harness plugin: adjust prompts and host patches on a machine you control to remove approval and sandbox gates for security evaluation and automation. It is free and non-profit. Repository:",
+  "welcome.repo": "https://github.com/youki258/dsh-ungate",
   "welcome.ban1": "Do not use this project for unauthorized attacks, intrusion, data theft, sabotage, or any illegal activity.",
   "welcome.ban2": "Do not commercially sell, resell, or profit from gray-market use, or redistribute for profit without the author.",
   "welcome.ban3": "You must follow local law and platform rules; illegal use is solely your responsibility.",
@@ -1476,7 +1476,7 @@ function CommunityMaintenance() {
       h(
         "a",
         {
-          href: "https://github.com/youki258/dsh-purge-minimal/releases",
+          href: "https://github.com/youki258/dsh-ungate/releases",
           target: "_blank",
           rel: "noreferrer"
         },
@@ -3726,17 +3726,17 @@ function SettingsRoot(props = {}) {
     h(
       "header",
       { className: "dshpp-native-head" },
-      h("div", null, h("h2", null, "Purge"), h("p", null, "\u63D2\u4EF6\u8BBE\u7F6E")),
+      h("div", null, h("h2", null, "Ungate"), h("p", null, "\u63D2\u4EF6\u8BBE\u7F6E")),
       h(
         "span",
         { className: "dshpp-native-badge" },
-        "Purge 0.1.3"
+        "Ungate 0.2.0"
       )
     ),
     h(CompatibilityNote, { status: backendStatus }),
     h(
       "nav",
-      { className: "dshpp-native-nav", "aria-label": "Purge \u8BBE\u7F6E\u5206\u7C7B" },
+      { className: "dshpp-native-nav", "aria-label": "Ungate \u8BBE\u7F6E\u5206\u7C7B" },
       [
         ["status", "\u72B6\u6001"],
         ["prompt", "\u63D0\u793A\u8BCD"],
@@ -3855,7 +3855,7 @@ function StatusStrip({ info }) {
       "span",
       { className: "dshpp-strip-item" },
       "\u63D2\u4EF6 ",
-      h("b", null, info?.plugin_version || "0.1.3")
+      h("b", null, info?.plugin_version || "0.2.0")
     )
   );
 }
@@ -3894,11 +3894,11 @@ function VersionNotice({ info }) {
     );
   }
   const backend = info?.plugin_version;
-  if (!backend || backend === "0.1.3") return null;
+  if (!backend || backend === "0.2.0") return null;
   return h(
     "p",
     { className: "dshpp-warn", role: "status" },
-    `\u5B98\u65B9\u7248\u672C ${backend}\uFF1B\u754C\u9762 ${"0.1.3"}\u3002\u4E24\u8005\u4E0D\u4E00\u81F4\u65F6\u8BBE\u7F6E\u53EF\u80FD\u4E0D\u751F\u6548\uFF0C\u8BF7\u66F4\u65B0\u5230\u540C\u4E00\u7248\u672C\u540E\u91CD\u542F DSH\u3002`
+    `\u5B98\u65B9\u7248\u672C ${backend}\uFF1B\u754C\u9762 ${"0.2.0"}\u3002\u4E24\u8005\u4E0D\u4E00\u81F4\u65F6\u8BBE\u7F6E\u53EF\u80FD\u4E0D\u751F\u6548\uFF0C\u8BF7\u66F4\u65B0\u5230\u540C\u4E00\u7248\u672C\u540E\u91CD\u542F DSH\u3002`
   );
 }
 function PurgePage() {
@@ -3940,7 +3940,7 @@ function PurgePage() {
       h(
         "div",
         { className: "dshpp-page-title" },
-        h("h1", null, "Purge"),
+        h("h1", null, "Ungate"),
         h(
           "p",
           null,
@@ -3948,7 +3948,7 @@ function PurgePage() {
           true ? h(
             "span",
             { className: "dshpp-page-ver" },
-            "Purge 0.1.3"
+            "Ungate 0.2.0"
           ) : null
         )
       )
@@ -4843,7 +4843,7 @@ function WelcomeNotice(props = {}) {
 }
 
 // src/entry.js
-var name = "dsh-purge-minimal";
+var name = "dsh-ungate";
 var inject = ["slots", "locale"];
 function PurgeIcon({ size = 20 } = {}) {
   return h(
@@ -4872,7 +4872,7 @@ function PanelOverlays() {
     h("style", null, base_default),
     // Restored from 1.1.71 apply(): shell.overlay carried the welcome notice.
     h(WelcomeNotice, {
-      repo: true ? "https://github.com/youki258/dsh-purge-minimal" : void 0
+      repo: true ? "https://github.com/youki258/dsh-ungate" : void 0
     })
   );
 }
@@ -4906,7 +4906,7 @@ function apply(ctx) {
         name: "sidebar.panellist",
         id: "dsh-purge",
         order: 30,
-        label: "Purge",
+        label: "Ungate",
         inject: () => ({ t })
       },
       PurgeGlyphIcon
@@ -4928,7 +4928,7 @@ function apply(ctx) {
     () => ctx.slots.register(
       {
         name: "plugins.bundle.config",
-        key: "dsh-purge-minimal",
+        key: "dsh-ungate",
         inject: () => ({ t })
       },
       SettingsRoot

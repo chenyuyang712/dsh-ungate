@@ -153,14 +153,14 @@ try {
     "custom source preserved",
   );
   const backups = fs.readdirSync(
-    path.join(home, "dsh-purge-minimal/preset-migrations"),
+    path.join(home, "dsh-ungate/preset-migrations"),
   );
   assert.equal(backups.length, 1);
   assert.deepEqual(
     fs.readFileSync(
       path.join(
         home,
-        "dsh-purge-minimal/preset-migrations",
+        "dsh-ungate/preset-migrations",
         backups[0],
         "agent.cordis.yml",
       ),
@@ -170,7 +170,7 @@ try {
   await fiber.restart();
   await waitRegistered();
   assert.equal(
-    fs.readdirSync(path.join(home, "dsh-purge-minimal/preset-migrations"))
+    fs.readdirSync(path.join(home, "dsh-ungate/preset-migrations"))
       .length,
     1,
     "reload reuses backup",

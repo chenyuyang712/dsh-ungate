@@ -5,7 +5,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
-const repository = process.env.GITHUB_REPOSITORY || 'youki258/dsh-purge-minimal';
+const repository = process.env.GITHUB_REPOSITORY || 'youki258/dsh-ungate';
 if (!/^[\w.-]+\/[\w.-]+$/.test(repository)) throw Error('Invalid repository');
 const start = '<!-- CONTRIBUTORS:START -->', end = '<!-- CONTRIBUTORS:END -->';
 const snapshot = path.join(root, '.github/contributors.json');

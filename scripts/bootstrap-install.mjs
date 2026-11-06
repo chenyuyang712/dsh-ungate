@@ -8,7 +8,7 @@ import { execFile, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import { pathToFileURL } from "node:url";
 const exec = promisify(execFile);
-const repo = "youki258/dsh-purge-minimal";
+const repo = "youki258/dsh-ungate";
 const hosts = new Set(["api.github.com", "github.com", "release-assets.githubusercontent.com", "objects.githubusercontent.com"]);
 
 // Keep this module self-contained: the raw installer runs before dependencies exist.
@@ -334,7 +334,7 @@ export async function bootstrapInstall(options = {}) {
   if (!fs.existsSync(path.join(home, "profiles", selectedProfile, "package.json"))) throw Error("Profile is not initialized; open DSH once first, or specify the correct home/profile.");
   const local = options.archiveFile !== undefined || options.sha256 !== undefined;
   if (local && (!options.archiveFile || !/^[a-f0-9]{64}$/i.test(options.sha256 || ""))) throw Error("Local install requires --archive and a 64-character --sha256");
-  let version = options.version || (local ? /^dsh-purge-minimal-(\d+\.\d+\.\d+)\.tgz$/.exec(path.basename(options.archiveFile))?.[1] : undefined);
+  let version = options.version || (local ? /^dsh-ungate-(\d+\.\d+\.\d+)\.tgz$/.exec(path.basename(options.archiveFile))?.[1] : undefined);
   if (local && !version) throw Error("Specify --version for this local archive");
   if (!version) {
     const release = JSON.parse((await downloadReleaseFile(`https://api.github.com/repos/${repo}/releases/latest`, 1024 * 1024, { ...download, request, log, stage: "metadata" })).toString("utf8"));
@@ -342,9 +342,9 @@ export async function bootstrapInstall(options = {}) {
     version = String(release.tag_name || "").replace(/^v/, "");
   }
   if (!/^\d+\.\d+\.\d+$/.test(version)) throw Error("Invalid release version");
-  const filename = `dsh-purge-minimal-${version}.tgz`;
+  const filename = `dsh-ungate-${version}.tgz`;
   const base = `https://github.com/${repo}/releases/download/v${version}`;
-  log(`${local ? "Verifying local" : "Downloading"} Purge Minimal ${version}...`);
+  log(`${local ? "Verifying local" : "Downloading"} Ungate ${version}...`);
   if (local && fs.statSync(options.archiveFile).size > 50 * 1024 * 1024) throw Error("Release file too large");
   const archive = local ? fs.readFileSync(options.archiveFile) : await downloadReleaseFile(`${base}/${filename}`, 50 * 1024 * 1024, { ...download, request, log, stage: "archive", budget: archiveDownloadBudget() });
   const sums = local ? `${options.sha256}  ${filename}\n` : (await downloadReleaseFile(`${base}/SHA256SUMS.txt`, 64 * 1024, { ...download, request, log, stage: "checksum" })).toString("utf8");
@@ -360,7 +360,7 @@ export async function bootstrapInstall(options = {}) {
     if (!listing.stdout.trim() || listing.stdout.trim().split(/\r?\n/).some(name => !/^package\//.test(name) || name.includes("\\") || name.split("/").some(part => part === ".."))) throw Error("Invalid archive paths");
     await run(tar, ["-xzf", filename], { cwd: tmp, timeout: 30000, windowsHide: true });
     const manifest = JSON.parse(fs.readFileSync(path.join(tmp, "package/package.json"), "utf8"));
-    if (manifest.name !== "dsh-purge-minimal" || manifest.version !== version || manifest.repository?.url !== `git+https://github.com/${repo}.git`) throw Error("Release package identity mismatch");
+    if (manifest.name !== "dsh-ungate" || manifest.version !== version || manifest.repository?.url !== `git+https://github.com/${repo}.git`) throw Error("Release package identity mismatch");
     const host = platform === "linux" && mode === "web" ? prepareLinuxHost(cli, { userHome: options.userHome, log }) : null;
     if (host) cli = host.cli;
     const result = await run(executable, [path.join(tmp, "package/bin/community.js"), "migrate", file], {

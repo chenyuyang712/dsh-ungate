@@ -47,7 +47,7 @@ try {
     [void](New-Item -ItemType Directory -Path $temporary)
     $bootstrap = Join-Path $temporary 'bootstrap-install.mjs'
     [Net.ServicePointManager]::SecurityProtocol = [Net.ServicePointManager]::SecurityProtocol -bor [Net.SecurityProtocolType]::Tls12
-    Invoke-WebRequest -UseBasicParsing -TimeoutSec 90 -Uri 'https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/bootstrap-install.mjs' -OutFile $bootstrap
+    Invoke-WebRequest -UseBasicParsing -TimeoutSec 90 -Uri 'https://raw.githubusercontent.com/youki258/dsh-ungate/master/scripts/bootstrap-install.mjs' -OutFile $bootstrap
     $env:ELECTRON_RUN_AS_NODE = '1'
     if ($DshHome) { $env:DSH_HOME = $DshHome }
     $arguments = @($bootstrap)

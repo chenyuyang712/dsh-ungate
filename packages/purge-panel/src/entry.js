@@ -43,7 +43,7 @@ export function PanelOverlays() {
     // Restored from 1.1.71 apply(): shell.overlay carried the welcome notice.
     h(WelcomeNotice, {
       repo: __COMMUNITY__
-        ? "https://github.com/youki258/dsh-purge-minimal"
+        ? "https://github.com/youki258/dsh-ungate"
         : undefined,
     }),
   );
@@ -78,7 +78,7 @@ export function apply(ctx) {
         name: "sidebar.panellist",
         id: "dsh-purge",
         order: 30,
-        label: "Purge",
+        label: "Ungate",
         inject: () => ({ t }),
       },
       PurgeGlyphIcon,

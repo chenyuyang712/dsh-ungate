@@ -12,7 +12,7 @@ try {
   for(const legacy of [false,true]) {
     const home=path.join(tmp,legacy?'legacy':'new');fs.mkdirSync(home,{mode:0o700});fs.chownSync(home,uid,gid);
     const sentinel=path.join(home,'config');fs.writeFileSync(sentinel,'PRIVATE',{mode:0o600});fs.chownSync(sentinel,uid,gid);
-    const dir=path.join(home,'dsh-purge-minimal'),file=path.join(dir,'audit.jsonl');
+    const dir=path.join(home,'dsh-ungate'),file=path.join(dir,'audit.jsonl');
     if(legacy){fs.mkdirSync(dir,{mode:0o700});fs.writeFileSync(file,'{"event":"old"}\n',{mode:0o600});fs.writeFileSync(file+'.1','history',{mode:0o600});}
     child(home,true,'root-apply');
     assert.equal(fs.statSync(dir).uid,uid);assert.equal(fs.statSync(dir).mode&0o777,0o700);
@@ -31,7 +31,7 @@ try {
   // A privileged writer must not chown or write external symlink/hardlink targets.
   const home=path.join(tmp,'links');fs.mkdirSync(home);fs.chownSync(home,uid,gid);
   const outside=path.join(tmp,'outside');fs.mkdirSync(outside);
-  const dir=path.join(home,'dsh-purge-minimal');fs.symlinkSync(outside,dir);
+  const dir=path.join(home,'dsh-ungate');fs.symlinkSync(outside,dir);
   assert.throws(()=>child(home,true));assert.equal(fs.statSync(outside).uid,0);assert.deepEqual(fs.readdirSync(outside),[]);
   fs.unlinkSync(dir);fs.mkdirSync(dir,{mode:0o700});
   const target=path.join(outside,'secret');fs.writeFileSync(target,'PRIVATE',{mode:0o600});

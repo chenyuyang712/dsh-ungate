@@ -9,10 +9,10 @@ import { installedVersion, runningVersion, localVersion } from '../lib/update.js
 function fixture(t, running = '1.6.40', disk = running, initial = {}) {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), 'purge-state-'));
   const profile = path.join(home, 'profiles', 'desktop');
-  const root = path.join(profile, 'node_modules', 'dsh-purge-minimal');
+  const root = path.join(profile, 'node_modules', 'dsh-ungate');
   fs.mkdirSync(root, { recursive: true });
   const pkg = path.join(root, 'package.json');
-  const writeVersion = v => fs.writeFileSync(pkg, JSON.stringify({ name:'dsh-purge-minimal', version:v }));
+  const writeVersion = v => fs.writeFileSync(pkg, JSON.stringify({ name:'dsh-ungate', version:v }));
   writeVersion(disk);
   savePreferences(home, { autoCheck:true, autoInstall:true, intervalHours:24 });
   const stateFile = path.join(home, 'dsh-purge', 'update-status.json');
@@ -24,7 +24,7 @@ function fixture(t, running = '1.6.40', disk = running, initial = {}) {
   let installs = 0;
   const readDisk = () => {
     const p = JSON.parse(fs.readFileSync(pkg));
-    if (p.name !== 'dsh-purge-minimal') throw Error('package identity mismatch');
+    if (p.name !== 'dsh-ungate') throw Error('package identity mismatch');
     return p.version;
   };
   const make = (version = running, overrides = {}) => createUpdateController({

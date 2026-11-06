@@ -1821,7 +1821,7 @@ function CommunityMaintenance() {
       h(
         "a",
         {
-          href: "https://github.com/youki258/dsh-purge-minimal/releases",
+          href: "https://github.com/youki258/dsh-ungate/releases",
           target: "_blank",
           rel: "noreferrer"
         },
@@ -5295,7 +5295,7 @@ function PanelOverlays() {
     h("style", null, base_default),
     // Restored from 1.1.71 apply(): shell.overlay carried the welcome notice.
     h(WelcomeNotice, {
-      repo: false ? "https://github.com/youki258/dsh-purge-minimal" : void 0
+      repo: false ? "https://github.com/youki258/dsh-ungate" : void 0
     })
   );
 }

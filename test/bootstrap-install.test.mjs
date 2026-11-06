@@ -6,22 +6,22 @@ import path from 'node:path';
 import {createHash} from 'node:crypto';
 import {execFileSync} from 'node:child_process';
 import {bootstrapInstall,verifyChecksum,desktopCli} from '../scripts/bootstrap-install.mjs';
-const version='1.6.8',filename=`dsh-purge-minimal-${version}.tgz`;
+const version='1.6.8',filename=`dsh-ungate-${version}.tgz`;
 function fixture(t){
  const tmp=fs.mkdtempSync(path.join(os.tmpdir(),'purge 空格 '));t.after(()=>fs.rmSync(tmp,{recursive:true,force:true}));
  const home=path.join(tmp,'home'), profile=path.join(home,'profiles','desktop'),pack=path.join(tmp,'pack');
  fs.mkdirSync(profile,{recursive:true});fs.writeFileSync(path.join(profile,'package.json'),'{}');fs.writeFileSync(path.join(profile,'cordis.patch.yml'),'CURRENT PRIVATE SETTINGS');
  fs.mkdirSync(path.join(pack,'package/bin'),{recursive:true});
- fs.writeFileSync(path.join(pack,'package/package.json'),JSON.stringify({name:'dsh-purge-minimal',version,repository:{url:'git+https://github.com/youki258/dsh-purge-minimal.git'}}));
+ fs.writeFileSync(path.join(pack,'package/package.json'),JSON.stringify({name:'dsh-ungate',version,repository:{url:'git+https://github.com/youki258/dsh-ungate.git'}}));
  fs.writeFileSync(path.join(pack,'package/bin/community.js'),`require('node:fs').writeFileSync(process.env.DSH_HOME+'/called.json',JSON.stringify({args:process.argv.slice(2),env:process.env.DSH_PROFILE,cli:process.env.PURGE_DSH_CLI}));`);
  const file=path.join(tmp,filename);const tar=process.platform==='win32'?path.join(process.env.SystemRoot,'System32/tar.exe'):'tar';execFileSync(tar,['-czf',filename,'-C','pack','package'],{cwd:tmp});const bytes=fs.readFileSync(file);
  const sum=createHash('sha256').update(bytes).digest('hex');
- const request=async url=>new Response(url.includes('releases/latest')?JSON.stringify({tag_name:'v'+version}):url.endsWith('.tgz')?bytes:`${sum}  ${filename}\n${sum}  dsh-purge-minimal.tgz\n`);
+ const request=async url=>new Response(url.includes('releases/latest')?JSON.stringify({tag_name:'v'+version}):url.endsWith('.tgz')?bytes:`${sum}  ${filename}\n${sum}  dsh-ungate.tgz\n`);
  return {tmp,home,profileDir:profile,bytes,sum,request,cli:path.join(tmp,'fake-cli.js')};
 }
 test('checksum validates only downloaded filename, rejects mismatch and duplicates',()=>{
  const b=Buffer.from('archive'),s=createHash('sha256').update(b).digest('hex');
- assert.doesNotThrow(()=>verifyChecksum(b,`${s}  ${filename}\n${s}  dsh-purge-minimal.tgz`,filename));
+ assert.doesNotThrow(()=>verifyChecksum(b,`${s}  ${filename}\n${s}  dsh-ungate.tgz`,filename));
  assert.throws(()=>verifyChecksum(b,'0'.repeat(64)+'  '+filename,filename),/SHA256/);
  assert.throws(()=>verifyChecksum(b,`${s}  ${filename}\n${s}  ${filename}`,filename),/SHA256/);
 });
@@ -71,7 +71,7 @@ test('real distribution CLI starts before runtime dependencies exist; migrate ne
  assert(!fs.existsSync(path.join(pack,'node_modules')));
  const env={...process.env,DSH_HOME:home,DSH_PROFILE:'desktop',PURGE_PROFILE_DIR:profile,PURGE_DSH_CLI:'',DSH_BASE:''};
  const text=execFileSync(process.execPath,[path.join(pack,'bin/community.js'),'status'],{env,encoding:'utf8'});
- assert.equal(JSON.parse(text).package,'dsh-purge-minimal');
+ assert.equal(JSON.parse(text).package,'dsh-ungate');
  assert.throws(()=>execFileSync(process.execPath,[path.join(pack,'bin/community.js'),'migrate',path.join(tmp,'missing.tgz')],{env,encoding:'utf8',stdio:'pipe'}),error=>{
    assert(!/ERR_MODULE_NOT_FOUND|Cannot find package .yaml/.test(error.stderr));
    return true;

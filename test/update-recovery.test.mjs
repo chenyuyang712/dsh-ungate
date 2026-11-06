@@ -7,7 +7,7 @@ import { installForkRelease } from '../lib/update.js';
 import { profileVersions, summarizeProfileUpdates } from '../lib/update-targets.js';
 import { createUpdateController, savePreferences, updateStatus } from '../lib/update-policy.js';
 import { ensureInstalledRevSeed } from '../lib/reapply.js';
-const PACKAGE = 'dsh-purge-minimal';
+const PACKAGE = 'dsh-ungate';
 const release = { version: '1.6.28', ref: 'v1.6.28', latest: true };
 function fixture(t) {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), 'purge-multiprofile-'));

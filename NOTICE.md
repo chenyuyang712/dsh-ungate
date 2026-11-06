@@ -1,6 +1,6 @@
 # Attribution
 
-Purge Minimal (`dsh-purge-minimal`) is an independently maintained distribution. Its code comes from the community branch **kingcharleslzy-ai/dsh-purge** (the minimal cut of that project):
+Purge Minimal (`dsh-ungate`) is an independently maintained distribution. Its code comes from the community branch **kingcharleslzy-ai/dsh-purge** (the minimal cut of that project):
 https://github.com/kingcharleslzy-ai/dsh-purge
 
 That branch derives from **dsh-purge**, original author **小杨 / YuJunZhiXue**:

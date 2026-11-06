@@ -52,7 +52,7 @@ function setup() {
     JSON.stringify({
       name: PACKAGE,
       version: "1.2.0",
-      repository: { url: "https://github.com/youki258/dsh-purge-minimal.git" },
+      repository: { url: "https://github.com/youki258/dsh-ungate.git" },
     }),
   );
   const candidate = path.join(home, "candidate.tgz");
@@ -327,8 +327,8 @@ test("release checksum failure stops before installation", async () => {
       installRelease(f.manager, {
         ref: "v1.2.0",
         version: "1.2.0",
-        asset: "https://github.com/youki258/dsh-purge-minimal/releases/download/v1.2.0/dsh-purge-minimal-1.2.0.tgz",
-        sums: "https://github.com/youki258/dsh-purge-minimal/releases/download/v1.2.0/SHA256SUMS.txt",
+        asset: "https://github.com/youki258/dsh-ungate/releases/download/v1.2.0/dsh-ungate-1.2.0.tgz",
+        sums: "https://github.com/youki258/dsh-ungate/releases/download/v1.2.0/SHA256SUMS.txt",
       }, globalThis.fetch),
       /SHA256/,
     );
@@ -372,12 +372,12 @@ test("large files are stored once and restored byte-for-byte", async () => {
     fs.writeFileSync(path.join(f.root, "client.js"), big);
     const a = await f.manager.backup("dedupe-a");
     const b = await f.manager.backup("dedupe-b");
-    const objects = path.join(f.home, "dsh-purge-minimal", "objects");
+    const objects = path.join(f.home, "dsh-ungate", "objects");
     assert.equal(fs.readdirSync(objects).length, 1, "same content -> one object");
     // 备份目录里不再重复放这份大文件
     assert(
       !fs.existsSync(
-        path.join(f.home, "dsh-purge-minimal", "backups", a.id, "plugins", PACKAGE, "client.js"),
+        path.join(f.home, "dsh-ungate", "backups", a.id, "plugins", PACKAGE, "client.js"),
       ),
       "deduped file is not copied into the snapshot folder",
     );

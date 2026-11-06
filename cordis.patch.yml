@@ -72,7 +72,7 @@
 
 - insert:
     - id: dsh-purge
-      name: 'dsh-purge-minimal'
+      name: 'dsh-ungate'
       inject: [systemPrompt, tools]
       config:
         enabled: true
@@ -94,4 +94,4 @@
 
     # 自带 agent 预设：unrestricted（无限制模式）
     - id: dsh-purge-presets
-      name: dsh-purge-minimal/presets-plugin
+      name: dsh-ungate/presets-plugin

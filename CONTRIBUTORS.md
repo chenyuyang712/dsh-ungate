@@ -29,6 +29,6 @@
 
 ## 说明
 
-- 上表记录的是上游与社区分支的贡献；本仓库（youki258/dsh-purge-minimal）在上游基础上做减法与文档收敛，新增改动见提交历史与 [release-notes.md](release-notes.md)。
+- 上表记录的是上游与社区分支的贡献；本仓库（youki258/dsh-ungate）在上游基础上做减法与文档收敛，新增改动见提交历史与 [release-notes.md](release-notes.md)。
 - 本仓库**未启用**自动头像同步工作流（没有 `.github/`），因此 README 不展示由脚本生成的名单；署名以上表与 git 历史为准。
 - 发现遗漏或署名需要更正时，直接提 issue 或 PR，不必先跑任何生成脚本。

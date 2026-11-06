@@ -242,11 +242,11 @@ if (LEGACY[op]) {
       ? await patchDrift(target, undefined, {surface:hostSurface(target),dshHome:home})
       : {host:"",state:"unknown",checked:0,drifted:[],optionalDrift:[],chained:[],missing:[],
           note:"未定位当前实例；请明确 DSH_BASE 或 PURGE_DSH_CLI，不扫描其他安装"};
-    result = { name: "Purge Minimal", package: PACKAGE, compatibility: compatibility(target), ...drift };
+    result = { name: "Ungate", package: PACKAGE, compatibility: compatibility(target), ...drift };
   } else if (op === "status") {
     const target = diagnosticHost();
     result = {
-      name: "Purge Minimal",
+      name: "Ungate",
       package: PACKAGE,
       compatibility: compatibility(target),
       host_selection: target ? "explicit-or-running" : "unresolved",
@@ -275,7 +275,7 @@ if (LEGACY[op]) {
       exit: run.status === null ? 1 : run.status,
       note: action === "revert"
         ? "已还原原生宿主；重启 dsh 服务后生效（systemctl restart dsh-web-iso 或 dsh-web）。"
-        : "已应用 Purge Minimal 补丁；重启 dsh 服务后生效（systemctl restart dsh-web-iso 或 dsh-web）。",
+        : "已应用 Ungate 补丁；重启 dsh 服务后生效（systemctl restart dsh-web-iso 或 dsh-web）。",
     };
   } else if (op === "backup") result = await maintenance().backup("cli");
   else if (op === "prune") result = await maintenance().pruneLocked();

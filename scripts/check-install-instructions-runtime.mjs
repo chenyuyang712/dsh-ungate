@@ -46,10 +46,10 @@ const run = (exe, args, env, label) => {
 };
 run(process.platform === 'win32' ? 'tar.exe' : 'tar', ['-xzf',archive,'-C',temp],process.env,'unpack');
 const pkg = JSON.parse(fs.readFileSync(path.join(temp,'package/package.json')));
-const releaseURL = `https://github.com/youki258/dsh-purge-minimal/releases/download/v${pkg.version}/dsh-purge-minimal-${pkg.version}.tgz`;
+const releaseURL = `https://github.com/youki258/dsh-ungate/releases/download/v${pkg.version}/dsh-ungate-${pkg.version}.tgz`;
 const ext = process.platform === 'win32' ? 'ps1' : 'sh';
 const script = path.join(temp,`install.${ext}`);
-const response = await fetch(`https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.${ext}`, {signal:AbortSignal.timeout(90000)});
+const response = await fetch(`https://raw.githubusercontent.com/youki258/dsh-ungate/master/scripts/install.${ext}`, {signal:AbortSignal.timeout(90000)});
 assert(response.ok, 'Installer download must succeed'); fs.writeFileSync(script,await response.text());
 const cliScript = path.join(temp,'package/bin/community.js');
 const reports = [];
@@ -92,9 +92,9 @@ for (const scenario of ['official-first-install','community-first-install','lega
     assert.deepEqual(fs.readFileSync(path.join(profile,'package.json')),before);
     install = wrapper(false);
   }
-  assert.equal(JSON.parse(fs.readFileSync(path.join(profile,'node_modules/dsh-purge-minimal/package.json'))).version,pkg.version);
+  assert.equal(JSON.parse(fs.readFileSync(path.join(profile,'node_modules/dsh-ungate/package.json'))).version,pkg.version);
   const bundles = JSON.parse(fs.readFileSync(path.join(profile,'package.json'))).dsh.profile.bundles;
-  assert(bundles.includes('dsh-purge-minimal')); assert(!bundles.includes('dsh-purge'));
+  assert(bundles.includes('dsh-ungate')); assert(!bundles.includes('dsh-purge'));
   preserve();
   // Exercise documented status and rollback with actual CLI, never a global bin assumption.
   const status = JSON.parse(run(runtime,[cliScript,'status'],env,label('status')));
@@ -102,7 +102,7 @@ for (const scenario of ['official-first-install','community-first-install','lega
   const backupId = install?.match(/"backup_id"\s*:\s*"([^"]+)"/)?.[1];
   if (scenario === 'legacy-migration') {
     assert(backupId && status.backups.some(b=>b.id===backupId));
-    assert.equal(fs.readFileSync(patch,'utf8'),original.replace('name: dsh-purge\n','name: "dsh-purge-minimal"\n'));
+    assert.equal(fs.readFileSync(patch,'utf8'),original.replace('name: dsh-purge\n','name: "dsh-ungate"\n'));
     fs.appendFileSync(patch,'\n# user edit after migration\n');
     run(runtime,[cliScript,'rollback',backupId],env,label('rollback'));
     assert.equal(JSON.parse(fs.readFileSync(path.join(profile,'node_modules/dsh-purge/package.json'))).version,'1.1.71');
@@ -113,7 +113,7 @@ for (const scenario of ['official-first-install','community-first-install','lega
     const back = JSON.parse(run(runtime,[cliScript,'backup'],env,label('backup')));
     fs.appendFileSync(patch,'\n# user edit after backup\n');
     run(runtime,[cliScript,'rollback',back.id],env,label('rollback'));
-    assert.equal(JSON.parse(fs.readFileSync(path.join(profile,'node_modules/dsh-purge-minimal/package.json'))).version,pkg.version);
+    assert.equal(JSON.parse(fs.readFileSync(path.join(profile,'node_modules/dsh-ungate/package.json'))).version,pkg.version);
     assert.equal(fs.readFileSync(patch,'utf8'),original+'\n# user edit after backup\n'); preserve();
   }
   reports.push({scenario,version:pkg.version,settingsPreserved:true,rollback:scenario!=='official-first-install'});

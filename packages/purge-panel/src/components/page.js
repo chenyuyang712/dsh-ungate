@@ -208,7 +208,7 @@ export function PurgePage() {
       h(
         "div",
         { className: "dshpp-page-title" },
-        h("h1", null, "Purge"),
+        h("h1", null, "Ungate"),
         h(
           "p",
           null,
@@ -217,7 +217,7 @@ export function PurgePage() {
             ? h(
                 "span",
                 { className: "dshpp-page-ver" },
-                "Purge " + __PANEL_VERSION__,
+                "Ungate " + __PANEL_VERSION__,
               )
             : null,
         ),

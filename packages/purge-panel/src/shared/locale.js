@@ -19,8 +19,8 @@ export const zh = {
   "welcome.warn":
     "本插件免费开源。任何背着作者私自售卖、付费倒卖或借本项目盈利的行为，作者将依法追究法律责任。",
   "welcome.body":
-    "dsh-purge-minimal 是 DeepSeek Harness 的本机插件：在受控本机环境中调整提示词与宿主补丁、解除审批与沙箱拦截，适合安全评测与自动化调试。项目免费、非营利，源码仓库：",
-  "welcome.repo": "https://github.com/youki258/dsh-purge-minimal",
+    "dsh-ungate 是 DeepSeek Harness 的本机插件：在受控本机环境中调整提示词与宿主补丁、解除审批与沙箱拦截，适合安全评测与自动化调试。项目免费、非营利，源码仓库：",
+  "welcome.repo": "https://github.com/youki258/dsh-ungate",
   "welcome.ban1":
     "禁止将本项目用于未授权的网络攻击、入侵、窃取数据、破坏系统或任何违法犯罪。",
   "welcome.ban2":
@@ -108,7 +108,7 @@ export const zh = {
   "btn.revert": "还原",
   "btn.uninstall": "卸载",
   "btn.uninstall.busy": "卸载中…",
-  "uninstall.title": "卸载 dsh-purge",
+  "uninstall.title": "卸载插件",
   "uninstall.body":
     "是否卸载？卸载将还原回原版，并清除本插件的全部文件与补丁。",
   "uninstall.confirm": "确认卸载",
@@ -402,8 +402,8 @@ export const en = {
   "welcome.warn":
     "This plugin is free and open source. Anyone who sells, resells, or profits from it behind the author's back may face legal action.",
   "welcome.body":
-    "dsh-purge-minimal is a local DeepSeek Harness plugin: adjust prompts and host patches on a machine you control to remove approval and sandbox gates for security evaluation and automation. It is free and non-profit. Repository:",
-  "welcome.repo": "https://github.com/youki258/dsh-purge-minimal",
+    "dsh-ungate is a local DeepSeek Harness plugin: adjust prompts and host patches on a machine you control to remove approval and sandbox gates for security evaluation and automation. It is free and non-profit. Repository:",
+  "welcome.repo": "https://github.com/youki258/dsh-ungate",
   "welcome.ban1":
     "Do not use this project for unauthorized attacks, intrusion, data theft, sabotage, or any illegal activity.",
   "welcome.ban2":

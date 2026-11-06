@@ -1,6 +1,6 @@
-# 运维手册（dsh-purge-minimal 0.1.3）
+# 运维手册（dsh-ungate 0.2.0）
 
-> 当前版本 **0.1.3**。面向在本机维护插件的人：体检、改宿主、重启、隔离验证、出事怎么收。
+> 当前版本 **0.2.0**。面向在本机维护插件的人：体检、改宿主、重启、隔离验证、出事怎么收。
 > 前提：`DSH_HOME` 与 `DSH_PROFILE` 指向**你要操作的那个实例**，不是"这台机器上恰好跑着的那个"。
 
 ## 0. 一分钟体检
@@ -8,9 +8,9 @@
 ```sh
 export DSH_HOME=/home/kali/.dsh DSH_PROFILE=web
 export PURGE_DSH_CLI="$(command -v dsh)"
-node /path/to/dsh-purge-minimal/bin/community.js status
-node /path/to/dsh-purge-minimal/bin/community.js selfcheck --json | jq '{ok, state, patch, broken}'
-node /path/to/dsh-purge-minimal/bin/community.js audit --limit 20
+node /path/to/dsh-ungate/bin/community.js status
+node /path/to/dsh-ungate/bin/community.js selfcheck --json | jq '{ok, state, patch, broken}'
+node /path/to/dsh-ungate/bin/community.js audit --limit 20
 ```
 
 判断顺序：`state` → `broken[]` → `patch.applied/total` → 最近审计里有没有 `refusal_retry`。

@@ -74,7 +74,7 @@ try {
 
   // 4) bundle patch 里的条目名与包名一致
   const yml = fs.readFileSync(path.join(pkgDir, "cordis.patch.yml"), "utf8");
-  for (const needle of ["dsh-purge-minimal", "dsh-purge-minimal/presets-plugin"])
+  for (const needle of ["dsh-ungate", "dsh-ungate/presets-plugin"])
     if (!yml.includes(needle)) problems.push(`cordis.patch.yml 缺少 ${needle}`);
   if (!problems.length) ok("bundle patch 条目完整");
 

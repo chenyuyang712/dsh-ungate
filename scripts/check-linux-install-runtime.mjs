@@ -40,7 +40,7 @@ try {
  assert(version.trim());
  Object.assign(process.env,childEnv);
  await verifyInstalledPackage(profile,metadata);
- const m=new Maintenance({home,profile,root:path.join(profile,'node_modules/dsh-purge-minimal')});
+ const m=new Maintenance({home,profile,root:path.join(profile,'node_modules/dsh-ungate')});
  const snapshot=await m.backup('pr42-linux-actual-cli');
  await m.install(archive);await verifyInstalledPackage(profile,metadata);
  await m.rollback(snapshot.id);await verifyInstalledPackage(profile,metadata);

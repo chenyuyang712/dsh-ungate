@@ -1,11 +1,11 @@
-# 当前状态（0.1.3）
+# 当前状态（0.2.0）
 
-> 当前版本 **0.1.3** · 最后更新：2026-11-06
+> 当前版本 **0.2.0** · 最后更新：2026-11-06
 > 本文件记录"现在是什么"，不记录"以前是什么"。历史在 [release-notes.md](../release-notes.md) 与 [upstream](upstream/)。
 
 ## 这是什么
 
-`dsh-purge-minimal`：给 DSH 解除审批、沙箱与拒绝倾向拦截的附加组件。宿主补丁 + 运行时注入 + 强化段 + 权限配置 + `unrestricted` 预设，五层叠加。安装、应用、加载是三个不同阶段，任何"已生效"的结论都必须来自重开后的 `selfcheck` 与探针。
+`dsh-ungate`：给 DSH 解除审批、沙箱与拒绝倾向拦截的附加组件。宿主补丁 + 运行时注入 + 强化段 + 权限配置 + `unrestricted` 预设，五层叠加。安装、应用、加载是三个不同阶段，任何"已生效"的结论都必须来自重开后的 `selfcheck` 与探针。
 
 ## 补丁表（27 条定义）
 
@@ -79,8 +79,9 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 | `$DSH_HOME/dsh-purge/probe.json` | 运行时探针（30 分钟 TTL） |
 | `$DSH_HOME/dsh-purge/anchor-overrides.json` | 本机重锚覆盖 |
 | `$DSH_HOME/dsh-purge/applied.json` · `installed-rev` | 上次应用的插件版本 |
-| `$DSH_HOME/dsh-purge-minimal/audit.jsonl` | 动作审计（1MB 轮转，保留 2 份） |
-| `$DSH_HOME/dsh-purge-minimal/backups/` | 快照与对象（`manifest.json` + `objects/`） |
+| `$DSH_HOME/dsh-ungate/audit.jsonl` | 动作审计（1MB 轮转，保留 2 份） |
+| `$DSH_HOME/dsh-ungate/backups/` | 快照与对象（`manifest.json` + `objects/`） |
+| `$DSH_HOME/dsh-ungate/` | 0.2.0 起的数据目录；首次运行若只剩旧目录 `dsh-purge-minimal/`，自动改名迁移（审计、备份、快照一起搬；迁移失败则回退到旧目录继续读写） |
 | `$DSH_HOME/.agent-presets/unrestricted/` | 无限制模式预设 |
 
 ## 本机参考实例

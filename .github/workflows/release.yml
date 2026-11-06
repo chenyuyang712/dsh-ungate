@@ -16,7 +16,7 @@ permissions:
 jobs:
   release:
     # 保险丝：在 fork 上打 tag 不会去动上游 release。
-    if: github.repository == 'youki258/dsh-purge-minimal'
+    if: github.repository == 'youki258/dsh-ungate'
     runs-on: ubuntu-latest
     env:
       NPM_TOKEN: ${{ secrets.NPM_TOKEN }}

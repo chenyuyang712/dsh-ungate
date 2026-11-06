@@ -191,7 +191,7 @@ assert(
   headStyles[0].textContent.includes(".dshp-dock{display:none!important}"),
 );
 if (process.env.PANEL_CLIENT) {
-  assert.equal(plugin.name, "dsh-purge-minimal");
+  assert.equal(plugin.name, "dsh-ungate");
   const rewindSeat = seats.find(
     (x) => x.spec.name === "conversation.input.right",
   );
@@ -233,7 +233,7 @@ win.confirm = () => true;
     button = (text) =>
       root.findAllByType("button").find((x) => x.children.join("") === text);
   assert(
-    root.findAllByType("h1").some((x) => x.children.join("") === "Purge"),
+    root.findAllByType("h1").some((x) => x.children.join("") === "Ungate"),
     "page title renders",
   );
   assert(root.findAllByProps({ "aria-label": "维护" }).length);

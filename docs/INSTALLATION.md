@@ -1,6 +1,6 @@
-# 安装与升级（0.1.3）
+# 安装与升级（0.2.0）
 
-> 当前版本 **0.1.3**。安装不应用补丁、不重启 DSH；应用与加载是另外两步，见文末「装完必做」。
+> 当前版本 **0.2.0**。安装不应用补丁、不重启 DSH；应用与加载是另外两步，见文末「装完必做」。
 
 ## 0. 先确认你面对的是哪个实例
 
@@ -17,10 +17,10 @@ echo "$DSH_HOME"        # 数据目录
 
 ### 1.1 DSH 插件市场 / 官方插件界面（推荐）
 
-本仓库的 Releases 提供固定版本包。市场里搜 `dsh-purge-minimal`，或直接用 CLI：
+本仓库的 Releases 提供固定版本包。市场里搜 `dsh-ungate`，或直接用 CLI：
 
 ```sh
-dsh plugin --profile web add https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.3/dsh-purge-minimal-0.1.3.tgz
+dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.0/dsh-ungate-0.2.0.tgz
 ```
 
 Desktop：把 `web` 换成 `desktop`。官方插件管理器维护 `dsh.bundle`；装完它会出现在左侧栏「Purge」。
@@ -30,17 +30,17 @@ Desktop：把 `web` 换成 `desktop`。官方插件管理器维护 `dsh.bundle`�
 Linux / macOS：
 
 ```sh
-curl -fsSLO https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.sh
+curl -fsSLO https://raw.githubusercontent.com/youki258/dsh-ungate/master/scripts/install.sh
 sh install.sh --dry-run     # 只验证前置条件、下载与 SHA256
 sh install.sh               # 正式安装：备份、调用官方 CLI、迁移旧包引用、验证磁盘版本
 ```
 
-可显式指定：`DSH_NODE` / `PURGE_DSH_CLI` / `DSH_HOME` / `--profile=名称` / `--version=0.1.3`。
+可显式指定：`DSH_NODE` / `PURGE_DSH_CLI` / `DSH_HOME` / `--profile=名称` / `--version=0.2.0`。
 
 Windows（PowerShell 5.1+）：
 
 ```powershell
-Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/youki258/dsh-purge-minimal/master/scripts/install.ps1 -OutFile install.ps1
+Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/youki258/dsh-ungate/master/scripts/install.ps1 -OutFile install.ps1
 .\install.ps1 -DryRun
 .\install.ps1
 ```
@@ -53,7 +53,7 @@ Invoke-WebRequest -UseBasicParsing https://raw.githubusercontent.com/youki258/ds
 
 ```sh
 cd "$DSH_HOME/profiles/web"
-pnpm add /path/to/dsh-purge-minimal-0.1.3.tgz
+pnpm add /path/to/dsh-ungate-0.2.0.tgz
 ```
 
 然后把本包 `cordis.patch.yml` 里的 `dsh-purge` 与 `dsh-purge-presets` 两条 insert 合并进 profile 的 `cordis.yml`（不要整份覆盖），再重启服务。
@@ -104,7 +104,7 @@ purge uninstall         # 卸载插件，清理本 home 内的插件目录与链
 | `Profile is not initialized` | 目标 home/profile 没初始化，或脚本传了别的 home | 先打开一次 DSH，确认 profile 目录有 `package.json` |
 | `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION` | 依赖太新被拦；若同时报 `version not present in registry manifest` 则是公开镜像元数据不全 | 安装器会对明确的公开镜像做一次 scoped registry 重试；仍失败就保留日志，不要关 `minimumReleaseAge` |
 | `fetch failed` / `UND_ERR_DESTROYED` | 下载阶段问题，不等于包没上传 | 看 `[download]` 三段（metadata / archive / checksum）与底层错误码；瞬时 408/429/5xx 最多两次 |
-| `Cannot find package 'dsh-purge-minimal'` | 入口找到了但依赖没装好，或 profile 里存在重复入口 | 检查 `profiles/<名>/node_modules/dsh-purge-minimal`、bundle 条目与实际 manifest；不要盲删配置 |
+| `Cannot find package 'dsh-ungate'` | 入口找到了但依赖没装好，或 profile 里存在重复入口 | 检查 `profiles/<名>/node_modules/dsh-ungate`、bundle 条目与实际 manifest；不要盲删配置 |
 | 应用后模型仍推脱 | 插件链路问题还是模型层问题分不清 | 先 `purge probe new`：回显=注入到位，改人设/强化段；不回显=查注入层 |
 | `读取失败: timeout` | 单次请求超时，不代表宿主缺失 | 刷新；持续失败再收集版本与脱敏错误 |
 
@@ -112,6 +112,6 @@ purge uninstall         # 卸载插件，清理本 home 内的插件目录与链
 
 ## 7. 测试与验收边界
 
-- `pnpm test`：533 项，干净环境 0 失败；从 DSH 会话里跑也成立（安装器不再继承会话 profile）。
+- `pnpm test`：536 项，干净环境 0 失败；从 DSH 会话里跑也成立（安装器不再继承会话 profile）。
 - `pnpm run smoke`：打包 → 解包 → 无依赖启动 → 导入 → 预设解析。
 - 真机验收（Electron / Windows 换包 / macOS 交接）使用隔离实例，不能拿 Node 单测冒充。

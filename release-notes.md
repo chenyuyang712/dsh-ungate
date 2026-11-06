@@ -1,6 +1,31 @@
+# 0.2.0
+
+> 2026-11-07 · `dsh-ungate` 0.2.0（原 `dsh-purge-minimal`）
+
+这是一次**身份变更**，功能仍然是那 27 条补丁与 20 层自检。改名的原因：`purge` 读起来像批量删宿主代码，`minimal` 读起来像某个分支的变体，两者都不适合作为独立发行版的发行身份。
+
+## 变更
+
+- 包名 `dsh-purge-minimal` → `dsh-ungate`；仓库更名为 `youki258/dsh-ungate`（GitHub 旧链会自动跳转）。
+- 插件在 `cordis.patch.yml` 里的 id 仍是 `dsh-purge`：已装用户的配置、提示词、规则、`$DSH_HOME/dsh-purge/*` 全部不动。
+- 数据目录 `$DSH_HOME/dsh-ungate/`：首次运行若发现旧目录 `dsh-purge-minimal/`，自动改名迁移（审计、备份、快照一起搬，失败时回退到旧目录继续读）。
+- 兼容读取：`dsh-purge-minimal` 仍被安装识别、回滚依赖名与卸载清理逻辑接受，方便旧安装平滑升级。
+- 面板标题从 `Purge` 改为 `Ungate`；命令行 `purge` 不变。
+- 发行包排除 `docs/upstream/`（实测 1.1M / 170 文件，上游归档命中 0）。
+
+## 验证
+
+- `pnpm test`：536 项，0 失败（512 通过 / 24 跳过）。
+- `pnpm run check:docs`：通过。
+- 面板 bundle 校验、打包内容断言（`.github/workflows/ci.yml` 同款）。
+
+## 升级路径
+
+桌面/Web 面板里装旧版 → 换新 tgz 或 npm 包 → 点「应用」→ 退出重开 → `selfcheck`。旧数据目录会在首次启动时自动迁移。
+
 # 0.1.3
 
-> 2026-11-07 · `dsh-purge-minimal` 0.1.3 · 已实测宿主不变：DSH Desktop 0.2.1-rc.1 / rc.2 / rc.3 / rc.5，0.2.2-rc.1 仅 web / npm CLI 面
+> 2026-11-07 · `dsh-ungate` 0.1.3 · 已实测宿主不变：DSH Desktop 0.2.1-rc.1 / rc.2 / rc.3 / rc.5，0.2.2-rc.1 仅 web / npm CLI 面
 
 这一版对齐 DSH 官方插件规范，并把 README 重写成本发行版自己的叙事。
 
@@ -25,7 +50,7 @@
 
 # 0.1.2
 
-> 2026-11-06 · 主干：`dsh-purge-minimal` 0.1.2 · 已实测 DSH Desktop 0.2.1-rc.1 / rc.2 / rc.3 / rc.5
+> 2026-11-06 · 主干：`dsh-ungate` 0.1.2 · 已实测 DSH Desktop 0.2.1-rc.1 / rc.2 / rc.3 / rc.5
 
 这一版只做减法与收敛：把上一轮 fork 留下的半成品删干净，让代码、面板、文档说的是同一件事。
 
@@ -48,7 +73,7 @@
 
 ## 验证
 
-- `pnpm test`：533 项，508 通过 / 24 跳过 / 0 失败（干净环境；从 DSH 会话里直接跑也不再受 profile 泄漏影响）。
+- `pnpm test`：536 项，508 通过 / 24 跳过 / 0 失败（干净环境；从 DSH 会话里直接跑也不再受 profile 泄漏影响）。
 - `pnpm run smoke`：打包 → 解包 → 无依赖启动 CLI → 导入 → 预设解析 → status，全部通过。
 - `pnpm run check:docs`：通过。
 - 面板 `node packages/purge-panel/scripts/build.mjs --community --check`：bundle 与源码一致。
@@ -63,7 +88,7 @@
 
 # 0.1.1
 
-- 仓库迁到 [youki258/dsh-purge-minimal](https://github.com/youki258/dsh-purge-minimal)，插件身份与安装链接随之更新。
+- 仓库迁到 [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate)，插件身份与安装链接随之更新。
 - 补丁表从社区版的 48 条压到 27 条：去掉渗透工具面、演练台与在线自更新相关的全部补丁与运行时。
 
 # 0.1.0

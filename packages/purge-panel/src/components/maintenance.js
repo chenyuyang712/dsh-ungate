@@ -328,7 +328,7 @@ export function CommunityMaintenance() {
       h(
         "a",
         {
-          href: "https://github.com/youki258/dsh-purge-minimal/releases",
+          href: "https://github.com/youki258/dsh-ungate/releases",
           target: "_blank",
           rel: "noreferrer",
         },

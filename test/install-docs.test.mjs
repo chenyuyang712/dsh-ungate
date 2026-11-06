@@ -15,7 +15,7 @@ test('legacy imports are found with all YAML quoting styles and module subpaths'
 
 test('valid community entries, id-only overrides, diagnostic prose and prompt data are allowed', () => {
   for (const text of [
-    example('dsh-purge-minimal'),
+    example('dsh-ungate'),
     '```yaml\n- id: dsh-purge\n  config:\n    name: dsh-purge\n    postPrompt: "name: dsh-purge"\n```',
     'The error mentions `name: dsh-purge` and `Cannot find package`.\n```text\nname: dsh-purge\n```',
     '```yaml\n- name: another-plugin\n  config:\n    insert:\n      - name: dsh-purge\n```',
@@ -32,7 +32,7 @@ test('archive warning must precede the actual historical YAML example', () => {
     notice + '## Another section\n' + example('dsh-purge'),
     notice + '```sh\necho unrelated\n```\n' + example('dsh-purge'),
     notice + '\n'.repeat(25) + example('dsh-purge'),
-    notice + example('dsh-purge-minimal'),
+    notice + example('dsh-ungate'),
   ]) assert.ok(checkInstallExamples(text, { archive: true }).length, text);
 });
 

@@ -5,14 +5,14 @@ import { SOURCE_REPO, UPSTREAM_REPO, archiveZipUrl, archiveTarballUrl } from "..
 import { REPOSITORY } from "../lib/community.js";
 
 test("update sources point at this repository", () => {
-  assert.equal(SOURCE_REPO, "youki258/dsh-purge-minimal");
+  assert.equal(SOURCE_REPO, "youki258/dsh-ungate");
   assert.equal(UPSTREAM_REPO, SOURCE_REPO);
   assert.equal(REPOSITORY, SOURCE_REPO);
 });
 
 test("archive URLs never reference the removed upstream", () => {
   for (const url of [archiveZipUrl("v1.6.36"), archiveTarballUrl("v1.6.36")]) {
-    assert.match(url, /youki258\/dsh-purge-minimal/);
+    assert.match(url, /youki258\/dsh-ungate/);
     assert.doesNotMatch(url, /YuJunZhiXue/);
   }
 });

@@ -21,7 +21,7 @@ const {installedCommunityPackage}=await import(pathToFileURL(path.join(candidate
 const {installedYaml}=await import(pathToFileURL(path.join(candidateRoot,'lib/market-migration.js')));
 const {createUpdateController,savePreferences}=await import(pathToFileURL(path.join(candidateRoot,'lib/update-policy.js')));
 const baseline=await validateArchive(legacy),candidate=await validateArchive(archive),reports=[];
-for(const alias of ['dsh-purge-minimal','dsh-purge']){
+for(const alias of ['dsh-ungate','dsh-purge']){
   const home=path.join(temp,alias,'home');fs.mkdirSync(home,{recursive:true});
   const env={...process.env,DSH_HOME:home,DSH_PROFILE:'web',DSH_SURFACE:'web',PURGE_DSH_CLI:cli,ELECTRON_RUN_AS_NODE:'1',DSH_BASE:'',PURGE_PROFILE_DIR:'',NPM_CONFIG_CACHE:path.join(temp,'npm-cache'),XDG_CACHE_HOME:path.join(temp,'cache')};
   Object.assign(process.env,env);
@@ -66,7 +66,7 @@ for(const alias of ['dsh-purge-minimal','dsh-purge']){
   assert.equal(fs.readFileSync(prompt,'utf8'),sentinel);
   const rolled=fs.readFileSync(config,'utf8');
   assert(rolled.includes('# USER EDIT AFTER BACKUP'));assert(rolled.includes('postPrompt: USER CONFIG SENTINEL'));
-  assert(rolled.includes(alias==='dsh-purge'?'name: "dsh-purge"':'name: dsh-purge-minimal'));
+  assert(rolled.includes(alias==='dsh-purge'?'name: "dsh-purge"':'name: dsh-ungate'));
   await m.install(archive);
   const protectedFiles=[config,prompt,path.join(profile,'package.json'),path.join(profile,'pnpm-lock.yaml')];
   const bytes=protectedFiles.map(p=>fs.readFileSync(p));

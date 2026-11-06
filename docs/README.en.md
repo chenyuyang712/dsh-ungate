@@ -1,11 +1,11 @@
-# dsh-purge-minimal
+# dsh-ungate
 
-**Current version 0.1.3** — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.
+**Current version 0.2.0** — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.
 
 > **Provenance**
 > - Original upstream: [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (author YuJunZhiXue, MIT).
 > - The code in this repository comes from the minimal cut of the community branch [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge); host patches, selfcheck, installers and the panel originate there.
-> - [youki258/dsh-purge-minimal](https://github.com/youki258/dsh-purge-minimal) only subtracts and rewrites: no tool surface, no legacy debug entry points, no in-plugin self-update, 27 patches, one source of truth for docs. It is **not** an official release by the upstream author.
+> - [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) only subtracts and rewrites: no tool surface, no legacy debug entry points, no in-plugin self-update, 27 patches, one source of truth for docs. It is **not** an official release by the upstream author.
 
 ## What it changes
 
@@ -22,7 +22,7 @@ It does **not** touch your prompt text, rule sets or other plugin configs, and i
 ## Quick start
 
 ```sh
-dsh plugin --profile web add https://github.com/youki258/dsh-purge-minimal/releases/download/v0.1.3/dsh-purge-minimal-0.1.3.tgz
+dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.0/dsh-ungate-0.2.0.tgz
 node bin/community.js apply
 # fully quit DSH, reopen, then:
 node bin/community.js selfcheck --json

@@ -93,17 +93,17 @@ export function SettingsRoot(props = {}) {
     h(
       "header",
       { className: "dshpp-native-head" },
-      h("div", null, h("h2", null, "Purge"), h("p", null, "插件设置")),
+      h("div", null, h("h2", null, "Ungate"), h("p", null, "插件设置")),
       h(
         "span",
         { className: "dshpp-native-badge" },
-        "Purge " + __PANEL_VERSION__,
+        "Ungate " + __PANEL_VERSION__,
       ),
     ),
     h(CompatibilityNote, { status: backendStatus }),
     h(
       "nav",
-      { className: "dshpp-native-nav", "aria-label": "Purge 设置分类" },
+      { className: "dshpp-native-nav", "aria-label": "Ungate 设置分类" },
       [
         ["status", "状态"],
         ["prompt", "提示词"],

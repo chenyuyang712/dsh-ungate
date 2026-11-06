@@ -4,7 +4,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import { bootstrapInstall, downloadReleaseFile, archiveDownloadBudget } from '../scripts/bootstrap-install.mjs';
-const url = 'https://github.com/youki258/dsh-purge-minimal/releases/download/v1.6.38/dsh-purge-minimal-1.6.38.tgz';
+const url = 'https://github.com/youki258/dsh-ungate/releases/download/v1.6.38/dsh-ungate-1.6.38.tgz';
 const network = code => new TypeError('fetch failed with https://user:secret@proxy.invalid/?token=private', {cause:Object.assign(Error('private details'), {code})});
 const options = { sleep: async()=>{}, log:()=>{}, curlRequest:async()=>assert.fail('unexpected curl') };
 
@@ -66,7 +66,7 @@ test('fallback checksum mismatch and checksum transport failure cannot invoke mi
   for(const failChecksum of [false,true]){
     await assert.rejects(bootstrapInstall({home,cli:'fixture',version:'1.6.38',request:async()=>{throw network('ENETUNREACH');},download:{sleep:async()=>{},curlRequest:async u=>{
       if(u.endsWith('SHA256SUMS.txt')&&failChecksum)throw Object.assign(Error('no curl'),{code:'CURL_UNAVAILABLE'});
-      return {status:200,headers:new Headers(),body:Buffer.from(u.endsWith('.tgz')?'tampered':'0'.repeat(64)+'  dsh-purge-minimal-1.6.38.tgz\n')};
+      return {status:200,headers:new Headers(),body:Buffer.from(u.endsWith('.tgz')?'tampered':'0'.repeat(64)+'  dsh-ungate-1.6.38.tgz\n')};
     }},log:()=>{},run:async()=>assert.fail('must not extract/install')}),failChecksum?/stage=checksum/:/SHA256/);
     assert.equal(fs.readFileSync(path.join(profile,'cordis.patch.yml'),'utf8'),'PRIVATE');assert.deepEqual(fs.readdirSync(home),['profiles']);
   }
