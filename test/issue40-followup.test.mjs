@@ -25,7 +25,7 @@ function fixture() {
     },
   };
 }
-const patches = ALL_PATCHES.filter((p) => [71, 83].includes(p.id));
+const patches = ALL_PATCHES.filter((p) => [83].includes(p.id));
 test("#40 terminal desktop target uses its own shell, missing real shell remains broken", async () => {
   const f = fixture();
   try {
@@ -60,25 +60,15 @@ test("#40 terminal desktop target uses its own shell, missing real shell remains
     f.close();
   }
 });
-test("#40 absent third-party family is na; installed-but-damaged stays missing", async () => {
+test("liangshen presence is read from the selected home, never from other installs", () => {
   const f = fixture();
   try {
-    const opts = { dshHome: f.home, surface: "desktop" };
-    const status = await patchStatus(f.host, patches, opts);
-    assert.equal(status[71], "na");
-    assert.equal(
-      tallyPatchStatus({ 71: status[71] }, [patches.find((p) => p.id === 71)])
-        .total,
-      0,
-    );
+    // 梁神预设的补丁已经不随包发布（0.1.2 起 host patch 表里没有 #71），
+    // 但「装没装」这个只读探测仍要准确：它现在只喂面板提示，不参与补丁判定。
+    assert.equal(liangshenPresence(f.home), "absent");
     const preset = path.join(f.home, ".agent-presets/liangshen");
     fs.mkdirSync(preset, { recursive: true });
-    assert.equal(
-      (await patchStatus(f.host, patches, opts))[71],
-      "missing_file",
-    );
-    fs.writeFileSync(path.join(preset, "agent.cordis.yml"), "malformed: [");
-    assert.equal((await patchStatus(f.host, patches, opts))[71], "unmatched");
+    assert.equal(liangshenPresence(f.home), "present");
     fs.rmSync(preset, { recursive: true });
     const profile = path.join(f.home, "profiles/custom");
     fs.mkdirSync(profile, { recursive: true });
@@ -86,12 +76,7 @@ test("#40 absent third-party family is na; installed-but-damaged stays missing",
       path.join(profile, "package.json"),
       JSON.stringify({ dependencies: { "@linxin666/dsh-liangshen": "1" } }),
     );
-    assert.equal(
-      (await patchStatus(f.host, patches, opts))[71],
-      "missing_file",
-    );
-    fs.writeFileSync(path.join(profile, "package.json"), "{broken");
-    assert.equal((await patchStatus(f.host, patches, opts))[71], "unknown");
+    assert.equal(liangshenPresence(f.home), "present");
     const denied = {
       readdirSync() {
         throw Object.assign(Error("denied"), { code: "EACCES" });

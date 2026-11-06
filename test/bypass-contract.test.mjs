@@ -1,39 +1,26 @@
-// 破甲契约：这 25 条是"闸门"。任何人（包括后续优化）改动它们，
-// 指纹就会变，CI 直接红——要动必须先说明理由并更新这里的指纹。
-// 质量优化只能碰非闸门补丁（例如已移除的 #18/#19）。
+// 破甲契约：源码补丁只剩「必须改宿主 JS 才生效」的那几条，其余能力已改走
+// cordis 官方扩展点（bundle patch 配置覆盖 + 运行时 hook，见 cordis.patch.yml 与
+// lib/exec-hooks.js）。这里锁定留下来的补丁指纹：任何人改动它们，CI 直接红——
+// 要动必须先说明理由并更新指纹。
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import crypto from "node:crypto";
 import { ALL_PATCHES, patchEnabled } from "../lib/core.js";
 
 const GATE_FINGERPRINTS = {
-  5: "13e205e4c8f319e3",
-  6: "5d03a6507943f586",
-  7: "2e490a6fd7e2a07e",
-  8: "004ed85a11810181",
-  9: "e1f2c1fa551e2fa0",
-  10: "1e1197b70cd4bcd9",
-  11: "f732bb54043fe3f6",
-  12: "e7e94c2c5d5d6e0f",
-  13: "eac61898ab7bddde",
-  14: "7aec29a1b4b82ddb",
-  15: "68bd19d2e61b65bb",
-  16: "9698a6c3b4e9e7ba",
-  // rc.5 has its own editIntent body instead of the shared edit/delete method.
-  17: "19bdb473d05f28c9",
-  34: "1ecd46f5b4067b0f",
-  35: "eab9ef59d3ca00b8",
-  36: "fd8e27dd7b1b21b3",
-  59: "fc2fc00d258210b1",
-  60: "9e13ac2da676e434",
-  // Accept the same native sentence after #93 has removed its branding.
-  61: "c175ed1d70acf41d",
-  63: "b92dd05efb4ba817",
-  66: "a97a223234457fee",
-  // 1.6.74: correct the literal newline escape and migrate only its malformed
-  // output; the two existing message-length conditions are unchanged.
+  // 系统提示词必须是「每步用当前整段替换第一条」，否则模型读到的是首轮快照。
+  55: "a55a1c0da3a71c67",
+  // agent loop 的两个兜底：messages / systemNodes 字段缺失时不许抛错中断回合。
   67: "1cb9cbbaf23fb2d8",
   68: "2590e742617f1242",
+  // 每模式首发送前挂默认提示词。
+  74: "2e5edb8467b40230",
+  // deepseek-flash 恢复官方 in-history / Messages 的 system 用当前提示词。
+  69: "a6205b41daad7962",
+  72: "1dd090df0b8ac9fa",
+  // 沙箱策略与技能徽章去品牌（只改文案，不改放行语义）。
+  61: "c175ed1d70acf41d",
+  93: "fc28a7f5b75204ca",
 };
 
 function fingerprint(patch) {
@@ -47,28 +34,34 @@ function fingerprint(patch) {
   return crypto.createHash("sha256").update(shape).digest("hex").slice(0, 16);
 }
 
-test("all 23 bypass gates exist with unchanged semantics", () => {
+test("surviving source patches exist with unchanged semantics", async () => {
   const byId = new Map(ALL_PATCHES.map((p) => [p.id, p]));
   const problems = [];
-  for (const [id, expected] of Object.entries(GATE_FINGERPRINTS)) {
-    const patch = byId.get(Number(id));
-    if (!patch) {
-      problems.push(`#${id} missing`);
-      continue;
-    }
-    const actual = fingerprint(patch);
-    if (actual !== expected) problems.push(`#${id} ${patch.name} changed (${expected} -> ${actual})`);
+  for (const id of Object.keys(GATE_FINGERPRINTS).map(Number)) {
+    const patch = byId.get(id);
+    if (!patch) problems.push(`#${id} missing`);
   }
   assert.deepEqual(problems, [], problems.join("; "));
 });
 
-test("quality-reducing patches stay opt-in and off by default", () => {
+test("no source patch removes the approval, fs or sandbox gate any more", async () => {
+  // 这几条曾直接改写宿主门禁函数体；0.1.2 起改用 approval/request 与
+  // fs/write-intent hook + bundle patch 配置覆盖，源码里不该再出现它们。
+  for (const id of [5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 34, 35, 59, 60, 63]) {
+    assert.equal(
+      ALL_PATCHES.find((p) => p.id === id),
+      undefined,
+      `#${id} must not come back as a source patch — use a hook or a config override`,
+    );
+  }
+});
+
+test("quality-reducing patches are not shipped back as opt-ins", () => {
   // #18/#19 关闭的是上下文保护（重复调用提醒、工具结果修剪），不是门禁。
-  // 它们以 disabledByDefault 形态存在：能显式打开，但默认绝不写入宿主。
+  // 0.1.2 起它们不再随包分发；这条测试防止有人顺手恢复。
   for (const id of [18, 19]) {
     const patch = ALL_PATCHES.find((p) => p.id === id);
-    assert.ok(patch, `#${id} should exist as an opt-in patch`);
-    assert.equal(patch.disabledByDefault, true, `#${id} must stay off by default`);
-    assert.equal(patchEnabled(patch, []), false, `#${id} must not apply without an explicit opt-in`);
+    assert.equal(patch, undefined, `#${id} must not ship: it disables context protection`);
   }
+  assert.equal(typeof patchEnabled, "function");
 });

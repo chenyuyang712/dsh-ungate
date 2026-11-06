@@ -271,9 +271,12 @@ test("补丁：写失败显式报错，原文与备份都可回滚，恢复后�
   for (const pkg of ["dsh-agent-instructions", "dsh-agent-loop", "dsh-system-prompt"]) {
     write(path.join(aiBase, pkg, "package.json"), JSON.stringify({ name: pkg, version: "0.2.1-rc.2" }));
   }
-  const patch1 = core.ALL_PATCHES.find((p) => p.id === 1);
-  const target = path.join(aiBase, "dsh-agent-instructions", "lib", "index.js");
+  // #1 已随注入面缩减下线；用仍在表里的 #25（dsh-system-prompt 的身份句剥离）。
+  const patch1 = core.ALL_PATCHES.find((p) => p.id === 25);
+  const target = path.join(aiBase, "dsh-system-prompt", "lib", "index.js");
   const original = patch1.replacements[0].pattern + ";";
+  // isAiBase() 以 dsh-agent-instructions/lib 是否存在判定插件根，先造出这个必需目录。
+  write(path.join(aiBase, "dsh-agent-instructions", "lib", "index.js"), "// fixture\n");
   write(target, original);
   process.env.DSH_BASE = aiBase;
   try {

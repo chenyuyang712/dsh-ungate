@@ -259,8 +259,10 @@ test("写入失败用例不依赖 chmod：把目标换成目录，状态必须�
   process.env.DSH_HOME = home;
   try {
     const aiBase = seedHost(path.join(TMP, "w-host", "node_modules", "@deepseek-ai"));
-    const patch = core.ALL_PATCHES.find((p) => p.id === 1);
-    const target = path.join(aiBase, "dsh-agent-instructions", "lib", "index.js");
+    // #1 已随「注入面缩减」下线；这里只要一个真实存在于当前补丁表、且目标落在
+    // 我们自造宿主里的补丁——#25 改的是 dsh-system-prompt。
+    const patch = core.ALL_PATCHES.find((p) => p.id === 25);
+    const target = path.join(aiBase, "dsh-system-prompt", "lib", "index.js");
     const original = patch.replacements[0].pattern + ";";
     write(target, original);
     // 注入失败：目标是文件时无法当作目录写入；换成同名目录即可跨平台制造写失败

@@ -1,7 +1,67 @@
 # dsh-purge bundle patch
 #
-# 本插件只做两件事：解锁类宿主补丁（lib/patches）+ 无限制模式预设（presets/unrestricted）。
-# 全部能力都通过 cordis 的官方扩展点与配置覆盖实现，不改宿主源码的第三方包。
+# 本插件的全部能力都通过 cordis 的官方扩展点与配置覆盖实现：
+#   1) 配置覆盖（本文件）——解锁所需的宿主默认值都在这里，不写宿主文件；
+#   2) 运行时 hook（lib/index.js）——审批放行、写意图放行、工具闸门放行；
+#   3) 少量源码补丁（lib/patches，见 docs/STATE.md 的保留清单）——只在宿主没有扩展点时使用。
+#
+# 覆盖语义：同 id 的条目按字段整体替换（applyEntryPatches），所以下面每一条都要写全该字段。
+
+# 全权限沙箱：环境变量仍可覆盖（DSH_PERMISSION_MODE=workspace-write 即恢复官方围栏）。
+- id: sandbox-policy
+  config:
+    mode: !!js process.env.DSH_PERMISSION_MODE ?? 'danger-full-access'
+    workspaceRoot: !!js process.cwd()
+
+# 审批策略固定 ask：真正的放行由 lib/index.js 的 approval/request hook 完成。
+# 这样插件缺席时自动失败关闭（会弹审批），而不是静默全放行。
+- id: approval
+  config:
+    policy: ask
+
+# 权限预设：把 danger-full-access 的审批也指向 ask，让 hook 有机会接管；
+# 并把新会话的默认预设钉在 danger-full-access。
+- id: permission
+  config:
+    presets:
+      read-only:
+        sandbox: read-only
+        approval: ask
+        name: read-only
+        description: 只读访问，不写文件。
+      workspace-write:
+        sandbox: workspace-write
+        approval: ask
+        name: workspace-write
+        description: 在工作区与临时目录内写入。
+      danger-full-access:
+        sandbox: danger-full-access
+        approval: ask
+        name: danger-full-access
+        description: 全盘读写，审批由 dsh-purge 自动放行。
+    defaultPreset: danger-full-access
+
+# 长任务：bash 等待上限。
+- id: bash-sandbox
+  config:
+    timeoutMs: 160000
+
+# 大文件读取上限（否则 read 默认 2e3 行 / 50KB 就截断）。
+- id: tool-fs
+  config:
+    readLimit: 20000
+    readMaxLineLength: 10000
+    readMaxBytes: 1048576
+
+# 子代理嵌套深度。
+- id: subagent
+  config:
+    maxDepth: 10
+
+# 不把 Session Log 上传到官方模型 API。
+- id: session-log-deepseek
+  config:
+    enabled: false
 
 - id: system-prompt
   config:

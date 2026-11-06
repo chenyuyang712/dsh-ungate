@@ -1,6 +1,6 @@
 // The bundled `unrestricted` preset is a skeleton: it must stay a valid agent
-// composition, install idempotently, and keep the anchors that patches #24 / #76
-// are written against — otherwise installing it silently disables those patches.
+// composition and install idempotently. Since 0.1.2 the preset ships with web
+// fetch already enabled, so no host patch has to rewrite it on install.
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import fs from "node:fs";
@@ -8,23 +8,23 @@ import os from "node:os";
 import path from "node:path";
 import { installPreset, presetStatus, bundledPresetDir, userPresetDir } from "../lib/presets.js";
 import { readPresetDefinition } from "../lib/preset-composition.js";
-import { ALL_PATCHES, applyReplacementsToText } from "../lib/core.js";
+import { ALL_PATCHES } from "../lib/core.js";
 
 const template = () => fs.readFileSync(path.join(bundledPresetDir(), "agent.cordis.yml"), "utf8");
 
-test("the bundled preset is present and still matches the patch anchors", () => {
+test("the bundled preset is present and ships without a host patch dependency", () => {
   const text = template();
   assert(text.length > 1000, "template should be a full composition, not a stub");
   assert(text.includes("- id: persona"), "persona row");
   assert(text.includes("@deepseek-ai/dsh-tool-bash"), "shell tool row");
   assert(text.includes("- id: tool-web"), "web tool row");
-  // #24 flips preset fetch on; the anchor must exist or the patch silently skips.
-  const fetchPatch = ALL_PATCHES.find((p) => p.id === 24);
-  assert.equal(applyReplacementsToText(text, fetchPatch).changed, true, "#24 anchor");
-  // #76 is optional for this preset: it must not mangle a preset that never used
-  // the stock identity line.
-  const stripPatch = ALL_PATCHES.find((p) => p.id === 76);
-  assert.equal(applyReplacementsToText(text, stripPatch).changed, false, "#76 stays optional");
+  assert.match(text, /- id: tool-web[\s\S]{0,200}?fetch: true/, "web fetch is on out of the box");
+  // 预设不再依赖任何源码补丁；这条断言防止有人把 #24 之类加回来。
+  assert.equal(
+    ALL_PATCHES.find((p) => [24, 76].includes(p.id)),
+    undefined,
+    "no preset-rewriting source patch should ship",
+  );
 });
 
 test("install is idempotent and never overwrites user edits without force", () => {
@@ -35,15 +35,8 @@ test("install is idempotent and never overwrites user edits without force", () =
     assert.equal(first.action, "installed");
     const file = path.join(first.dir, "agent.cordis.yml");
     assert(fs.existsSync(file));
-    // 落盘时就合并了 #24：模板里的 fetch: false 会被打开
     const installed = fs.readFileSync(file, "utf8");
     assert(installed.includes("fetch: true"), "preset ships with web fetch enabled");
-    // 精确断言：装完以后 #24 已无活可干（模板注释里提到 fetch: false 不算）
-    assert.equal(
-      applyReplacementsToText(installed, ALL_PATCHES.find((p) => p.id === 24)).changed,
-      false,
-      "no pending #24 anchor left behind",
-    );
 
     fs.writeFileSync(file, "user edited\n");
     const second = installPreset({ home });

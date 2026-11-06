@@ -135,8 +135,8 @@ if (LEGACY[op]) {
         ok: true,
         optIn,
         extraPatches: current,
-        hint: "purge patches enable 18,19 | disable 18",
-        note: "默认关闭：开启会取消重复调用提醒与工具结果修剪，长会话上下文会变大",
+        hint: optIn.length ? `purge patches enable ${optIn.join(",")} | disable ${optIn[0]}` : "当前发行版没有可手动开关的可选补丁",
+        note: optIn.length ? "默认关闭：开启会取消重复调用提醒与工具结果修剪，长会话上下文会变大" : "可选补丁（#18/#19）已随注入面缩减下线",
       };
     }
   } else if (op === "retry") {

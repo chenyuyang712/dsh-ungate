@@ -4,13 +4,13 @@
 
 **让 AI 更专注地辅助你的学习与动手实验。**
 
-给 DeepSeek Harness 的自托管精简控件（俗称「破甲」插件）· 75 条宿主补丁 · 23 层状态自检 · 左侧栏整页设置
+给 DeepSeek Harness 的自托管精简控件（俗称「破甲」插件）· 27 条宿主补丁 · 20 层状态自检 · 左侧栏整页设置
 
 [![Release](https://img.shields.io/github/v/release/youki258/dsh-purge-minimal?label=release)](https://github.com/youki258/dsh-purge-minimal/releases)
 
 当前版本 **0.1.1** · 适配 **DSH Desktop 0.2.2-rc.1**（0.2.1-rc.1 / rc.2 / rc.3 / rc.5 同样通过） · [English](docs/README.en.md)
 
-0.1.1 是精简发行线起点：以 1.6.82 为基线，剥离 11 条会改变原生行为的补丁（hooks 否决、回退、悬挂自愈、`ask_user` 超时），保留红队模式全套、解锁类宿主补丁与中性化界面。[发行说明](release-notes.md)。
+0.1.1 是精简发行线起点：以 1.6.82 为基线，把宿主源码改写压到 27 条（其余能力改走 cordis 配置覆盖与运行时 hook），并移除内置红队演练台。[发行说明](release-notes.md)。
 
 **原项目与作者**：本仓库是独立维护的精简发行版（minimal），代码源自 [小杨 / YuJunZhiXue 的 dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) 及其后续社区分支。原仓库已恢复；保留原作者署名、版权与 MIT 许可证。本发行版不是原作者官方发行。
 

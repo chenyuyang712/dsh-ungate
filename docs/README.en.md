@@ -4,7 +4,7 @@
 
 **Helping your AI assistant stay focused on your learning and hands-on work.**
 
-A self-hosted, minimal add-on for DeepSeek Harness (known in the community as a 破甲 / "jailbreak" plugin) · 75 host patches · 23 status layers
+A self-hosted, minimal add-on for DeepSeek Harness (known in the community as a 破甲 / "jailbreak" plugin) · 27 host patches · 20 status layers
 
 [![Release](https://img.shields.io/github/v/release/youki258/dsh-purge-minimal?label=release)](https://github.com/youki258/dsh-purge-minimal/releases)
 
@@ -72,7 +72,7 @@ A full page in the left sidebar: one line of state at the top, "Apply" as the pr
 
 ## Updates
 
-0.1.1 is the start of the minimal line: based on 1.6.82 with 11 behaviour-changing patches removed (hooks denial, rewind, dangling-anchor self-healing, `ask_user` timeout). The red-team preset, unlock-type host patches and neutralised UI are kept. See the [release notes](../release-notes.md).
+0.1.1 is the start of the minimal line: based on 1.6.82, host source rewrites are cut to 27 patches — everything else is done through cordis config overrides and runtime hooks. The bundled red-team drill is gone. See the [release notes](../release-notes.md).
 
 Two separate preferences (check / install), default check-only every six hours. Installing never restarts the app — you decide when to reopen it.
 

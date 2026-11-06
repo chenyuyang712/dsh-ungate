@@ -282,12 +282,12 @@
 
 # The `web` service and its search provider stay in the host composition; only
 # the model-facing tool is per-session.
-# 出厂 fetch: false；补丁 #24 会在「应用」时打开（锚点要求这四行紧挨着，别往中间加注释）。
+# 出厂即打开 web fetch：本发行版不再依赖补丁改写这一行。
 - id: present
   name: '@deepseek-ai/dsh-tool-present'
 
 - id: tool-web
   name: '@deepseek-ai/dsh-tool-web'
   config:
-    fetch: false
+    fetch: true
     searchTimeoutMs: 60000

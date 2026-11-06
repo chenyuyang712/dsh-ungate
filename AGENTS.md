@@ -16,7 +16,7 @@
 
 | 层 | 由谁提供 | 生效方式 | 你能怎么查 |
 | --- | --- | --- | --- |
-| **宿主补丁**（75 条） | 本插件写进 DSH 源码 | 点「应用」写入 → **退出重开**才加载 | `selfcheck` 看各层 `applied/required` |
+| **宿主补丁**（27 条） | 本插件写进 DSH 源码 | 点「应用」写入 → **退出重开**才加载 | `selfcheck` 看各层 `applied/required` |
 | **提示词注入** | 插件运行时（每步重贴） | `prompt-inject.md` 作为 `dsh-purge` section | 探针（§4）或看 `selfcheck` 的「运行时提示词注入」 |
 | **破甲强化段** | 插件运行时 | 尾部 section（默认开） | `purge boost` |
 | **权限配置** | profile 的 `cordis.patch.yml` | `danger-full-access` + `approval: never` | `selfcheck` 的「当前 profile 的权限选择」 |
@@ -29,7 +29,7 @@
 ```
 通过官方界面/CLI 首次安装，或社区安装器备份迁移
    ↓
-点「应用」→ 解包 host / 写 75 条补丁 / 建快照
+点「应用」→ 解包 host / 写 27 条补丁 / 建快照
    ↓
 退出并重开 DSH   ← 补丁只有重启后才被加载
    ↓
@@ -52,7 +52,7 @@ selfcheck 全绿 = 可以开工
 | 命令 | 作用 | 退出码 |
 | --- | --- | --- |
 | `purge status` | 宿主路径、补丁计数 | 0 |
-| `purge selfcheck [--json\|--text]` | 23 层逐层证据 | **broken → 1**，pending/ok → 0 |
+| `purge selfcheck [--json\|--text]` | 20 层逐层证据 | **broken → 1**，pending/ok → 0 |
 | `purge host-status` | 只读磁盘布局与当前服务入口证据，不退出/换包/重启 | 0，须检查 state |
 | `purge diagnose [--json]` | 锚点漂移诊断（含行号 + 片段） | 0 |
 | `purge reanchor list\|show\|apply <id> [--index n] [--lines a-b] [--yes]\|clear <id>` | 半自动重锚：把新锚点钉成本地覆盖 | 0 |
@@ -109,7 +109,7 @@ purge probe new
 
 **不变量**：`prompt-inject.md`、规则集、其他插件配置，任何时候都不该被「应用」或「回滚」覆盖。
 
-## 7. 补丁表：75 条，怎么读、怎么加
+## 7. 补丁表：27 条，怎么读、怎么加
 
 - 定义在 `lib/core.js` 的 `ALL_PATCHES`（`PATCHES` / `CODE_PATCHES` / `ENGINE_PATCHES` / `NEW_TOOL_PATCHES`）。
 - 每条 = `{id, name, layer, file, replacements:[{pattern, replace}], markers, optional?}`；`pattern` 是对宿主源码的**精确片段**（或正则），`markers` 用来判断"已应用"。
