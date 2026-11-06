@@ -115,7 +115,7 @@ purge probe new
 ## 测试与开发
 
 ```sh
-pnpm test        # 532 项：补丁锚点、自检、安装器、HTTP、面板契约、回归
+pnpm test        # 533 项：补丁锚点、自检、安装器、HTTP、面板契约、回归
 pnpm run smoke   # 打包后解包、无依赖启动、导入、预设解析、CLI status
 pnpm run check:docs   # 版本/兼容声明/残留引用的一致性守卫
 pnpm run test:ui      # 面板客户端 bundle 契约

@@ -146,7 +146,7 @@ token 在服务启动日志里（`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | 
 ## 12. 测试入口
 
 ```sh
-pnpm test            # 532 项
+pnpm test            # 533 项
 pnpm run smoke       # 打包后验证（pnpm 环境自动回退）
 pnpm run check:docs  # 版本/兼容/残留引用一致性
 pnpm run test:ui

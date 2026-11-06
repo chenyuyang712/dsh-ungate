@@ -23,7 +23,7 @@
 
 ## 验证
 
-- `pnpm test`：532 项，508 通过 / 24 跳过 / 0 失败（干净环境；从 DSH 会话里直接跑也不再受 profile 泄漏影响）。
+- `pnpm test`：533 项，508 通过 / 24 跳过 / 0 失败（干净环境；从 DSH 会话里直接跑也不再受 profile 泄漏影响）。
 - `pnpm run smoke`：打包 → 解包 → 无依赖启动 CLI → 导入 → 预设解析 → status，全部通过。
 - `pnpm run check:docs`：通过。
 - 面板 `node packages/purge-panel/scripts/build.mjs --community --check`：bundle 与源码一致。

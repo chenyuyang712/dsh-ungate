@@ -51,7 +51,7 @@ Verified: 0.2.1-rc.1, 0.2.1-rc.2, 0.2.1-rc.3, 0.2.1-rc.5. Unknown: 0.2.1-rc.4, 0
 ## Tests
 
 ```sh
-pnpm test          # 532 tests
+pnpm test          # 533 tests
 pnpm run smoke     # pack, unpack, dependency-free bootstrap, imports, preset parse
 pnpm run check:docs
 pnpm run test:ui
