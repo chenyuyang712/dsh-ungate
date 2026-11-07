@@ -14,22 +14,6 @@ export function useT() {
 
 export const zh = {
   nav: "规则设定",
-  "welcome.title": "用户须知",
-  "welcome.lead": "首次安装本插件时请阅读以下说明。确认后本窗不再弹出。",
-  "welcome.warn":
-    "本插件免费开源。任何背着作者私自售卖、付费倒卖或借本项目盈利的行为，作者将依法追究法律责任。",
-  "welcome.body":
-    "dsh-ungate 是 DeepSeek Harness 的本机插件：在受控本机环境中调整提示词与宿主补丁、解除审批与沙箱拦截，适合安全评测与自动化调试。项目免费、非营利，源码仓库：",
-  "welcome.repo": "https://github.com/youki258/dsh-ungate",
-  "welcome.ban1":
-    "禁止将本项目用于未授权的网络攻击、入侵、窃取数据、破坏系统或任何违法犯罪。",
-  "welcome.ban2":
-    "禁止商业售卖、付费倒卖、黑灰产牟利，以及隐瞒作者的营利性再分发。",
-  "welcome.ban3":
-    "使用者须自行遵守所在地法律法规与平台规范；违法后果由行为人自行承担，与作者无关。",
-  "welcome.bans": "禁止事项",
-  "welcome.check": "我已阅读并理解上述用户须知，同意合法合规使用。",
-  "welcome.ok": "我已知晓并继续",
   "envGate.title": "环境还没配好",
   "envGate.lead":
     "红队模式发送前需要本机工具。未检测到可用环境时，先去环境适配，或确认暂不配置。",
@@ -399,24 +383,6 @@ export const zh = {
 
 export const en = {
   nav: "Rules",
-  "welcome.title": "User notice",
-  "welcome.lead":
-    "Please read this on first install. After you confirm, it will not appear again.",
-  "welcome.warn":
-    "This plugin is free and open source. Anyone who sells, resells, or profits from it behind the author's back may face legal action.",
-  "welcome.body":
-    "dsh-ungate is a local DeepSeek Harness plugin: adjust prompts and host patches on a machine you control to remove approval and sandbox gates for security evaluation and automation. It is free and non-profit. Repository:",
-  "welcome.repo": "https://github.com/youki258/dsh-ungate",
-  "welcome.ban1":
-    "Do not use this project for unauthorized attacks, intrusion, data theft, sabotage, or any illegal activity.",
-  "welcome.ban2":
-    "Do not commercially sell, resell, or profit from gray-market use, or redistribute for profit without the author.",
-  "welcome.ban3":
-    "You must follow local law and platform rules; illegal use is solely your responsibility.",
-  "welcome.bans": "Prohibitions",
-  "welcome.check":
-    "I have read and understand this notice and will use the plugin lawfully.",
-  "welcome.ok": "I understand — continue",
   "envGate.title": "Environment is not ready",
   "envGate.lead":
     "Red team mode needs local tools before you send. If none are available, open Env adapt or confirm you will continue without them.",

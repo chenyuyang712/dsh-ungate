@@ -7,7 +7,6 @@ import { PurgePage, PurgeGlyph } from "./components/page.js";
 import { bindSessionContext } from "./state/session-context.js";
 import { installLegacyVisibility } from "./state/legacy-visibility.js";
 import { installRewindUi } from "./components/rewind.js";
-import { WelcomeNotice } from "./components/welcome.js";
 
 export const name = __MODULE_ID__;
 
@@ -36,17 +35,7 @@ function PurgeGlyphIcon({ size = 16 } = {}) {
 }
 
 export function PanelOverlays() {
-  return h(
-    react.Fragment,
-    null,
-    h("style", null, PURGE_CSS),
-    // Restored from 1.1.71 apply(): shell.overlay carried the welcome notice.
-    h(WelcomeNotice, {
-      repo: __COMMUNITY__
-        ? "https://github.com/youki258/dsh-ungate"
-        : undefined,
-    }),
-  );
+  return h("style", null, PURGE_CSS);
 }
 
 export function apply(ctx) {

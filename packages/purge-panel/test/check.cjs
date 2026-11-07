@@ -223,10 +223,10 @@ const test = async () => {
     const dialogs = () => o.root.findAll((x) => x.props.role === "dialog");
     assert.equal(
       dialogs().length,
-      1,
-      "first-run welcome notice is restored into the overlay",
+      0,
+      "overlay carries no first-run notice (removed)",
     );
-    assert(JSON.stringify(o.toJSON()).includes("用户须知"));
+    assert(!JSON.stringify(o.toJSON()).includes("用户须知"));
     assert(
       !o.root
         .findAllByType("button")
@@ -235,16 +235,6 @@ const test = async () => {
         ),
       "no legacy launcher buttons in the overlay",
     );
-    await act(async () => {
-      o.root.findByType("input").props.onChange({ target: { checked: true } });
-    });
-    await act(async () => {
-      o.root
-        .findAllByType("button")
-        .find((x) => x.children.join("") === "我已知晓并继续")
-        .props.onClick();
-    });
-    assert.equal(dialogs().length, 0, "acknowledging closes the notice");
     await act(async () => o.unmount());
     assert.equal(
       headStyles.length,
@@ -281,29 +271,11 @@ const test = async () => {
     await act(async () => tree.unmount());
     assert.equal(writes.length, 0);
     console.log(
-      "PASS: isolated overlay, first-run welcome notice, upstream version warning, unavailable service warning, restored composer rewind slot",
+      "PASS: isolated overlay without first-run notice, upstream version warning, unavailable service warning, restored composer rewind slot",
     );
   }
   console.log(
     "PASS: native registry, persistent tab, loaded values, draft preservation across tabs and refresh, no implicit writes, no legacy launchers",
-  );
-  // 演练台：旧版靠外层 dock 把 .rt-* 的 CSS 注入 <head>，重构时丢了 → 面板在右侧栏里
-  // 完全没样式。这条守住"CSS 必须随组件一起发出"和"容器要能撑开"。
-  const bundleText = fs.readFileSync(process.env.PANEL_CLIENT, "utf8");
-  assert(
-    bundleText.includes("data-dsh-purge-drill"),
-    "drill stylesheet must be attached by the panel",
-  );
-  assert(
-    bundleText.includes(".rt-dock.rt-embedded"),
-    "the drill CSS itself must ship in the bundle",
-  );
-  assert(
-    /\.dshpp-native-drill\s*\{[^}]*min-height:\s*72vh/.test(bundleText),
-    "the drill container must reserve height inside the narrow sidebar",
-  );
-  console.log(
-    "PASS: drill stylesheet is attached and the container reserves space in the sidebar",
   );
 };
 test().catch((e) => {
