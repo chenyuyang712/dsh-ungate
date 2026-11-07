@@ -35,16 +35,6 @@
 
 It does **not** touch your prompt text, rule sets or other plugin configs, and it does not judge who owns a target. Disk writes are not proof of load: every "in effect" claim below is backed by a post-restart `selfcheck` and a probe.
 
-## Preview
-
-| Panel status | Rules |
-| --- | --- |
-| ![Panel status](preview/settings.png) | ![Rules](preview/rules.png) |
-
-| Own-servers panel (zh) | Own-servers panel (en) |
-| --- | --- |
-| ![zh](preview/own-servers.png) | ![en](preview/own-servers-en.png) |
-
 ## Install
 
 Pick any one entry point; the activation steps afterwards are identical (apply → fully quit and reopen → verify).

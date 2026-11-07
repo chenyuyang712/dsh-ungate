@@ -39,16 +39,6 @@
 
 "应用"只写宿主源码副本并留备份；磁盘写成功 ≠ 当前进程已加载。所有"已生效"的结论都以重开后的 `selfcheck` 与探针为准。
 
-## 预览
-
-| 面板状态 | 规则 |
-| --- | --- |
-| ![面板状态](docs/preview/settings.png) | ![规则](docs/preview/rules.png) |
-
-| 自有服务器面板（中文） | 自有服务器面板（英文） |
-| --- | --- |
-| ![中文](docs/preview/own-servers.png) | ![英文](docs/preview/own-servers-en.png) |
-
 ## 安装
 
 三种入口任选其一，装完的生效步骤相同（应用 → 完全退出重开 → 自证）。
