@@ -49,21 +49,42 @@
 | --- | --- |
 | ![中文](docs/preview/own-servers.png) | ![英文](docs/preview/own-servers-en.png) |
 
-## 30 秒上手
+## 安装
+
+三种入口任选其一，装完的生效步骤相同（应用 → 完全退出重开 → 自证）。
+
+**方式一：官方 CLI + 固定版本 tgz（推荐）**
 
 ```sh
-# 1) 装（固定版本 tgz，任意一种入口都行）
 dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.2/dsh-ungate-0.2.2.tgz
+```
 
-# 2) 应用补丁（面板点「应用」等价）
-node bin/community.js apply
+**方式二：npm 包**（发布到 npm registry 的同名包）
 
-# 3) 完全退出 DSH，再打开，然后自证
+```sh
+dsh plugin --profile web add dsh-ungate@0.2.2
+```
+
+**方式三：社区引导安装器**（备份迁移、旧包换装；先 `--dry-run` 审阅再执行）
+
+```sh
+sh scripts/install.sh --dry-run    # Linux/macOS
+pwsh scripts/install.ps1 -DryRun   # Windows
+```
+
+**装完生效（三种方式相同）**
+
+```sh
+node bin/community.js apply     # 面板点「应用」等价；写宿主源码副本并留备份
+# 完全退出 DSH（托盘退出 / ⌘Q，不是关窗口）再打开，然后自证：
 node bin/community.js selfcheck --json   # state=ok、broken 为空
 node bin/community.js probe new          # 发一句话看模型是否原样回显 nonce
 ```
 
-Desktop 用户把 `--profile web` 换成实际 profile 名。也支持社区引导安装器（`scripts/install.sh` / `install.ps1`，先 `--dry-run`）和手工 `pnpm add <tgz>`，细节见 [安装指南](docs/INSTALLATION.md)。
+- Desktop 用户把 `--profile web` 换成实际 profile 名（桌面壳默认 `desktop`）。
+- **升级**：本包在插件管理器里属 `not-updatable`（预期行为），换新版本重新 `plugin add` 一次即可，配置与提示词不受影响；每次宿主升级后 `asar` 重新封住，点一次「应用」再退出重开。
+- **卸载**：`node bin/community.js uninstall`（只清理本 home 内插件目录与链接，不动提示词、规则集、其他插件配置）。
+- 细节与失败排查见 [安装指南](docs/INSTALLATION.md)；桌面壳验收见 [桌面测试卡](docs/DESKTOP-TEST.md)。
 
 ## 兼容矩阵
 

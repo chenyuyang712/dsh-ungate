@@ -45,15 +45,42 @@ It does **not** touch your prompt text, rule sets or other plugin configs, and i
 | --- | --- |
 | ![zh](preview/own-servers.png) | ![en](preview/own-servers-en.png) |
 
-## Quick start
+## Install
+
+Pick any one entry point; the activation steps afterwards are identical (apply → fully quit and reopen → verify).
+
+**Option 1: official CLI + pinned-version tgz (recommended)**
 
 ```sh
 dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.2/dsh-ungate-0.2.2.tgz
-node bin/community.js apply
-# fully quit DSH, reopen, then:
-node bin/community.js selfcheck --json
-node bin/community.js probe new
 ```
+
+**Option 2: npm package**
+
+```sh
+dsh plugin --profile web add dsh-ungate@0.2.2
+```
+
+**Option 3: community bootstrap installer** (backup migration; review with `--dry-run` first)
+
+```sh
+sh scripts/install.sh --dry-run    # Linux/macOS
+pwsh scripts/install.ps1 -DryRun   # Windows
+```
+
+**Activate (same for all options)**
+
+```sh
+node bin/community.js apply     # same as pressing Apply in the panel; writes a host source copy and keeps backups
+# Fully quit DSH (tray exit / ⌘Q, not just closing the window), reopen, then verify:
+node bin/community.js selfcheck --json   # state=ok, broken empty
+node bin/community.js probe new          # send any message; the model should echo the nonce verbatim
+```
+
+- Desktop users: replace `--profile web` with the actual profile name (the desktop shell defaults to `desktop`).
+- **Upgrading**: this package is `not-updatable` in the plugin manager (expected); just `plugin add` the new version again — configs and prompt text are untouched. After every host upgrade the `asar` reseals: press Apply once, then quit and reopen.
+- **Uninstall**: `node bin/community.js uninstall` (cleans only this home's plugin directory and links; never touches prompt text, rule sets or other plugin configs).
+- Details and failure triage: [INSTALLATION](INSTALLATION.md); desktop-shell acceptance: [DESKTOP-TEST](DESKTOP-TEST.md).
 
 ## Compatibility matrix
 
