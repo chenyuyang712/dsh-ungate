@@ -8,11 +8,9 @@ import {
   Maintenance,
   compatibility,
   requirePatchCompatibility,
-  download,
   PACKAGE,
 } from "../lib/community.js";
 import { atomicCopyFileSync } from "../lib/core.js";
-import { filterDirs } from "../lib/update-install.js";
 function setup() {
   const home = fs.mkdtempSync(path.join(os.tmpdir(), "purge-community-")),
     profile = path.join(home, "profiles/desktop"),
@@ -263,27 +261,6 @@ test("maintenance serializes writes across processes", async () => {
     f.close();
   }
 });
-test("download rejects redirects to untrusted and insecure hosts before a second request", async () => {
-  let calls = 0;
-  const request = async () => {
-    calls++;
-    return new Response(null, {
-      status: 302,
-      headers: { location: "http://127.0.0.1/secret" },
-    });
-  };
-  await assert.rejects(
-    download("https://github.com/test", 1024, request),
-    /来源无效/,
-  );
-  assert.equal(calls, 1);
-});
-test("download limits streamed size even without content-length", async () => {
-  await assert.rejects(
-    download("https://github.com/test", 3, async () => new Response("too big")),
-    /过大/,
-  );
-});
 
 test("missing prompt component does not pass a version check", () => {
   const f = setup();
@@ -309,33 +286,6 @@ test("repeated rollback stages fresh verified code instead of reusing mutable pa
       "original client",
     );
   } finally {
-    f.close();
-  }
-});
-test("release checksum failure stops before installation", async () => {
-  const { installRelease } = await import("../lib/community.js");
-  const f = setup(),
-    previous = globalThis.fetch;
-  try {
-    globalThis.fetch = async (url) =>
-      new Response(
-        String(url).endsWith("SHA256SUMS.txt")
-          ? "0".repeat(64) + "  " + PACKAGE + "-1.2.0.tgz"
-          : "wrong bytes",
-      );
-    await assert.rejects(
-      installRelease(f.manager, {
-        ref: "v1.2.0",
-        version: "1.2.0",
-        asset: "https://github.com/youki258/dsh-ungate/releases/download/v1.2.0/dsh-ungate-1.2.0.tgz",
-        sums: "https://github.com/youki258/dsh-ungate/releases/download/v1.2.0/SHA256SUMS.txt",
-      }, globalThis.fetch),
-      /SHA256/,
-    );
-    assert.equal(f.installs.length, 0);
-    assert.equal(f.manager.list().length, 0);
-  } finally {
-    globalThis.fetch = previous;
     f.close();
   }
 });
@@ -448,22 +398,6 @@ test('native installer stages a fresh source for its own rollback link and resto
  }finally{if(old===undefined)delete process.env.PURGE_DSH_CLI;else process.env.PURGE_DSH_CLI=old;f.close();}
 });
 
-test("overlay targets that are files are skipped instead of aborting the update", () => {
-  // issue #118：file:<tgz> 依赖会把 tar 包路径当成安装目录
-  const dir = fs.mkdtempSync(path.join(os.tmpdir(), "purge-dirs-"));
-  try {
-    const realDir = path.join(dir, "pkg");
-    fs.mkdirSync(realDir);
-    const tar = path.join(dir, "pkg.tgz");
-    fs.writeFileSync(tar, "x");
-    const missing = path.join(dir, "not-yet");
-    const { kept, skipped } = filterDirs([realDir, tar, missing]);
-    assert.deepEqual(kept.sort(), [realDir, missing].sort());
-    assert.deepEqual(skipped, [tar]);
-  } finally {
-    fs.rmSync(dir, { recursive: true, force: true });
-  }
-});
 
 test('a failed fresh install quarantines partial package and retains user settings', async () => {
   const f = setup();

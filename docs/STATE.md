@@ -55,7 +55,7 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 ## 已知限制
 
 - **0.2.2-rc.1 只在 web / npm CLI 宿主上验证**：2026-11-06 在隔离实例（`DSH_HOME=/home/kali/.dsh-rc1`、端口 3082、宿主 `/tmp/dsh022`）跑通 apply（20 应用 + #90 已原生 + 6 不适用，零 failed）→ 重启 → selfcheck 20 层 19 ok + 1 不适用、21/21 补丁、零漂移。桌面壳（换包/关窗组 #45/#46/#82/#83/#84/#92）在该宿主上本来就 `surfaces:["desktop"]`，仍属未验证；`host_family` 报 `npm-cli`，不冒充 Desktop 家族。
-- **没有在线更新**：本 fork 不发布可供 `PURGE_UPDATE_REPO` 使用的发行索引，`applyUpdate` 会直接抛"无在线更新源"。因此面板与后台的检查更新已移除，升级只走插件市场或手动安装。`GET /dsh-purge/status` 的 `update` 段固定为 `disabled`。
+- **没有在线更新**：0.2.2 起后端 update 链整体退役（`lib/update*.js` 与 `/dsh-purge/update` 路由删除），`GET /dsh-purge/status` 不再有 `update` 字段。升级只走插件市场或手动安装；快照与回滚只走 CLI。
 - **`purge selfcheck` 裸跑没有意义**：没有 `DSH_HOME` / `PURGE_DSH_CLI` 时宿主为空，会报 `unknown` 与 17 层不确定。先指定实例，再读结果。
 - **桌面换包真机覆盖有限**：Linux 侧走过完整流程；Windows/macOS 依赖 Electron 版本，交接受单测覆盖但不等于实机验收。
 - **rc.4 / 0.2.2-alpha.2 未验证**：允许应用，`selfcheck` 会标未验证；不要据此对外声称兼容。
@@ -66,7 +66,7 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 | --- | --- | --- |
 | hooks 拦截旁路（四条旧补丁 id 及其接口、面板区块、状态字段） | 与"恢复官方 hook 语义"的声明冲突，且一键就能把 deny/ask 翻成放行 | lib/ 与面板源码里应无该模块与接口 |
 | 历史调试台（调试授权路由、模块、状态、欢迎语） | 只服务已删除的工具面 | lib/ 与面板源码里应无该模块与路由 |
-| 面板/后台在线更新 | 已整体移除：面板无版本管理、无备份回滚区，`/dsh-purge/update` 返回 null | 快照与回滚只走 CLI：`purge backup` / `purge rollback <id>` |
+| 面板/后台在线更新 | 已整体退役：面板无版本管理与备份回滚区，后端无 `/dsh-purge/update` 路由 | 快照与回滚只走 CLI：`purge backup` / `purge rollback <id>` |
 | 上下文化可选补丁的两个开关 | 对应注入面已缩减，补丁不再存在 | `purge patches list` 返回空清单 |
 | 渗透工具面与历史调试入口 | 本 fork 只保留宿主解闸能力 | `presets/` 只有 `unrestricted` |
 

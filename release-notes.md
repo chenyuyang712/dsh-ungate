@@ -6,6 +6,7 @@
 
 ## 变更
 
+- **后端 update 链整体退役**：`lib/update*.js`（更新控制器/下载/镜像/代理/密钥）、`/dsh-purge/update` 路由与 11 个 update 测试套件删除；status 不再有 `update` 字段，升级只走插件市场或手动安装，快照与回滚只走 CLI（`purge backup` / `purge rollback <id>`）。
 - `modePromptText()` 不再删段：改为**去标记、留正文**（`unwrapRedteamOnlySections`）。本 fork 没有红队模式可判，所以正文应当全部到模型。
 - `withoutRedteamOnlySections()` 保留导出但不再用于注入路径，注释写明它是旧语义、调用它会吃掉用户正文。
 - 探针语义不变：`purge probe new` 仍是证明"注入到达模型"的手段；这次修的正是它此前查不出的那一类。
@@ -14,7 +15,7 @@
 
 - 主实例（home `/home/kali/.dsh`）：`[inject.read]` 由 `rawBytes=32448 outBytes=922` 变为 **`outBytes=32371`**。
 - 模型侧取证（`DSH_HOME=/home/kali/.dsh-iso`，`dsh --profile headless` 真调用）：要求复述正文第 20000 字节处的英文原句，模型逐字返回 `Progress status lines are body text rendered in the UI in real time; …`。
-- `node --test`（533 项）与 `pnpm run check:docs` 通过；`pnpm run test:ui` 与面板 bundle 校验通过。
+- `node --test`（449 项）与 `pnpm run check:docs` 通过；`pnpm run test:ui` 与面板 bundle 校验通过。
 
 # 0.2.1
 

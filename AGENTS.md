@@ -127,7 +127,7 @@ purge probe new
 
 | 接口 | 用途 |
 | --- | --- |
-| `GET /dsh-purge/status` | 版本、宿主、补丁计数、`update` 段（本版固定 `disabled`） |
+| `GET /dsh-purge/status` | 版本、宿主、补丁计数（0.2.2 起无 `update` 字段） |
 | `GET /dsh-purge/selfcheck` | 20 层证据 |
 | `GET /dsh-purge/community` | 快照列表（CLI `purge backup` / `rollback` 同源） |
 | `POST /dsh-purge/apply` / `revert` / `boost` / `tuning` | 写操作（带 token） |
@@ -148,7 +148,7 @@ token 在服务启动日志里（`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | 
 ## 12. 测试入口
 
 ```sh
-pnpm test            # 533 项
+pnpm test            # 449 项
 pnpm run smoke       # 打包后验证（pnpm 环境自动回退）
 pnpm run check:docs  # 版本/兼容/残留引用一致性
 pnpm run test:ui

@@ -90,7 +90,7 @@ purge probe new
 
 ```sh
 pnpm install --frozen-lockfile --allow-build=esbuild   # 面板构建需要 esbuild 的二进制
-pnpm test              # 533 项：补丁锚点、自检、安装器、HTTP、面板契约、回归
+pnpm test              # 449 项：补丁锚点、自检、安装器、HTTP、面板契约、回归
 pnpm run smoke         # 打包后：无依赖启动、模块导入、预设解析、status
 pnpm run check:docs    # 版本/兼容声明/残留引用一致性
 pnpm run test:ui       # 面板客户端 bundle 契约

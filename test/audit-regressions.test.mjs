@@ -5,9 +5,7 @@ import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
 import { rollupLayers } from "../lib/selfcheck.js";
-import { versionIsNewer, sameRev } from "../lib/update-state.js";
 import { atomicFiles } from "../lib/atomic-files.js";
-import { dirBackup, dirRestore } from "../lib/update-install.js";
 
 const tmp = (tag) => fs.mkdtempSync(path.join(os.tmpdir(), `purge ${tag} `));
 
@@ -25,20 +23,7 @@ test("读取补丁状态失败时，自检不能报成全绿", () => {
   assert(rollupLayers({}, false).every((l) => l.state === "unknown"));
 });
 
-test("预发布段按数字比较：rc.2 不比 rc.10 新", () => {
-  assert.equal(versionIsNewer("0.2.1-rc.2", "0.2.1-rc.10"), false);
-  assert.equal(versionIsNewer("0.2.1-rc.10", "0.2.1-rc.2"), true);
-  assert.equal(versionIsNewer("0.2.1-rc.2", "0.2.1"), false);
-  assert.equal(versionIsNewer("0.2.1", "0.2.1-rc.2"), true);
-  assert.equal(versionIsNewer("1.6.27", "1.6.9"), true);
-  assert.equal(versionIsNewer("1.6.100", "1.6.99"), true);
-});
 
-test("sameRev 只对 git sha 做前缀比较，不把 apply:<版本> 当成同一修订", () => {
-  assert.equal(sameRev("apply:1.6.2", "apply:1.6.27"), false);
-  assert.equal(sameRev("abc1234", "abc1234def"), true);
-  assert.equal(sameRev("abc1234", "fff9999"), false);
-});
 
 test("rename 撞到瞬时占用会退避重试，而不是直接让状态文件写失败", () => {
   const root = tmp("rename");
@@ -71,26 +56,3 @@ test("rename 撞到瞬时占用会退避重试，而不是直接让状态文件�
   }
 });
 
-test("目录回滚保住被备份有意跳过的 node_modules", () => {
-  const root = tmp("dirrestore");
-  const home = path.join(root, "home");
-  const dir = path.join(root, "plugin");
-  try {
-    fs.mkdirSync(path.join(dir, "lib"), { recursive: true });
-    fs.mkdirSync(path.join(dir, "node_modules", "yaml"), { recursive: true });
-    fs.writeFileSync(path.join(dir, "lib", "index.js"), "v1");
-    fs.writeFileSync(path.join(dir, "node_modules", "yaml", "index.js"), "dep");
-    const backup = dirBackup(dir, { home, reason: "test" });
-    // 升级把源码写坏，但 node_modules 仍在盘上
-    fs.writeFileSync(path.join(dir, "lib", "index.js"), "broken");
-    dirRestore(backup, dir);
-    assert.equal(fs.readFileSync(path.join(dir, "lib", "index.js"), "utf8"), "v1");
-    assert.equal(
-      fs.existsSync(path.join(dir, "node_modules", "yaml", "index.js")),
-      true,
-      "回滚后依赖必须还在，否则插件 import yaml 直接失败",
-    );
-  } finally {
-    fs.rmSync(root, { recursive: true, force: true });
-  }
-});
