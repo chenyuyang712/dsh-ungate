@@ -828,7 +828,7 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
                 ? "is-warn"
                 : patchBusy
                   ? ""
-                  : s?.asar_still_sealed || tally.pending
+                  : s?.ok === false || s?.asar_still_sealed
                     ? "is-warn"
                     : "is-ok"),
           }),
@@ -846,13 +846,24 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
                   : s?.asar_still_sealed
                     ? `${applied}/${total} 条磁盘补丁（退出重开后加载）`
                     : tally.pending
-                      ? `还有 ${tally.pending} 条待应用`
-                      : `${applied}/${total} 条补丁已生效`,
+                      ? `补丁已还原 ${applied}/${total} · 点「应用」重新挂上`
+                      : applied === total
+                        ? `全部就绪：补丁 ${applied}/${total} 生效`
+                        : `${applied}/${total} 条补丁已生效`,
           ),
           h(
             "span",
             { className: "dshpp-hero-sub" },
-            t("surface." + hostSurface),
+            [
+              t("surface." + hostSurface),
+              s && s.inject
+                ? s.inject.chars > 0
+                  ? `${t("inject.on")} ${(s.inject.chars / 1000).toFixed(1)}K 字`
+                  : t("inject.off")
+                : "",
+            ]
+              .filter(Boolean)
+              .join(" · "),
           ),
         ),
         h(
@@ -872,6 +883,7 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
             Btn,
             {
               kind: "danger",
+              title: t("btn.revert.tip"),
               disabled: patchBusy || uninstallBusy,
               onClick: () => doAction("revert", "action.revert"),
             },

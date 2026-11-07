@@ -144,6 +144,9 @@ var zh = {
   "btn.apply": "\u5E94\u7528",
   "btn.apply.busy": "\u5904\u7406\u4E2D\u2026",
   "btn.revert": "\u8FD8\u539F",
+  "btn.revert.tip": "\u8FD8\u539F\u53EA\u64A4\u5BBF\u4E3B\u8865\u4E01\uFF1B\u63D0\u793A\u8BCD\u6CE8\u5165\u4E0E\u672C\u63D2\u4EF6\u8FD0\u884C\u65F6\u4E0D\u53D7\u5F71\u54CD\u3002",
+  "inject.on": "\u6CE8\u5165",
+  "inject.off": "\u6CE8\u5165\u6B63\u6587\u4E3A\u7A7A",
   "btn.uninstall": "\u5378\u8F7D",
   "btn.uninstall.busy": "\u5378\u8F7D\u4E2D\u2026",
   "uninstall.title": "\u5378\u8F7D\u63D2\u4EF6",
@@ -285,7 +288,7 @@ var zh = {
   "group.code": "\u4EE3\u7801",
   "group.engine": "\u5F15\u64CE",
   "group.tools": "\u5DE5\u5177",
-  "group.compat": "0.1.5 \u517C\u5BB9",
+  "group.compat": "\u5B8C\u6574\u6A21\u5F0F\u515C\u5E95",
   "group.dsh20": "0.2.0",
   "patch.1": "\u5168\u5C40\u514D\u8D23 \u2192 \u5F3A\u6307\u4EE4",
   "patch.2": "\u66FF\u6362\u5F0F\u514D\u8D23 \u2192 \u5F3A\u6307\u4EE4",
@@ -494,6 +497,9 @@ var en = {
   "btn.apply": "Apply",
   "btn.apply.busy": "Working\u2026",
   "btn.revert": "Restore",
+  "btn.revert.tip": "Revert only removes host patches; prompt injection and this plugin's runtime are untouched.",
+  "inject.on": "inject",
+  "inject.off": "inject body empty",
   "btn.uninstall": "Uninstall",
   "btn.uninstall.busy": "Uninstalling\u2026",
   "uninstall.title": "Uninstall dsh-purge",
@@ -635,7 +641,7 @@ var en = {
   "group.code": "Code",
   "group.engine": "Engine",
   "group.tools": "Tools",
-  "group.compat": "0.1.5 compat",
+  "group.compat": "complete-mode fallback",
   "group.dsh20": "0.2.0",
   "patch.1": "Global disclaimer \u2192 mandate",
   "patch.2": "Replacement disclaimer \u2192 mandate",
@@ -1009,7 +1015,7 @@ var LAYER_GROUP = {
   \u63D0\u793A\u8BCD: "prompt",
   \u4EE3\u7801: "code",
   \u5DE5\u5177: "tools",
-  "0.1.5 \u517C\u5BB9": "compat",
+  "\u5B8C\u6574\u6A21\u5F0F\u515C\u5E95": "compat",
   "0.2.0 \u517C\u5BB9": "dsh20"
 };
 var GROUP_ORDER = ["prompt", "code", "tools", "compat", "dsh20"];
@@ -1280,13 +1286,13 @@ function StatusExtras() {
         "span",
         { className: "dshpp-line-main" },
         h("i", {
-          className: "dshpp-dot " + (check ? failed.length ? "is-bad" : pendingLayers.length || uncertain.length ? "is-warn" : "is-ok" : "")
+          className: "dshpp-dot " + (check ? failed.length ? "is-bad" : uncertain.length ? "is-warn" : "is-ok" : "")
         }),
         "\u7834\u7532\u81EA\u68C0",
         h(
           "b",
           null,
-          check ? failed.length ? `${failed.length} \u5C42\u672A\u751F\u6548` : pendingLayers.length ? `${pendingPatches} \u6761\u5F85\u5E94\u7528` : uncertain.length ? `${uncertain.length} \u5C42\u9700\u786E\u8BA4` : `${total} \u5C42\u5168\u90E8\u5728\u4F4D` : "\u68C0\u6D4B\u4E2D\u2026"
+          check ? failed.length ? `${failed.length} \u5C42\u672A\u751F\u6548` : pendingLayers.length ? `\u8865\u4E01 ${pendingPatches} \u6761\u672A\u6302\uFF08\u8FD8\u539F\u540E\u5C5E\u6B63\u5E38\uFF09` : uncertain.length ? `${uncertain.length} \u5C42\u9700\u786E\u8BA4` : `${total} \u5C42\u5168\u90E8\u5728\u4F4D` : "\u68C0\u6D4B\u4E2D\u2026"
         )
       ),
       h(
@@ -1301,10 +1307,10 @@ function StatusExtras() {
               "div",
               {
                 key: layer.title,
-                className: "dshpp-check" + (["pending", "inferred", "unknown"].includes(layer.state) ? " is-warn" : layer.ok ? "" : " is-bad")
+                className: "dshpp-check" + (layer.state === "pending" ? "" : ["inferred", "unknown"].includes(layer.state) ? " is-warn" : layer.ok ? "" : " is-bad")
               },
               h("i", {
-                className: "dshpp-dot " + (["pending", "inferred", "unknown"].includes(layer.state) ? "is-warn" : layer.ok ? "is-ok" : "is-bad")
+                className: "dshpp-dot " + (layer.state === "pending" ? "" : ["inferred", "unknown"].includes(layer.state) ? "is-warn" : layer.ok ? "is-ok" : "is-bad")
               }),
               h("span", { className: "dshpp-check-name" }, layer.title),
               h(
@@ -2473,17 +2479,20 @@ function PurgifySection({ page = "status", onStatus } = {}) {
           "div",
           { className: "dshpp-hero-state" },
           h("i", {
-            className: "dshpp-dot " + (!located ? "is-warn" : patchBusy ? "" : s?.asar_still_sealed || tally.pending ? "is-warn" : "is-ok")
+            className: "dshpp-dot " + (!located ? "is-warn" : patchBusy ? "" : s?.ok === false || s?.asar_still_sealed ? "is-warn" : "is-ok")
           }),
           h(
             "b",
             null,
-            !s ? "\u6B63\u5728\u8BFB\u53D6\u5BBF\u4E3B\u72B6\u6001\u2026" : s.ok === false ? "\u72B6\u6001\u8BFB\u53D6\u5931\u8D25\uFF0C\u5BBF\u4E3B\u4E0E\u8865\u4E01\u72B6\u6001\u672A\u77E5" : !located ? sealedReady ? "\u5BBF\u4E3B\u8FD8\u6CA1\u89E3\u5F00\uFF1A\u70B9\u300C\u5E94\u7528\u300D" : "\u672A\u5B9A\u4F4D\u5230\u5BBF\u4E3B\uFF1A\u70B9\u300C\u5E94\u7528\u300D\u91CD\u8BD5" : s?.asar_still_sealed ? `${applied}/${total} \u6761\u78C1\u76D8\u8865\u4E01\uFF08\u9000\u51FA\u91CD\u5F00\u540E\u52A0\u8F7D\uFF09` : tally.pending ? `\u8FD8\u6709 ${tally.pending} \u6761\u5F85\u5E94\u7528` : `${applied}/${total} \u6761\u8865\u4E01\u5DF2\u751F\u6548`
+            !s ? "\u6B63\u5728\u8BFB\u53D6\u5BBF\u4E3B\u72B6\u6001\u2026" : s.ok === false ? "\u72B6\u6001\u8BFB\u53D6\u5931\u8D25\uFF0C\u5BBF\u4E3B\u4E0E\u8865\u4E01\u72B6\u6001\u672A\u77E5" : !located ? sealedReady ? "\u5BBF\u4E3B\u8FD8\u6CA1\u89E3\u5F00\uFF1A\u70B9\u300C\u5E94\u7528\u300D" : "\u672A\u5B9A\u4F4D\u5230\u5BBF\u4E3B\uFF1A\u70B9\u300C\u5E94\u7528\u300D\u91CD\u8BD5" : s?.asar_still_sealed ? `${applied}/${total} \u6761\u78C1\u76D8\u8865\u4E01\uFF08\u9000\u51FA\u91CD\u5F00\u540E\u52A0\u8F7D\uFF09` : tally.pending ? `\u8865\u4E01\u5DF2\u8FD8\u539F ${applied}/${total} \xB7 \u70B9\u300C\u5E94\u7528\u300D\u91CD\u65B0\u6302\u4E0A` : applied === total ? `\u5168\u90E8\u5C31\u7EEA\uFF1A\u8865\u4E01 ${applied}/${total} \u751F\u6548` : `${applied}/${total} \u6761\u8865\u4E01\u5DF2\u751F\u6548`
           ),
           h(
             "span",
             { className: "dshpp-hero-sub" },
-            t("surface." + hostSurface)
+            [
+              t("surface." + hostSurface),
+              s && s.inject ? s.inject.chars > 0 ? `${t("inject.on")} ${(s.inject.chars / 1e3).toFixed(1)}K \u5B57` : t("inject.off") : ""
+            ].filter(Boolean).join(" \xB7 ")
           )
         ),
         h(
@@ -2503,6 +2512,7 @@ function PurgifySection({ page = "status", onStatus } = {}) {
             Btn,
             {
               kind: "danger",
+              title: t("btn.revert.tip"),
               disabled: patchBusy || uninstallBusy,
               onClick: () => doAction("revert", "action.revert")
             },
@@ -3838,17 +3848,17 @@ function StatusStrip({ info }) {
     h(
       "span",
       { className: "dshpp-strip-item" },
-      "\u78C1\u76D8\u5199\u5165\u8BA1\u6570 ",
+      "\u8865\u4E01 ",
       h(
         "b",
         null,
         `${info?.patches_applied ?? "?"}/${info?.patches_total ?? "?"}`,
-        info?.patches_na > 0 ? ` \xB7 ${info.patches_na} \u6761\u672C\u673A\u4E0D\u9002\u7528` : ""
+        info?.patches_na > 0 ? ` \xB7 ${info.patches_na} \u4E0D\u9002\u7528` : ""
       ),
       h(
         HelpTip,
         { title: "\u5BBF\u4E3B\u8865\u4E01" },
-        `\u5B9E\u9645\u5199\u8FDB DSH \u5BBF\u4E3B\u4EE3\u7801\u7684\u8865\u4E01\u6761\u6570\uFF08\u5206\u6BCD\u53EA\u7B97\u672C\u673A\u9002\u7528\u7684\uFF09\u3002\u5168\u90E8\u8865\u4E01 ${info?.patches_total_all ?? "?"} \u6761\uFF0C\u5176\u4E2D ${info?.patches_na ?? 0} \u6761\u76EE\u6807\u63D2\u4EF6/\u9884\u8BBE\u672A\u5B89\u88C5\uFF1B\u5F85\u5E94\u7528\u8868\u793A\u951A\u70B9\u8FD8\u5728\u3001\u8FD8\u6CA1\u5199\u5165\uFF1B\u6CA1\u5BF9\u4E0A\u8868\u793A\u5BBF\u4E3B\u6E90\u7801\u5DF2\u53D8\uFF0C\u9700\u8981\u91CD\u65B0\u5B9A\u4F4D\u951A\u70B9\u3002`
+        `\u5B9E\u9645\u5199\u8FDB DSH \u5BBF\u4E3B\u4EE3\u7801\u7684\u8865\u4E01\u6761\u6570\uFF08\u5206\u6BCD\u53EA\u7B97\u672C\u673A\u9002\u7528\u7684\uFF09\u3002\u5168\u90E8\u8865\u4E01 ${info?.patches_total_all ?? "?"} \u6761\uFF0C\u5176\u4E2D ${info?.patches_na ?? 0} \u6761\u4EC5\u684C\u9762\u58F3\u4F7F\u7528\uFF1B\u8FD8\u539F\u540E\u672A\u5199\u5165\u7684\u6761\u6570\u5728\u72B6\u6001\u5361\u91CC\u663E\u793A\u4E3A\u300C\u8865\u4E01\u5DF2\u8FD8\u539F\u300D\u3002`
       )
     ),
     h(
@@ -3860,7 +3870,8 @@ function StatusStrip({ info }) {
   );
 }
 function LayoutNotice({ info }) {
-  if (!info || !info.asar_still_sealed && !info.host_layout) return null;
+  if (!info || info.surface === "web") return null;
+  if (!info.asar_still_sealed && !info.host_layout) return null;
   const sealed = info.asar_still_sealed === true;
   const note = info.host_layout?.note || "\u76EE\u6807\u78C1\u76D8\u4ECD\u6709 app.asar\uFF1B\u5F53\u524D\u8FDB\u7A0B\u52A0\u8F7D\u6765\u6E90\u5C1A\u672A\u786E\u8BA4\u3002";
   const handoff = info.asar_handoff ? ` \u6362\u5305\u72B6\u6001\uFF1A${{ not_scheduled: "\u5C1A\u672A\u5E94\u7528\uFF1A\u70B9\u300C\u5E94\u7528\u300D\u540E\u624D\u4F1A\u5B89\u6392\u6362\u5305", archive_reappeared: "\u5F52\u6863\u518D\u6B21\u51FA\u73B0\uFF0C\u65E7\u6362\u5305\u8BB0\u5F55\u4E0D\u4EE3\u8868\u5F53\u524D\u5DF2\u5B8C\u6210", backup_missing: "\u539F\u5F52\u6863\u5907\u4EFD\u7F3A\u5931\uFF0C\u8BF7\u68C0\u67E5\u8BCA\u65AD", unknown_target: "\u76EE\u6807\u5B9E\u4F8B\u672A\u786E\u5B9A", unreadable: "\u6362\u5305\u8BB0\u5F55\u4E0D\u53EF\u8BFB\uFF0C\u8BF7\u68C0\u67E5\u8BCA\u65AD", starting: "\u52A9\u624B\u542F\u52A8\u4E2D\uFF08\u5C1A\u672A\u786E\u8BA4\u5C31\u7EEA\uFF09", ready: "\u52A9\u624B\u5DF2\u5C31\u7EEA", waiting_for_quit: "\u7B49\u5F85\u5B8C\u6574\u9000\u51FA\uFF08macOS \u2318Q / Windows \u7CFB\u7EDF\u6258\u76D8\uFF09", waiting_for_unlock: "\u7B49\u5F85\u5F52\u6863\u89E3\u9501", moving: "\u6B63\u5728\u4FDD\u7559\u539F\u5F52\u6863", complete: "\u6362\u5305\u5B8C\u6210\uFF0C\u8BF7\u624B\u52A8\u6253\u5F00 DSH", already_unsealed: "\u5F52\u6863\u5DF2\u79FB\u8D70\uFF0C\u8BF7\u624B\u52A8\u6253\u5F00 DSH", failed: "\u5931\u8D25\uFF0C\u8BF7\u67E5\u770B\u8BCA\u65AD\u5E76\u6309\u6062\u590D\u6587\u6863\u64CD\u4F5C", expired: "\u7B49\u5F85\u8D85\u65F6\uFF0C\u8BF7\u91CD\u65B0\u5E94\u7528\u6216\u6309\u6062\u590D\u6587\u6863\u64CD\u4F5C", helper_stopped: "\u52A9\u624B\u610F\u5916\u7ED3\u675F\uFF0C\u8BF7\u91CD\u65B0\u5E94\u7528\u6216\u6309\u6062\u590D\u6587\u6863\u64CD\u4F5C" }[info.asar_handoff.phase] || info.asar_handoff.phase}\u3002` : "";
@@ -3981,8 +3992,14 @@ function PurgePage() {
         "div",
         { hidden: tab !== "status", className: "dshpp-sec" },
         h(PurgifySection, { page: "status", onStatus: mergeInfo }),
-        h(StatusExtras),
-        h(CommunityMaintenance)
+        // 渐进式披露：首屏只回答"现在能不能用"；逐层证据与维护动作按需展开。
+        h(
+          "details",
+          { className: "dshpp-fold" },
+          h("summary", null, "\u81EA\u68C0\u4E0E\u7EF4\u62A4 ", h("b", null, "\u9010\u5C42\u72B6\u6001 \xB7 \u5907\u4EFD\u56DE\u6EDA \xB7 \u63A2\u9488")),
+          h(StatusExtras),
+          h(CommunityMaintenance)
+        )
       ),
       h(
         "div",

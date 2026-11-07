@@ -47,7 +47,7 @@ export const LAYER_GROUP = {
   提示词: "prompt",
   代码: "code",
   工具: "tools",
-  "0.1.5 兼容": "compat",
+  "完整模式兜底": "compat",
   "0.2.0 兼容": "dsh20",
 };
 

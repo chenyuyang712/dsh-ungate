@@ -79,9 +79,9 @@ export function StatusExtras() {
             (check
               ? failed.length
                 ? "is-bad"
-                : pendingLayers.length || uncertain.length
+                : uncertain.length
                   ? "is-warn"
-                  : "is-ok"
+                  : "is-ok" // 还原后的 pending 是主动状态，不算故障，不给警示色
               : ""),
         }),
         "破甲自检",
@@ -92,7 +92,7 @@ export function StatusExtras() {
             ? failed.length
               ? `${failed.length} 层未生效`
               : pendingLayers.length
-                ? `${pendingPatches} 条待应用`
+                ? `补丁 ${pendingPatches} 条未挂（还原后属正常）`
                 : uncertain.length
                   ? `${uncertain.length} 层需确认`
                   : `${total} 层全部在位`
@@ -114,20 +114,24 @@ export function StatusExtras() {
                     key: layer.title,
                     className:
                       "dshpp-check" +
-                      (["pending", "inferred", "unknown"].includes(layer.state)
-                        ? " is-warn"
-                        : layer.ok
-                          ? ""
-                          : " is-bad"),
+                      (layer.state === "pending"
+                        ? ""
+                        : ["inferred", "unknown"].includes(layer.state)
+                          ? " is-warn"
+                          : layer.ok
+                            ? ""
+                            : " is-bad"),
                   },
                   h("i", {
                     className:
                       "dshpp-dot " +
-                      (["pending", "inferred", "unknown"].includes(layer.state)
-                        ? "is-warn"
-                        : layer.ok
-                          ? "is-ok"
-                          : "is-bad"),
+                      (layer.state === "pending"
+                        ? "" // 还原后的待挂是主动状态
+                        : ["inferred", "unknown"].includes(layer.state)
+                          ? "is-warn"
+                          : layer.ok
+                            ? "is-ok"
+                            : "is-bad"),
                   }),
                   h("span", { className: "dshpp-check-name" }, layer.title),
                   h(
