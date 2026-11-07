@@ -35,6 +35,28 @@
 
 **边界**：取证用的是隔离 home（`/home/kali/.dsh-iso`）+ 真实模型调用（provider agent2api，`zc2/glm-5.3-flash`）；仍未覆盖桌面壳换包与真实 GUI 多轮会话。
 
+## 0.2.2（dsh-ungate）· DSH 0.2.2-rc.1 · web 面 · 隔离实例 3081 · **发布包本体** · 探针回显闭环
+
+环境：`DSH_HOME=/home/kali/.dsh-iso`，宿主 `/home/kali/.dsh-iso/host-0.2.2-rc.1`，服务 `dsh-web-iso.service --port 3081`（对外 `http://100.77.215.99:3083/`）。
+验证对象：`pnpm pack` 产出的 `dsh-ungate-0.2.2.tgz`，sha256 `23dc95d80458d5d1667fe9ace28440b172553c953e3478cba61eb6a65c86489c`，1,134,936 B。
+
+| 环节 | 命令 | 结果 |
+| --- | --- | --- |
+| 还原 pristine | 逐个把 `*.dshpurge.bak` 回拷原名 | 63 个文件还原，`grep -rl '\[dsh-purge\]' node_modules/@deepseek-ai` 命中 **0** |
+| 安装 | `dsh plugin --profile web remove dsh-ungate` → `add /tmp/pkg022/dsh-ungate-0.2.2.tgz` | profile 版本 **0.2.2**，`bundles=[dsh-base, dsh-web-app, dsh-ungate]` |
+| 应用前 | `GET /dsh-purge/status` | `plugin 0.2.2` / `host 0.2.2-rc.1` / `host_family npm-cli` / `qualified true` / applied=5、pending=16、na=6、total=21/all=27 |
+| 应用 | `POST /dsh-purge/apply` | HTTP 200：applied=16、already=5、failed=**0**、complete=true、host_written=true、`failed_items=[]` |
+| 分布 | report 逐条 | applied 25/29/37/40/42/55/57/61/66/67/68/69/72/74/91/93；already 33/36/48/90/94；na 45/46/82/83/84/92 |
+| 自检 | `GET /dsh-purge/selfcheck` | state=**ok**、broken=[]、needsApply=false、patch 21/21（all 27、na 6、partial 0、missing_file 0）；20 层 = ok 19 + na 1（宿主磁盘布局层 web 面不适用） |
+| 幂等 | 再跑一次 apply | applied=0、already=21、failed=0、complete=true |
+| 漂移 | `diagnose --json` | checked=21、drifted=0、missing=0、optionalDrift=0、desktop_entry=not_desktop |
+| 探针 | `node bin/community.js probe new` | nonce **purge-d25a9d3e** |
+| 回显闭环 | `dsh --profile headless "请原样输出下面这行…[purge-d25a9d3e]"` | exit 0，模型回复正文含 `[purge-d25a9d3e]`；同轮 `[inject.read] rawBytes=32448 outBytes=32371` |
+
+说明：`already=5`（33/36/48/90/94）是这些补丁的 `markers` 在 pristine 宿主上就已命中的情形（#90 的判据本就是"宿主已是原生插话行为"），不是别人留下的补丁痕迹——还原后 `[dsh-purge]` 标记文件数为 0。
+
+**边界**：仍是 web 面。桌面壳换包与关窗组（#45/#46/#82/#83/#84/#92）为不适用，未验证；本轮新增的只是"发布包本体 + 探针回显"两项。
+
 ## 0.2.1（dsh-ungate）· DSH 0.2.2-rc.1 · web 面 · 隔离实例 3081
 
 环境：`DSH_HOME=/home/kali/.dsh-iso`，宿主 `/home/kali/.dsh-iso/host-0.2.2-rc.1`（hoisted，0.2.2-rc.1），`dsh-web-iso.service --profile web --port 3081`。
