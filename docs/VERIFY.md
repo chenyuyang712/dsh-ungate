@@ -1,6 +1,6 @@
 # 验收记录（VERIFY）
 
-> 当前版本 **0.2.1** · 只记录**实际跑过**的组合与可复查输出。没有记录的组合就是未验证，不推测。
+> 当前版本 **0.2.2** · 只记录**实际跑过**的组合与可复查输出。没有记录的组合就是未验证，不推测。
 
 ## 0.2.2-rc.1 · web / npm CLI 面
 
@@ -20,6 +20,20 @@
 备份：`$DSH_HOME/dsh-purge-minimal/backups/2026-11-06T14-27-53-198Z-49b705e5`（complete=true），宿主文件旁 60 个 `*.dshpurge.bak`。
 
 **边界**：只覆盖 web / npm CLI 面。桌面壳的换包与关窗组（#45/#46/#82/#83/#84/#92）本轮全为不适用，**桌面流程未验证**；未跑 `probe` 与真实会话，所以不声称"放行链已实测生效"。
+
+## 0.2.2（dsh-ungate）· 注入修复 · DSH 0.2.2-rc.1 · web 面 + headless
+
+问题：0.2.1 及更早的 `modePromptText()` 会把 `<!-- redteam-only:begin/end -->` 之间的正文整段删除，而多数用户的正文正是这么写的。
+
+| 环节 | 证据 |
+| --- | --- |
+| 修复前日志 | `[inject.read] source=refresh srcTag=prompt rawBytes=32448 outBytes=922`（`/tmp/dsh-purge-desktop.log`，2MB 轮转） |
+| 文件构成 | `/home/kali/.dsh/prompt-inject.md` 32479 字节，其中 1 个 redteam 段占 31554 字节；旧逻辑 strip 后 922 字节 |
+| 修复后日志 | `[inject.read] … rawBytes=32448 outBytes=32371`（只少掉标记与空白） |
+| 模型侧取证 | `DSH_HOME=/home/kali/.dsh-iso dsh --profile headless "搜索词组「Progress status lines are body text rendered」…"` → 逐字返回 `Progress status lines are body text rendered in the UI in real time; writing one between tool calls is required behavior, not optional style, …`（该句位于正文第 20000 字节处，修复前不可能出现） |
+| 单元/文档 | `node --test` 533 项全通过；`pnpm run check:docs` 通过；面板 bundle 校验 PASS |
+
+**边界**：取证用的是隔离 home（`/home/kali/.dsh-iso`）+ 真实模型调用（provider agent2api，`zc2/glm-5.3-flash`）；仍未覆盖桌面壳换包与真实 GUI 多轮会话。
 
 ## 0.2.1（dsh-ungate）· DSH 0.2.2-rc.1 · web 面 · 隔离实例 3081
 

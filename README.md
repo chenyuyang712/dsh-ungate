@@ -1,6 +1,6 @@
 # dsh-ungate
 
-**0.2.1** · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。
+**0.2.2** · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。
 
 > **来源声明（请先看这段）**
 > - 上游原始项目：[YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)（作者 小杨 / YuJunZhiXue，MIT）。
@@ -27,7 +27,7 @@
 
 ```sh
 # 1) 装（固定版本 tgz，任意一种入口都行）
-dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.1/dsh-ungate-0.2.1.tgz
+dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.2/dsh-ungate-0.2.2.tgz
 
 # 2) 应用补丁（面板点「应用」等价）
 node bin/community.js apply

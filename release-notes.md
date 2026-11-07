@@ -1,3 +1,21 @@
+# 0.2.2
+
+> 2026-11-07 · `dsh-ungate` 0.2.2
+
+修一个**注入几乎全丢**的严重缺陷：0.2.1 及更早版本会把 `prompt-inject.md` 里被 `<!-- redteam-only:begin -->` / `<!-- redteam-only:end -->` 包住的正文整段删除，而绝大多数用户的正文正是这么写的——实测主实例 32479 字节的注入正文，最终只发出 **922 字节**。
+
+## 变更
+
+- `modePromptText()` 不再删段：改为**去标记、留正文**（`unwrapRedteamOnlySections`）。本 fork 没有红队模式可判，所以正文应当全部到模型。
+- `withoutRedteamOnlySections()` 保留导出但不再用于注入路径，注释写明它是旧语义、调用它会吃掉用户正文。
+- 探针语义不变：`purge probe new` 仍是证明"注入到达模型"的手段；这次修的正是它此前查不出的那一类。
+
+## 验证
+
+- 主实例（home `/home/kali/.dsh`）：`[inject.read]` 由 `rawBytes=32448 outBytes=922` 变为 **`outBytes=32371`**。
+- 模型侧取证（`DSH_HOME=/home/kali/.dsh-iso`，`dsh --profile headless` 真调用）：要求复述正文第 20000 字节处的英文原句，模型逐字返回 `Progress status lines are body text rendered in the UI in real time; …`。
+- `node --test`（533 项）与 `pnpm run check:docs` 通过；`pnpm run test:ui` 与面板 bundle 校验通过。
+
 # 0.2.1
 
 > 2026-11-07 · `dsh-ungate` 0.2.1（原 `dsh-purge-minimal`）

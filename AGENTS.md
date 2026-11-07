@@ -1,7 +1,7 @@
 # AGENTS.md — 给 AI agent 的 Ungate 使用说明书
 
 > 写给**在 DSH 里干活的 agent**，不是营销文档。
-> 当前版本：**0.2.1** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
+> 当前版本：**0.2.2** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
 > 版本号与兼容声明由 `pnpm run check:docs` 对照 `package.json` 校验。
 
 ---
@@ -17,7 +17,7 @@
 | 层 | 由谁提供 | 生效方式 | 怎么查 |
 | --- | --- | --- | --- |
 | 宿主补丁（27 条定义） | 本插件写进宿主源码副本 | 应用 → 退出重开 | `purge selfcheck` |
-| 运行时提示词注入 | 插件运行时，每步重贴 | 立即 | 面板状态 / `purge probe` |
+| 运行时提示词注入 | 插件运行时，每步重贴（`$DSH_HOME/prompt-inject.md` 全文，只去掉 `<!-- red-team-only -->` 标记本身、保留段内正文） | 立即 | 面板状态 / `purge probe` |
 | 破甲强化段 | 运行时尾部 section | 立即 | `purge boost` |
 | 权限配置 | profile 的 `cordis.patch.yml` | 重载后 | selfcheck 权限层 |
 | agent 预设 | `presets/unrestricted` | 新会话选择 | 预设下拉 |
@@ -114,7 +114,7 @@ purge probe new
 
 | 组件 | 值 |
 | --- | --- |
-| 插件 | `dsh-ungate` 0.2.1 |
+| 插件 | `dsh-ungate` 0.2.2 |
 | 已验证宿主 | DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5 |
 | 已验证宿主（限定 web / npm CLI 面） | DSH Desktop 0.2.2-rc.1：apply 20 + selfcheck 19/19 适用层；桌面换包/关窗组不适用 |
 | 未验证 | 0.2.1-rc.4、0.2.2-alpha.2（selfcheck 标未验证，不猜） |
