@@ -34,7 +34,7 @@ for (const file of ["docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK
   if (!read(file).includes(`当前版本 **${version}**`)) problems.push(`${file} 当前版本未同步到 ${version}`);
 }
 
-// 上游历史资料只在 docs/upstream 里；当前文档里出现旧版本号通常意味着整段没重写。
+// 当前文档里出现旧版本号或已删除的机制名，通常意味着整段没重写。
 const forbidden = [
   [/1\.6\.\d+/, "上游 1.6.x 版本号"],
   [/全量 84|73\/76/, "旧的补丁总数说法"],
@@ -102,8 +102,6 @@ for (const [file, doc] of [["README.md", readme], ["docs/README.en.md", readmeEn
 // 6) 来源与致谢：README 必须写明本仓库来自 kingcharleslzy-ai/dsh-purge，NOTICE 保留上游归属。
 if (!readme.includes("kingcharleslzy-ai/dsh-purge")) problems.push("README.md 缺少来源说明：kingcharleslzy-ai/dsh-purge");
 if (!readme.includes("YuJunZhiXue/dsh-purge")) problems.push("README.md 缺少上游作者归属：YuJunZhiXue/dsh-purge");
-if (!fs.existsSync("docs/upstream/README.md")) problems.push("docs/upstream/README.md 缺失（上游资料归档目录）");
-
 // 7) 补丁条数是可核对的事实，不是形容词。
 let patchCount = 0;
 try {
@@ -115,9 +113,7 @@ try {
 if (patchCount && !agents.includes(`${patchCount} 条`)) problems.push(`AGENTS.md 未写明当前补丁条数（${patchCount} 条）`);
 if (patchCount && !readme.includes(`${patchCount} 条`)) problems.push(`README.md 未写明当前补丁条数（${patchCount} 条）`);
 
-// 8) 可复制的安装示例：归档目录里的历史 YAML 原样保留，当前文档必须能被解析器读懂。
-for (const file of ["docs/upstream/README.md", "docs/upstream/README.zh-CN.md"])
-  for (const problem of checkInstallExamples(read(file), { archive: true })) problems.push(`${file}: ${problem}`);
+// 8) 可复制的安装示例：当前文档必须能被解析器读懂。
 for (const file of currentDocs.filter((f) => f.endsWith(".md")))
   for (const problem of checkInstallExamples(read(file))) problems.push(`${file}: ${problem}`);
 
