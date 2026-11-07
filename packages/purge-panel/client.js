@@ -194,12 +194,6 @@ var zh = {
   "err.save": "\u4FDD\u5B58\u5931\u8D25: {error}",
   "btn.saveInject": "\u4FDD\u5B58",
   "saved.override": "\u5DF2\u4FDD\u5B58",
-  "rules.title": "\u89C4\u5219\u96C6",
-  "rules.none": "\u65E0",
-  "rules.reset": "\u8FD8\u539F",
-  "rules.reset.confirm": "\u8FD8\u539F\u5168\u5C40\u6307\u4EE4\u6587\u4EF6\uFF1F\u89C4\u5219\u5E93\u4F1A\u4FDD\u7559\u3002",
-  "rules.empty": "\u6682\u65E0\u89C4\u5219",
-  "rules.pick": "\u9009\u62E9\u89C4\u5219",
   "policy.title": "\u5DE5\u4F5C\u533A\u7B56\u7565",
   "policy.strict": "\u4E25\u683C",
   "policy.fallback": "\u7A7A\u4F4D\u515C\u5E95",
@@ -224,22 +218,11 @@ var zh = {
   "need.id": "\u9700\u8981 id",
   "ph.content": "",
   "btn.saveRule": "\u4FDD\u5B58",
-  "skills.title": "Skill",
-  "skills.hint": "\u5BFC\u5165\u5230\u5B98\u65B9\u76EE\u5F55\u540E\uFF0C\u7531 DSH \u8C03\u7528\uFF1A\u804A\u5929\u8F93\u5165 /\u540D\u79F0 \u7ACB\u5373\u52A0\u8F7D\uFF1B\u4EFB\u52A1\u5BF9\u4E0A description \u6216 whenToUse \u65F6\u6A21\u578B\u4F1A\u8C03 skill \u5DE5\u5177\u3002\u6B63\u6587\u5199\u300C\u6FC0\u6D3B\u300D\u4E0D\u4F1A\u89E6\u53D1\u3002",
-  "skills.hint.desktop": "\u5F53\u524D\u684C\u9762\u5BBF\u4E3B\u7684\u5B98\u65B9 Skill \u76EE\u5F55\u3002\u804A\u5929\u8F93\u5165 /\u540D\u79F0 \u7ACB\u5373\u52A0\u8F7D\uFF1B\u4EFB\u52A1\u5BF9\u4E0A description \u65F6\u6A21\u578B\u4F1A\u8C03 skill \u5DE5\u5177\u3002",
-  "skills.empty": "\u6682\u65E0\u7528\u6237 Skill",
   "btn.importZip": "\u5BFC\u5165\u538B\u7F29\u5305",
   "btn.importFolder": "\u5BFC\u5165\u6587\u4EF6\u5939",
-  "skills.importing": "\u6B63\u5728\u5BFC\u5165\u2026",
   "saved.import": "\u5DF2\u5BFC\u5165 {count} \u4E2A Skill",
   "need.import": "\u8BF7\u9009\u62E9\u538B\u7F29\u5305\u6216\u6587\u4EF6\u5939",
   "err.import.folder": "\u6CA1\u8BFB\u5230\u6587\u4EF6\u5939\u91CC\u7684\u6587\u4EF6\uFF0C\u8BF7\u76F4\u63A5\u9009 Skill \u76EE\u5F55\uFF08\u91CC\u9762\u8981\u6709 SKILL.md\uFF09",
-  "skills.pick": "\u9009\u62E9 Skill",
-  "skills.invalid": "\u5B98\u65B9\u4F1A\u5FFD\u7565\uFF1A\u683C\u5F0F\u4E0D\u5BF9",
-  "skills.call.slash": "\u804A\u5929\u8F93\u5165 {cmd}",
-  "skills.call.model": "\u6A21\u578B\u53EF\u8C03",
-  "skills.call.modelOff": "\u6A21\u578B\u4E0D\u53EF\u8C03",
-  "skills.call.userOff": "\u4E0D\u53EF /\u540D\u79F0",
   "ph.skill.desc": "description\uFF08\u4F55\u65F6\u7528\uFF09",
   "btn.saveSkill": "\u4FDD\u5B58",
   "need.skill.id": "id \u5FC5\u987B\u662F kebab-case\uFF0C\u4F8B\u5982 code-review",
@@ -536,12 +519,6 @@ var en = {
   "err.save": "Save failed: {error}",
   "btn.saveInject": "Save",
   "saved.override": "Saved",
-  "rules.title": "Rule sets",
-  "rules.none": "None",
-  "rules.reset": "Restore",
-  "rules.reset.confirm": "Restore global instruction files? The rule library is kept.",
-  "rules.empty": "No rules",
-  "rules.pick": "Select a rule",
   "policy.title": "Workspace policy",
   "policy.strict": "Strict",
   "policy.fallback": "Fallback",
@@ -566,22 +543,11 @@ var en = {
   "need.id": "id required",
   "ph.content": "",
   "btn.saveRule": "Save",
-  "skills.title": "Skills",
-  "skills.hint": "After import, DSH calls it: type /name in chat to load now; the model calls the skill tool when the task matches description or whenToUse. Writing\u300C\u6FC0\u6D3B\u300Din the body does nothing.",
-  "skills.hint.desktop": "This desktop host\u2019s official skill catalog. Type /name in chat to load; the model calls the skill tool when the task matches the description.",
-  "skills.empty": "No user skills",
   "btn.importZip": "Import zip",
   "btn.importFolder": "Import folder",
-  "skills.importing": "Importing\u2026",
   "saved.import": "Imported {count} skill(s)",
   "need.import": "Choose a zip or folder",
   "err.import.folder": "No files were read. Select the skill folder itself (it must contain SKILL.md).",
-  "skills.pick": "Select a skill",
-  "skills.invalid": "Official catalog will ignore this: invalid format",
-  "skills.call.slash": "Type {cmd} in chat",
-  "skills.call.model": "Model can load",
-  "skills.call.modelOff": "Hidden from model",
-  "skills.call.userOff": "/name disabled",
   "ph.skill.desc": "description (when to use)",
   "btn.saveSkill": "Save",
   "need.skill.id": "id must be kebab-case, e.g. code-review",
@@ -930,36 +896,10 @@ function promptBoxEmpty(text) {
 function responseNeedsPrompt(d) {
   return Boolean(d && (d.needPrompt || d.injectSource === "none"));
 }
-function warnNeedPrompt(d, tr) {
-  if (!responseNeedsPrompt(d)) return false;
-  window.alert(tr("need.prompt"));
-  return true;
-}
 async function bothInjectEmpty(overrideText, defaultText) {
   if (!promptBoxEmpty(overrideText)) return false;
   if (!promptBoxEmpty(defaultText)) return false;
   return true;
-}
-function rulesApi(op, extra) {
-  return apiJson("/dsh-purge/rules", {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(Object.assign({ op }, extra || {}))
-  });
-}
-function skillsRouteMissing(e) {
-  return e?.status === 404 || e?.status === 405;
-}
-function skillsApi(op, extra) {
-  const init = {
-    method: "POST",
-    headers: { "content-type": "application/json" },
-    body: JSON.stringify(Object.assign({ op }, extra || {}))
-  };
-  return apiJson("/dsh-purge/skills", init).catch((e) => {
-    if (!skillsRouteMissing(e)) throw e;
-    return apiJson("/dsh-purge/skill", init);
-  });
 }
 
 // src/components/patch-status.js
@@ -1135,12 +1075,6 @@ function PatchGroups({ state }) {
 }
 
 // src/components/primitives.js
-function formatSize(bytes) {
-  if (typeof bytes !== "number" || !isFinite(bytes) || bytes < 0) return "0 B";
-  if (bytes < 1024) return bytes + " B";
-  const kb = bytes / 1024;
-  return (kb >= 100 ? Math.round(kb) : kb.toFixed(1)) + " KB";
-}
 function noticeNode(notice) {
   if (!notice || notice.kind === "idle" || !notice.text) return null;
   return h(
@@ -2073,892 +2007,6 @@ function PurgifySection({ page = "status", onStatus } = {}) {
   );
 }
 
-// src/state/session-context.js
-var import_react6 = require("react");
-var host = null;
-var listeners = /* @__PURE__ */ new Set();
-function notify() {
-  for (const listener of listeners) listener();
-}
-function subscribe(listener) {
-  listeners.add(listener);
-  return () => listeners.delete(listener);
-}
-function bindSessionContext(ctx) {
-  host = ctx;
-  const dispose = [ctx.uiWorkspace?.selection, ctx.sessions?.list].filter((store) => typeof store?.subscribe === "function").map((store) => store.subscribe(notify));
-  notify();
-  return () => {
-    for (const fn of dispose) if (typeof fn === "function") fn();
-    if (host === ctx) {
-      host = null;
-      notify();
-    }
-  };
-}
-function readSessionCwd(sess) {
-  if (!sess || typeof sess !== "object") return "";
-  try {
-    const pv = sess.projectionValues;
-    if (pv && typeof pv.cwd === "string" && pv.cwd.trim()) return pv.cwd.trim();
-  } catch {
-  }
-  try {
-    if (typeof sess.cwd === "string" && sess.cwd.trim()) return sess.cwd.trim();
-  } catch {
-  }
-  try {
-    const header = sess.header;
-    if (header && typeof header.cwd === "string" && header.cwd.trim())
-      return header.cwd.trim();
-  } catch {
-  }
-  return "";
-}
-function clientCurrentCwd() {
-  if (!host?.sessions) return "";
-  const sessions = host.sessions;
-  const selection = host.uiWorkspace?.selection?.getSnapshot?.();
-  const list = sessions.list?.getSnapshot?.();
-  const id = selection?.sessionId || list?.current;
-  if (!id) return "";
-  const fromList = readSessionCwd(list?.byId?.[id]);
-  if (fromList) return fromList;
-  try {
-    const scope = sessions.scope?.(id);
-    const face = sessions.sessionOf?.(scope);
-    return readSessionCwd(face?.getSnapshot?.() ?? face);
-  } catch {
-    return "";
-  }
-}
-function useCurrentCwd() {
-  return (0, import_react6.useSyncExternalStore)(subscribe, clientCurrentCwd, () => "");
-}
-
-// src/components/rules.js
-var TARGETS = ["AGENTS.md", "CLAUDE.md"];
-function ruleLabel(r) {
-  if (!r) return "";
-  if (r.name !== r.id) return r.name + " (" + r.id + ")";
-  return r.id;
-}
-function RulesSection() {
-  const t = useT();
-  const cwd = useCurrentCwd();
-  const statusTicket = useRef(0);
-  const tRef = useRef(t);
-  tRef.current = t;
-  const [st, setSt] = useState(null);
-  const [editId, setEditId] = useState(null);
-  const [editName, setEditName] = useState("");
-  const [editTarget, setEditTarget] = useState("AGENTS.md");
-  const [content, setContent] = useState("");
-  const [newId, setNewId] = useState("");
-  const [newName, setNewName] = useState("");
-  const [newTarget, setNewTarget] = useState("AGENTS.md");
-  const [busy, setBusy] = useState(false);
-  const [notice, setNotice] = useState({ kind: "idle", text: "" });
-  const loadStatus = useCallback(() => {
-    const tr = tRef.current;
-    const ticket = ++statusTicket.current;
-    rulesApi("status", cwd ? { cwd } : void 0).then((d) => {
-      if (ticket !== statusTicket.current) return;
-      if (d && d.ok) setSt(d);
-      else {
-        setSt({ ok: false, rules: [], active: null });
-        setNotice({
-          kind: "error",
-          text: tr("err.rules", { error: d && d.error || "bad response" })
-        });
-      }
-    }).catch((e) => {
-      if (ticket !== statusTicket.current) return;
-      setSt({ ok: false, rules: [], active: null });
-      setNotice({
-        kind: "error",
-        text: tr("err.rules", { error: e.message })
-      });
-    });
-  }, [cwd]);
-  useEffect(() => {
-    loadStatus();
-    return () => {
-      statusTicket.current += 1;
-    };
-  }, [loadStatus]);
-  const doPost = useCallback(
-    (action, payload, after) => {
-      setBusy(true);
-      setNotice({ kind: "idle", text: "" });
-      rulesApi(action, payload).then((d) => {
-        if (d && d.ok) {
-          setNotice({ kind: "ok", text: t("ok.done") });
-          if (action === "save" || action === "activate")
-            warnNeedPrompt(d, t);
-          loadStatus();
-          if (after) after();
-        } else {
-          warnNeedPrompt(d, t);
-          setNotice({
-            kind: "error",
-            text: t("err.action", { error: d && d.error || "" })
-          });
-        }
-      }).catch(
-        (e) => setNotice({
-          kind: "error",
-          text: t("err.action", { error: e.message })
-        })
-      ).finally(() => setBusy(false));
-    },
-    [loadStatus, t]
-  );
-  const openRule = useCallback(
-    (id) => {
-      setBusy(true);
-      rulesApi("read", { id }).then((d) => {
-        if (d.ok) {
-          setEditId(id);
-          setEditName(d.name || id);
-          setEditTarget(d.target || "AGENTS.md");
-          setContent(typeof d.content === "string" ? d.content : "");
-        } else
-          setNotice({
-            kind: "error",
-            text: t("err.read", { error: d.error || "" })
-          });
-      }).catch(
-        (e) => setNotice({
-          kind: "error",
-          text: t("err.read", { error: e.message })
-        })
-      ).finally(() => setBusy(false));
-    },
-    [t]
-  );
-  const clearEditor = () => {
-    setEditId(null);
-    setEditName("");
-    setEditTarget("AGENTS.md");
-    setContent("");
-  };
-  let list;
-  if (!st) {
-    list = h("div", {
-      className: "dshpp-skel",
-      style: { height: 80, margin: 12 }
-    });
-  } else if (!st.rules || st.rules.length === 0) {
-    list = h("p", { className: "dshpp-empty" }, t("rules.empty"));
-  } else {
-    list = st.rules.map((r) => {
-      const isActive = r.id === st.active;
-      const isEdit = r.id === editId;
-      return h(
-        "div",
-        {
-          key: r.id,
-          className: "dshpp-ruleitem" + (isEdit ? " is-edit" : ""),
-          role: "button",
-          tabIndex: 0,
-          onClick: () => openRule(r.id),
-          onKeyDown: (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              openRule(r.id);
-            }
-          }
-        },
-        h(
-          "div",
-          { className: "dshpp-rule-main" },
-          h(
-            "span",
-            { className: "dshpp-rule-name" },
-            ruleLabel(r),
-            isActive ? h("span", { className: "dshpp-pill is-ok" }, t("pill.current")) : null
-          ),
-          h(
-            "span",
-            { className: "dshpp-rule-meta" },
-            r.target + " \xB7 " + formatSize(r.size)
-          )
-        ),
-        h(
-          "div",
-          { className: "dshpp-rule-ops" },
-          h(
-            Btn,
-            {
-              tiny: true,
-              kind: isActive ? void 0 : "primary",
-              disabled: busy || isActive,
-              onClick: (e) => {
-                e.stopPropagation();
-                if (!isActive) doPost("activate", { id: r.id });
-              }
-            },
-            isActive ? t("btn.inUse") : t("btn.use")
-          ),
-          h(
-            Btn,
-            {
-              tiny: true,
-              kind: "danger",
-              disabled: busy,
-              onClick: (e) => {
-                e.stopPropagation();
-                if (!window.confirm(t("confirm.delete", { id: r.id }))) return;
-                if (editId === r.id) clearEditor();
-                doPost("delete", { id: r.id });
-              }
-            },
-            t("delete")
-          )
-        )
-      );
-    });
-  }
-  const policyValue = st && typeof st.workspace_policy === "string" ? st.workspace_policy : "fallback";
-  const policyOptions = st && Array.isArray(st.workspace_policies) && st.workspace_policies.length ? st.workspace_policies : ["fallback", "strict", "always"];
-  const cwdCandidates = st && Array.isArray(st.cwd_candidates) ? st.cwd_candidates : [];
-  const cwdValue = st && typeof st.cwd === "string" ? st.cwd : "";
-  return h(
-    "section",
-    { className: "dshpp-panel", "aria-label": t("rules.title") },
-    h(
-      "div",
-      { className: "dshpp-head" },
-      h("h3", { className: "dshpp-title" }, t("rules.title")),
-      h(
-        "div",
-        { className: "dshpp-row", style: { margin: 0 } },
-        noticeNode(notice),
-        h(
-          Btn,
-          {
-            tiny: true,
-            kind: "danger",
-            disabled: busy,
-            onClick: () => {
-              if (!window.confirm(t("rules.reset.confirm"))) return;
-              clearEditor();
-              doPost("reset", {});
-            }
-          },
-          t("rules.reset")
-        )
-      )
-    ),
-    h(
-      "div",
-      { className: "dshpp-block" },
-      h(
-        "div",
-        { className: "dshpp-policy-row" },
-        h("label", { htmlFor: "dshpp-policy-select" }, t("policy.title")),
-        h(
-          "select",
-          {
-            id: "dshpp-policy-select",
-            className: "dshpp-field",
-            value: policyValue,
-            disabled: busy || !st,
-            onChange: (e) => doPost("set-policy", { policy: e.target.value })
-          },
-          policyOptions.map(
-            (p) => h("option", { key: p, value: p }, t("policy." + p))
-          )
-        )
-      ),
-      h("p", { className: "dshpp-block-hint" }, t("policy.hint"))
-    ),
-    h(
-      "div",
-      { className: "dshpp-block" },
-      h(
-        "div",
-        { className: "dshpp-block-head" },
-        h("h4", null, t("cwd.title")),
-        h(
-          Btn,
-          {
-            tiny: true,
-            disabled: busy,
-            onClick: () => {
-              let cwd2 = cwdValue;
-              if (!cwd2) {
-                try {
-                  cwd2 = clientCurrentCwd();
-                } catch {
-                }
-              }
-              doPost("scan-cwd", cwd2 ? { cwd: cwd2 } : {});
-            }
-          },
-          t("cwd.rescan")
-        )
-      ),
-      cwdValue ? h("p", { className: "dshpp-cwd-path" }, cwdValue) : null,
-      !st || !cwdValue ? h("p", { className: "dshpp-empty" }, t("cwd.no.workspace")) : cwdCandidates.length === 0 ? h("p", { className: "dshpp-empty" }, t("cwd.empty")) : h(
-        "div",
-        { className: "dshpp-cwd-list" },
-        cwdCandidates.map(
-          (item) => h(
-            "label",
-            {
-              key: item.path,
-              className: "dshpp-cwd-item" + (item.selected ? " is-on" : "")
-            },
-            h("input", {
-              type: "checkbox",
-              checked: Boolean(item.selected),
-              disabled: busy,
-              onChange: (e) => doPost("toggle-cwd", {
-                path: item.path,
-                enabled: e.target.checked
-              })
-            }),
-            h(
-              "div",
-              { className: "dshpp-cwd-main" },
-              h(
-                "div",
-                { className: "dshpp-cwd-name" },
-                h("span", null, item.name),
-                h(
-                  "span",
-                  { className: "dshpp-cwd-badge" },
-                  t("cwd.scope." + (item.scope || "cwd"))
-                ),
-                h(
-                  "span",
-                  { className: "dshpp-cwd-size" },
-                  formatSize(item.size || 0)
-                )
-              ),
-              h("div", { className: "dshpp-cwd-sub" }, item.path),
-              item.preview ? h("div", { className: "dshpp-cwd-prev" }, item.preview) : null
-            )
-          )
-        )
-      ),
-      h("p", { className: "dshpp-block-hint" }, t("cwd.hint"))
-    ),
-    h(
-      "div",
-      { className: "dshpp-block" },
-      h(
-        "div",
-        { className: "dshpp-split" },
-        h(
-          "div",
-          { className: "dshpp-rulelist" },
-          h("div", { className: "dshpp-rulebody" }, list),
-          h(
-            "div",
-            { className: "dshpp-create" },
-            h(
-              "div",
-              { className: "dshpp-create-row" },
-              h("input", {
-                className: "dshpp-field",
-                placeholder: t("ph.id"),
-                value: newId,
-                onChange: (e) => setNewId(e.target.value)
-              }),
-              h("input", {
-                className: "dshpp-field",
-                placeholder: t("ph.alias"),
-                value: newName,
-                onChange: (e) => setNewName(e.target.value)
-              }),
-              h(
-                "select",
-                {
-                  className: "dshpp-field",
-                  style: { minWidth: 120, flex: "0 0 auto" },
-                  value: newTarget,
-                  onChange: (e) => setNewTarget(e.target.value)
-                },
-                TARGETS.map((x) => h("option", { key: x, value: x }, x))
-              ),
-              h(
-                Btn,
-                {
-                  kind: "primary",
-                  tiny: true,
-                  disabled: busy,
-                  onClick: () => {
-                    const id = newId.trim();
-                    if (!id) {
-                      setNotice({ kind: "error", text: t("need.id") });
-                      return;
-                    }
-                    const name2 = newName.trim() || id;
-                    const target = newTarget;
-                    doPost("save", { id, content: "", name: name2, target }, () => {
-                      setEditId(id);
-                      setEditName(name2);
-                      setEditTarget(target);
-                      setContent("");
-                    });
-                    setNewId("");
-                    setNewName("");
-                    setNewTarget("AGENTS.md");
-                  }
-                },
-                t("btn.create")
-              )
-            )
-          )
-        ),
-        h(
-          "div",
-          { className: "dshpp-editor" },
-          editId ? [
-            h(
-              "div",
-              { key: "meta", className: "dshpp-row" },
-              h("input", {
-                className: "dshpp-field",
-                placeholder: t("ph.alias.short"),
-                value: editName,
-                onChange: (e) => setEditName(e.target.value)
-              }),
-              h(
-                "select",
-                {
-                  className: "dshpp-field",
-                  style: { minWidth: 120 },
-                  value: editTarget,
-                  onChange: (e) => setEditTarget(e.target.value)
-                },
-                TARGETS.map((x) => h("option", { key: x, value: x }, x))
-              )
-            ),
-            h("textarea", {
-              key: "body",
-              className: "dshpp-area",
-              value: content,
-              onChange: (e) => setContent(e.target.value),
-              placeholder: ""
-            }),
-            h(
-              "div",
-              { key: "save", className: "dshpp-row" },
-              h(
-                Btn,
-                {
-                  kind: "primary",
-                  disabled: busy,
-                  onClick: () => doPost("save", {
-                    id: editId,
-                    content,
-                    name: editName,
-                    target: editTarget
-                  })
-                },
-                t("btn.saveRule")
-              ),
-              noticeNode(notice)
-            )
-          ] : h("div", { className: "dshpp-editor-empty" }, t("rules.pick"))
-        )
-      )
-    )
-  );
-}
-
-// src/components/skills.js
-function skillUiAllowed(d) {
-  if (!d) return false;
-  const ver = String(d.plugin_version || d.localVersion || "").replace(
-    /^v/i,
-    ""
-  );
-  if (/^1\.1\.11(?:-|$)/.test(ver)) return false;
-  const parts = ver.match(/^(\d+)\.(\d+)\.(\d+)/);
-  if (!parts) return false;
-  if (+parts[1] !== 1) return +parts[1] > 1;
-  if (+parts[2] !== 1) return +parts[2] > 1;
-  return +parts[3] >= 12;
-}
-function SkillsSection() {
-  const t = useT();
-  const tRef = useRef(t);
-  tRef.current = t;
-  const [onBeta, setOnBeta] = useState(false);
-  const [st, setSt] = useState(null);
-  const [editId, setEditId] = useState(null);
-  const [editDesc, setEditDesc] = useState("");
-  const [content, setContent] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [notice, setNotice] = useState({ kind: "idle", text: "" });
-  const zipRef = useRef(null);
-  const folderRef = useRef(null);
-  const loadStatus = useCallback(() => {
-    const tr = tRef.current;
-    const fail = (e) => {
-      setSt({ ok: false, skills: [] });
-      setNotice({
-        kind: "error",
-        text: skillsRouteMissing(e) ? tr("err.skills.needRestart") : tr("err.skills", {
-          error: e && e.message || e || "bad response"
-        })
-      });
-    };
-    const apply2 = (d) => {
-      if (d && d.ok) setSt({ ok: true, skills: d.skills || [] });
-      else fail({ message: d && d.error || "bad response" });
-    };
-    apiJson("/dsh-purge/status").then((d) => {
-      const allowed = skillUiAllowed(d);
-      setOnBeta(allowed);
-      if (!allowed) {
-        setSt(null);
-        return;
-      }
-      if (d.skills) {
-        apply2({ ok: true, skills: d.skills });
-        return;
-      }
-      skillsApi("status").then(apply2).catch(fail);
-    }).catch(() => {
-      setOnBeta(false);
-      setSt(null);
-    });
-  }, []);
-  useEffect(() => {
-    loadStatus();
-  }, [loadStatus]);
-  const doPost = useCallback(
-    (action, payload, after) => {
-      setBusy(true);
-      setNotice({ kind: "idle", text: "" });
-      skillsApi(action, payload).then((d) => {
-        if (d && d.ok) {
-          setNotice({ kind: "ok", text: t("ok.done") });
-          loadStatus();
-          if (after) after(d);
-        } else {
-          setNotice({
-            kind: "error",
-            text: t("err.action", { error: d && d.error || "" })
-          });
-        }
-      }).catch(
-        (e) => setNotice({
-          kind: "error",
-          text: skillsRouteMissing(e) ? t("err.skills.needRestart") : t("err.action", { error: e.message })
-        })
-      ).finally(() => setBusy(false));
-    },
-    [loadStatus, t]
-  );
-  const openSkill = useCallback(
-    (id) => {
-      setBusy(true);
-      skillsApi("read", { id }).then((d) => {
-        if (d.ok) {
-          setEditId(id);
-          setEditDesc(d.description || "");
-          setContent(typeof d.content === "string" ? d.content : "");
-        } else
-          setNotice({
-            kind: "error",
-            text: t("err.read", { error: d.error || "" })
-          });
-      }).catch(
-        (e) => setNotice({
-          kind: "error",
-          text: t("err.read", { error: e.message })
-        })
-      ).finally(() => setBusy(false));
-    },
-    [t]
-  );
-  const clearEditor = () => {
-    setEditId(null);
-    setEditDesc("");
-    setContent("");
-  };
-  const readAsBase64 = (file) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    reader.onload = () => {
-      const text = String(reader.result || "");
-      const at = text.indexOf(",");
-      resolve(at >= 0 ? text.slice(at + 1) : text);
-    };
-    reader.onerror = () => reject(new Error(t("need.import")));
-    reader.readAsDataURL(file);
-  });
-  const importZip = (file) => {
-    if (!file) {
-      setNotice({ kind: "error", text: t("need.import") });
-      return;
-    }
-    setBusy(true);
-    setNotice({ kind: "ok", text: t("skills.importing") });
-    readAsBase64(file).then((data) => skillsApi("import", { data, name: file.name })).then((d) => {
-      if (!d || !d.ok) throw new Error(d && d.error || "");
-      setNotice({
-        kind: "ok",
-        text: t("saved.import", { count: (d.imported || []).length || 1 })
-      });
-      loadStatus();
-    }).catch(
-      (e) => setNotice({
-        kind: "error",
-        text: skillsRouteMissing(e) ? t("err.skills.needRestart") : t("err.action", { error: e.message })
-      })
-    ).finally(() => setBusy(false));
-  };
-  const keepFolderFile = (file) => {
-    const rel = String(file.webkitRelativePath || file.name || "").replace(
-      /\\/g,
-      "/"
-    );
-    if (!rel || rel.includes("..")) return false;
-    if (/(^|\/)(node_modules|\.git|__MACOSX|\.system)(\/|$)/i.test(rel))
-      return false;
-    if (/(^|\/)\._/.test(rel) || /\/\.DS_Store$/i.test(rel)) return false;
-    return true;
-  };
-  const importFolder = (list2) => {
-    const files = Array.from(list2 || []).filter(keepFolderFile);
-    if (!files.length) {
-      setNotice({ kind: "error", text: t("err.import.folder") });
-      return;
-    }
-    setBusy(true);
-    setNotice({ kind: "ok", text: t("skills.importing") });
-    Promise.all(
-      files.map(
-        (file) => readAsBase64(file).then((content2) => ({
-          path: file.webkitRelativePath || file.name,
-          content: content2,
-          encoding: "base64"
-        }))
-      )
-    ).then(
-      (payload) => skillsApi("import", {
-        files: payload,
-        name: String(payload[0] && payload[0].path || "").split("/")[0]
-      })
-    ).then((d) => {
-      if (!d || !d.ok) throw new Error(d && d.error || "");
-      setNotice({
-        kind: "ok",
-        text: t("saved.import", { count: (d.imported || []).length || 1 })
-      });
-      loadStatus();
-    }).catch(
-      (e) => setNotice({
-        kind: "error",
-        text: skillsRouteMissing(e) ? t("err.skills.needRestart") : t("err.action", { error: e.message })
-      })
-    ).finally(() => setBusy(false));
-  };
-  if (!onBeta) return null;
-  let list;
-  if (!st) {
-    list = h("div", {
-      className: "dshpp-skel",
-      style: { height: 80, margin: 12 }
-    });
-  } else if (!st.skills || st.skills.length === 0) {
-    list = h("p", { className: "dshpp-empty" }, t("skills.empty"));
-  } else {
-    list = st.skills.map((item) => {
-      const isEdit = item.id === editId;
-      return h(
-        "div",
-        {
-          key: item.id,
-          className: "dshpp-ruleitem" + (isEdit ? " is-edit" : ""),
-          role: "button",
-          tabIndex: 0,
-          onClick: () => openSkill(item.id),
-          onKeyDown: (e) => {
-            if (e.key === "Enter" || e.key === " ") {
-              e.preventDefault();
-              openSkill(item.id);
-            }
-          }
-        },
-        h(
-          "div",
-          { className: "dshpp-rule-main" },
-          h("span", { className: "dshpp-rule-name" }, item.id),
-          h(
-            "span",
-            { className: "dshpp-rule-meta" },
-            (item.valid ? item.description : t("skills.invalid")) + " \xB7 " + formatSize(item.size)
-          ),
-          item.valid ? h(
-            "span",
-            { className: "dshpp-rule-meta" },
-            [
-              item.userInvocable ? t("skills.call.slash", { cmd: "/" + item.id }) : t("skills.call.userOff"),
-              item.modelInvocable ? t("skills.call.model") : t("skills.call.modelOff")
-            ].join(" \xB7 ")
-          ) : null
-        ),
-        h(
-          "div",
-          { className: "dshpp-rule-ops" },
-          h(
-            Btn,
-            {
-              tiny: true,
-              kind: "danger",
-              disabled: busy,
-              onClick: (e) => {
-                e.stopPropagation();
-                if (!window.confirm(t("confirm.delete.skill", { id: item.id })))
-                  return;
-                if (editId === item.id) clearEditor();
-                doPost("delete", { id: item.id });
-              }
-            },
-            t("delete")
-          )
-        )
-      );
-    });
-  }
-  return h(
-    "section",
-    { className: "dshpp-panel", "aria-label": t("skills.title") },
-    h(
-      "div",
-      { className: "dshpp-head" },
-      h("h3", { className: "dshpp-title" }, t("skills.title")),
-      h(
-        "div",
-        { className: "dshpp-row", style: { margin: 0 } },
-        noticeNode(notice)
-      )
-    ),
-    h(
-      "p",
-      {
-        className: "dshpp-hint",
-        style: { margin: "0 0 10px", color: "var(--dshpp-mute)", fontSize: 12 }
-      },
-      hostText(t, "skills.hint", hostSurfaceOf())
-    ),
-    h(
-      "div",
-      { className: "dshpp-split" },
-      h(
-        "div",
-        { className: "dshpp-rulelist" },
-        h("div", { className: "dshpp-rulebody" }, list),
-        h(
-          "div",
-          { className: "dshpp-create" },
-          h(
-            "div",
-            { className: "dshpp-create-row" },
-            h("input", {
-              ref: zipRef,
-              type: "file",
-              accept: ".zip,.tgz,.tar.gz,.tar,.skill",
-              style: { display: "none" },
-              onChange: (e) => {
-                const file = e.target.files && e.target.files[0];
-                e.target.value = "";
-                importZip(file);
-              }
-            }),
-            h("input", {
-              ref: (el) => {
-                folderRef.current = el;
-                if (!el) return;
-                el.setAttribute("webkitdirectory", "");
-                el.setAttribute("directory", "");
-                el.multiple = true;
-              },
-              type: "file",
-              multiple: true,
-              style: { display: "none" },
-              onChange: (e) => {
-                const files = Array.from(e.target && e.target.files || []);
-                e.target.value = "";
-                importFolder(files);
-              }
-            }),
-            h(
-              Btn,
-              {
-                kind: "primary",
-                tiny: true,
-                disabled: busy,
-                onClick: () => zipRef.current && zipRef.current.click()
-              },
-              t("btn.importZip")
-            ),
-            h(
-              Btn,
-              {
-                tiny: true,
-                disabled: busy,
-                onClick: () => folderRef.current && folderRef.current.click()
-              },
-              t("btn.importFolder")
-            )
-          )
-        )
-      ),
-      h(
-        "div",
-        { className: "dshpp-editor" },
-        editId ? [
-          h(
-            "div",
-            { key: "meta", className: "dshpp-row" },
-            h("input", {
-              className: "dshpp-field",
-              placeholder: t("ph.skill.desc"),
-              value: editDesc,
-              onChange: (e) => setEditDesc(e.target.value)
-            })
-          ),
-          h("textarea", {
-            key: "body",
-            className: "dshpp-area",
-            value: content,
-            onChange: (e) => setContent(e.target.value),
-            spellCheck: false,
-            placeholder: ""
-          }),
-          h(
-            "div",
-            { key: "save", className: "dshpp-row" },
-            h(
-              Btn,
-              {
-                kind: "primary",
-                disabled: busy,
-                onClick: () => doPost("save", {
-                  id: editId,
-                  content,
-                  description: editDesc
-                })
-              },
-              t("btn.saveSkill")
-            ),
-            noticeNode(notice)
-          )
-        ] : h("div", { className: "dshpp-editor-empty" }, t("skills.pick"))
-      )
-    )
-  );
-}
-
 // src/components/settings-shell.js
 function CompatibilityNote({ status }) {
   if (false) return h(CommunityCompatibilityNote);
@@ -3007,8 +2055,6 @@ function SettingsRoot(props = {}) {
       [
         ["status", "\u72B6\u6001"],
         ["prompt", "\u63D0\u793A\u8BCD"],
-        ["rules", "\u89C4\u5219"],
-        ["skills", "\u6280\u80FD"],
         ["more", "\u66F4\u591A"]
       ].map(
         ([id, label]) => h(
@@ -3031,8 +2077,6 @@ function SettingsRoot(props = {}) {
         { hidden: !["status", "prompt", "more"].includes(page) },
         h(PurgifySection, { page, onStatus: setBackendStatus })
       ),
-      visited.rules ? h("div", { hidden: page !== "rules" }, h(RulesSection)) : null,
-      visited.skills ? h("div", { hidden: page !== "skills" }, h(SkillsSection)) : null,
       h(
         "div",
         { hidden: page !== "more", className: "dshpp-more" },
@@ -3196,9 +2240,7 @@ function StatusExtras() {
 var TABS = [
   ["status", "\u72B6\u6001", "\u5BBF\u4E3B\u517C\u5BB9\u3001\u8865\u4E01\u3001\u7834\u7532\u81EA\u68C0"],
   ["prompt", "\u63D0\u793A\u8BCD", "\u6CE8\u5165\u6B63\u6587\u4E0E\u7834\u7532\u5F3A\u5316\u6BB5"],
-  ["rules", "\u89C4\u5219", "\u89C4\u5219\u96C6\u4E0E\u5DE5\u4F5C\u533A\u7B56\u7565"],
-  ["skills", "\u6280\u80FD", "DSH \u6280\u80FD\u76EE\u5F55"],
-  ["more", "\u66F4\u591A", "\u670D\u52A1\u5668\u540D\u5355\u3001\u66F4\u65B0\u4E0E\u7EF4\u62A4"]
+  ["more", "\u66F4\u591A", "\u670D\u52A1\u5668\u540D\u5355\u4E0E\u7EF4\u62A4"]
 ];
 function PurgeGlyph({ size = 18 } = {}) {
   return h(
@@ -3409,16 +2451,6 @@ function PurgePage() {
       ),
       h(
         "div",
-        { hidden: tab !== "rules", className: "dshpp-sec" },
-        visited.rules ? h(RulesSection) : null
-      ),
-      h(
-        "div",
-        { hidden: tab !== "skills", className: "dshpp-sec" },
-        visited.skills ? h(SkillsSection) : null
-      ),
-      h(
-        "div",
         { hidden: tab !== "more", className: "dshpp-sec" },
         visited.more ? h(PurgifySection, { page: "more" }) : null
       )
@@ -3429,6 +2461,26 @@ function PurgePage() {
       false ? "\u57FA\u4E8E YuJunZhiXue/dsh-purge 1.1.71 \u72EC\u7ACB\u7EF4\u62A4 \xB7 MIT \xB7 \u4FDD\u7559\u539F\u4F5C\u8005\u7F72\u540D" : "\u754C\u9762\u72EC\u7ACB\u7EF4\u62A4 \xB7 \u57FA\u4E8E YuJunZhiXue/dsh-purge 1.1.71\uFF08MIT\uFF09"
     )
   );
+}
+
+// src/state/session-context.js
+var import_react9 = require("react");
+var host = null;
+var listeners = /* @__PURE__ */ new Set();
+function notify() {
+  for (const listener of listeners) listener();
+}
+function bindSessionContext(ctx) {
+  host = ctx;
+  const dispose = [ctx.uiWorkspace?.selection, ctx.sessions?.list].filter((store) => typeof store?.subscribe === "function").map((store) => store.subscribe(notify));
+  notify();
+  return () => {
+    for (const fn of dispose) if (typeof fn === "function") fn();
+    if (host === ctx) {
+      host = null;
+      notify();
+    }
+  };
 }
 
 // src/state/legacy-visibility.js

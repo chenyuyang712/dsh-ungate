@@ -154,12 +154,9 @@ export const zh = {
   "err.save": "保存失败: {error}",
   "btn.saveInject": "保存",
   "saved.override": "已保存",
-  "rules.title": "规则集",
-  "rules.none": "无",
-  "rules.reset": "还原",
-  "rules.reset.confirm": "还原全局指令文件？规则库会保留。",
-  "rules.empty": "暂无规则",
-  "rules.pick": "选择规则",
+
+
+
   "policy.title": "工作区策略",
   "policy.strict": "严格",
   "policy.fallback": "空位兜底",
@@ -186,25 +183,19 @@ export const zh = {
   "need.id": "需要 id",
   "ph.content": "",
   "btn.saveRule": "保存",
-  "skills.title": "Skill",
-  "skills.hint":
-    "导入到官方目录后，由 DSH 调用：聊天输入 /名称 立即加载；任务对上 description 或 whenToUse 时模型会调 skill 工具。正文写「激活」不会触发。",
-  "skills.hint.desktop":
-    "当前桌面宿主的官方 Skill 目录。聊天输入 /名称 立即加载；任务对上 description 时模型会调 skill 工具。",
-  "skills.empty": "暂无用户 Skill",
+
+
+
   "btn.importZip": "导入压缩包",
   "btn.importFolder": "导入文件夹",
-  "skills.importing": "正在导入…",
+
   "saved.import": "已导入 {count} 个 Skill",
   "need.import": "请选择压缩包或文件夹",
   "err.import.folder":
     "没读到文件夹里的文件，请直接选 Skill 目录（里面要有 SKILL.md）",
-  "skills.pick": "选择 Skill",
-  "skills.invalid": "官方会忽略：格式不对",
-  "skills.call.slash": "聊天输入 {cmd}",
-  "skills.call.model": "模型可调",
-  "skills.call.modelOff": "模型不可调",
-  "skills.call.userOff": "不可 /名称",
+
+
+
   "ph.skill.desc": "description（何时用）",
   "btn.saveSkill": "保存",
   "need.skill.id": "id 必须是 kebab-case，例如 code-review",
@@ -531,13 +522,9 @@ export const en = {
   "err.save": "Save failed: {error}",
   "btn.saveInject": "Save",
   "saved.override": "Saved",
-  "rules.title": "Rule sets",
-  "rules.none": "None",
-  "rules.reset": "Restore",
-  "rules.reset.confirm":
-    "Restore global instruction files? The rule library is kept.",
-  "rules.empty": "No rules",
-  "rules.pick": "Select a rule",
+
+
+
   "policy.title": "Workspace policy",
   "policy.strict": "Strict",
   "policy.fallback": "Fallback",
@@ -565,25 +552,19 @@ export const en = {
   "need.id": "id required",
   "ph.content": "",
   "btn.saveRule": "Save",
-  "skills.title": "Skills",
-  "skills.hint":
-    "After import, DSH calls it: type /name in chat to load now; the model calls the skill tool when the task matches description or whenToUse. Writing「激活」in the body does nothing.",
-  "skills.hint.desktop":
-    "This desktop host’s official skill catalog. Type /name in chat to load; the model calls the skill tool when the task matches the description.",
-  "skills.empty": "No user skills",
+
+
+
   "btn.importZip": "Import zip",
   "btn.importFolder": "Import folder",
-  "skills.importing": "Importing…",
+
   "saved.import": "Imported {count} skill(s)",
   "need.import": "Choose a zip or folder",
   "err.import.folder":
     "No files were read. Select the skill folder itself (it must contain SKILL.md).",
-  "skills.pick": "Select a skill",
-  "skills.invalid": "Official catalog will ignore this: invalid format",
-  "skills.call.slash": "Type {cmd} in chat",
-  "skills.call.model": "Model can load",
-  "skills.call.modelOff": "Hidden from model",
-  "skills.call.userOff": "/name disabled",
+
+
+
   "ph.skill.desc": "description (when to use)",
   "btn.saveSkill": "Save",
   "need.skill.id": "id must be kebab-case, e.g. code-review",

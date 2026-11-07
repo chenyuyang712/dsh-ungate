@@ -5,8 +5,6 @@ import { apiJson } from "../api/client.js";
 import { PURGE_CSS, NATIVE_CSS } from "../styles/index.js";
 import { Btn } from "./primitives.js";
 import { PurgifySection } from "./settings-form.js";
-import { RulesSection } from "./rules.js";
-import { SkillsSection } from "./skills.js";
 
 export function compatibilityLevelText(t, level) {
   const key = "compat.level." + (level || "unknown");
@@ -106,8 +104,6 @@ export function SettingsRoot(props = {}) {
       [
         ["status", "状态"],
         ["prompt", "提示词"],
-        ["rules", "规则"],
-        ["skills", "技能"],
         ["more", "更多"],
       ].map(([id, label]) =>
         h(
@@ -130,12 +126,6 @@ export function SettingsRoot(props = {}) {
         { hidden: !["status", "prompt", "more"].includes(page) },
         h(PurgifySection, { page, onStatus: setBackendStatus }),
       ),
-      visited.rules
-        ? h("div", { hidden: page !== "rules" }, h(RulesSection))
-        : null,
-      visited.skills
-        ? h("div", { hidden: page !== "skills" }, h(SkillsSection))
-        : null,
       h(
         "div",
         { hidden: page !== "more", className: "dshpp-more" },

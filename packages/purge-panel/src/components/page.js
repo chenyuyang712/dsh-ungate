@@ -7,16 +7,12 @@ import { useT } from "../shared/locale.js";
 import { apiJson, unavailableStatus } from "../api/client.js";
 import { Btn, HelpTip } from "./primitives.js";
 import { PurgifySection } from "./settings-form.js";
-import { RulesSection } from "./rules.js";
-import { SkillsSection } from "./skills.js";
 import { StatusExtras } from "./maintenance.js";
 
 const TABS = [
   ["status", "状态", "宿主兼容、补丁、破甲自检"],
   ["prompt", "提示词", "注入正文与破甲强化段"],
-  ["rules", "规则", "规则集与工作区策略"],
-  ["skills", "技能", "DSH 技能目录"],
-  ["more", "更多", "服务器名单、更新与维护"],
+  ["more", "更多", "服务器名单与维护"],
 ];
 
 function PurgeGlyph({ size = 18 } = {}) {
@@ -265,16 +261,6 @@ export function PurgePage() {
         "div",
         { hidden: tab !== "prompt", className: "dshpp-sec" },
         visited.prompt ? h(PurgifySection, { page: "prompt" }) : null,
-      ),
-      h(
-        "div",
-        { hidden: tab !== "rules", className: "dshpp-sec" },
-        visited.rules ? h(RulesSection) : null,
-      ),
-      h(
-        "div",
-        { hidden: tab !== "skills", className: "dshpp-sec" },
-        visited.skills ? h(SkillsSection) : null,
       ),
       h(
         "div",
