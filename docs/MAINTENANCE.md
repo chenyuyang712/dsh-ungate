@@ -41,7 +41,7 @@ purge reanchor clear 33           # 撤销覆盖，回到出厂锚点
 | --- | --- | --- |
 | GET | `/dsh-purge/status` | 版本、宿主、补丁计数、`patch_files`、兼容性、`update`（固定 disabled） |
 | GET | `/dsh-purge/selfcheck` | 20 层证据 |
-| GET | `/dsh-purge/community` | 快照、最近动作、发行记录 |
+| GET | `/dsh-purge/community` | 快照、审计摘要 |
 | POST | `/dsh-purge/apply` · `revert` | 写宿主 |
 | POST | `/dsh-purge/tuning` | boost / injectPosition / askNoBlock / refusalRetry |
 | POST | `/dsh-purge/maintenance` | backup / rollback / prune |

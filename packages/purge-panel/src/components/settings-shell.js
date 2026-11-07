@@ -1,4 +1,3 @@
-import { CommunityMaintenance } from "./maintenance.js";
 // UI derived from YuJunZhiXue/dsh-purge 1.1.71 (MIT). See LICENSE.
 import { h, useState, useEffect } from "../shared/react.js";
 import { setTranslate, useT } from "../shared/locale.js";
@@ -126,7 +125,6 @@ export function SettingsRoot(props = {}) {
     h(
       "div",
       { className: "dshpp-native-content" },
-      __COMMUNITY__ && page === "status" ? h(CommunityMaintenance) : null,
       h(
         "div",
         { hidden: !["status", "prompt", "more"].includes(page) },

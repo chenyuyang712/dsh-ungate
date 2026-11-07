@@ -236,7 +236,7 @@ win.confirm = () => true;
     root.findAllByType("h1").some((x) => x.children.join("") === "Ungate"),
     "page title renders",
   );
-  assert(root.findAllByProps({ "aria-label": "维护" }).length);
+  assert(root.findAllByProps({ "aria-label": "破甲状态" }).length, "self-check card renders");
   assert(
     JSON.stringify(tree.toJSON()).includes("0.2.1-rc.1"),
     "the status strip reports the host version from the backend",
@@ -270,34 +270,18 @@ win.confirm = () => true;
       false,
       "community build keeps " + label + " usable",
     );
-  await act(async () => {
-    button("立即备份").props.onClick();
-    await new Promise((r) => setTimeout(r, 15));
-  });
-  assert.deepEqual(
-    writes.map((x) => x.body.op),
-    ["backup"],
-  );
-  await act(async () => {
-    root
-      .findByProps({ "aria-label": "选择回滚备份" })
-      .props.onChange({ target: { value: "backup-fixture" } });
-  });
-  await act(async () => {
-    button("回滚插件").props.onClick();
-    await new Promise((r) => setTimeout(r, 15));
-  });
-  assert.equal(writes[1].body.id, "backup-fixture");
-  assert.equal(writes[1].body.op, "rollback");
+  const maintenanceTree = JSON.stringify(tree.toJSON());
   assert(
-    !writes.some((x) => /apply|restart|revert/.test(x.path)),
-    "maintenance never applies host patches or restarts DSH",
+    !maintenanceTree.includes("立即备份") &&
+      !maintenanceTree.includes("回滚插件") &&
+      !maintenanceTree.includes("版本管理"),
+    "backup/rollback and the retired update lane no longer render",
   );
   await act(async () => tree.unmount());
   for (const life of lifecycle.reverse())
     if (typeof life.dispose === "function") life.dispose();
   console.log(
-    "PASS: Community bundled UI, single native entry, backup and rollback contracts",
+    "PASS: Community bundled UI, single native entry, self-check contracts",
   );
 })().catch((e) => {
   console.error(e);

@@ -129,7 +129,7 @@ purge probe new
 | --- | --- |
 | `GET /dsh-purge/status` | 版本、宿主、补丁计数、`update` 段（本版固定 `disabled`） |
 | `GET /dsh-purge/selfcheck` | 20 层证据 |
-| `GET /dsh-purge/community` | 快照列表、最近动作、发行记录 |
+| `GET /dsh-purge/community` | 快照列表（CLI `purge backup` / `rollback` 同源） |
 | `POST /dsh-purge/apply` / `revert` / `boost` / `tuning` | 写操作（带 token） |
 | `POST /dsh-purge/maintenance` | backup / rollback / prune |
 

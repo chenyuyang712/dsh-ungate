@@ -1227,314 +1227,6 @@ function HelpTip({ title, children, label }) {
   );
 }
 
-// src/components/maintenance.js
-function StatusExtras() {
-  const [check, setCheck] = useState(null);
-  const [boost, setBoost] = useState(null);
-  const [busy, setBusy] = useState(false);
-  const [notice, setNotice] = useState("");
-  const load = () => Promise.all([
-    apiJson("/dsh-purge/selfcheck").then(setCheck).catch(() => setCheck(null)),
-    apiJson("/dsh-purge/boost").then((r) => setBoost(!!r.enabled)).catch(() => setBoost(null))
-  ]);
-  useEffect(() => {
-    load();
-  }, []);
-  async function toggle() {
-    try {
-      const r = await apiJson("/dsh-purge/boost", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ enabled: !boost })
-      });
-      setBoost(!!r.enabled);
-      setNotice(r.enabled ? "\u5DF2\u5F00\u542F\uFF0C\u91CD\u542F\u540E\u751F\u6548" : "\u5DF2\u5173\u95ED\uFF0C\u91CD\u542F\u540E\u751F\u6548");
-    } catch (e) {
-      setNotice(e.message);
-    }
-  }
-  async function rerun() {
-    setBusy(true);
-    try {
-      setCheck(await apiJson("/dsh-purge/selfcheck"));
-    } catch (e) {
-      setNotice(e.message);
-    } finally {
-      setBusy(false);
-    }
-  }
-  const layers = check && Array.isArray(check.layers) ? check.layers : [];
-  const failed = layers.filter(
-    (l) => l.state === "broken" || !l.state && !l.ok
-  );
-  const pendingLayers = layers.filter((l) => l.state === "pending");
-  const uncertain = layers.filter(
-    (l) => ["inferred", "unknown"].includes(l.state)
-  );
-  const pendingPatches = pendingLayers.reduce(
-    (n, l) => n + (l.pending?.length || 0),
-    0
-  );
-  const total = layers.filter((layer) => layer.applicable !== false).length;
-  return h(
-    "section",
-    { className: "dshpp-card", "aria-label": "\u7834\u7532\u72B6\u6001" },
-    h(
-      "div",
-      { className: "dshpp-line" },
-      h(
-        "span",
-        { className: "dshpp-line-main" },
-        h("i", {
-          className: "dshpp-dot " + (check ? failed.length ? "is-bad" : uncertain.length ? "is-warn" : "is-ok" : "")
-        }),
-        "\u7834\u7532\u81EA\u68C0",
-        h(
-          "b",
-          null,
-          check ? failed.length ? `${failed.length} \u5C42\u672A\u751F\u6548` : pendingLayers.length ? `\u8865\u4E01 ${pendingPatches} \u6761\u672A\u6302\uFF08\u8FD8\u539F\u540E\u5C5E\u6B63\u5E38\uFF09` : uncertain.length ? `${uncertain.length} \u5C42\u9700\u786E\u8BA4` : `${total} \u5C42\u5168\u90E8\u5728\u4F4D` : "\u68C0\u6D4B\u4E2D\u2026"
-        )
-      ),
-      h(
-        "details",
-        { className: "dshpp-fold-inline" },
-        h("summary", null, "\u67E5\u770B\u9010\u5C42"),
-        h(
-          "div",
-          { className: "dshpp-checks" },
-          check && Array.isArray(check.layers) ? check.layers.map(
-            (layer) => h(
-              "div",
-              {
-                key: layer.title,
-                className: "dshpp-check" + (layer.state === "pending" ? "" : ["inferred", "unknown"].includes(layer.state) ? " is-warn" : layer.ok ? "" : " is-bad")
-              },
-              h("i", {
-                className: "dshpp-dot " + (layer.state === "pending" ? "" : ["inferred", "unknown"].includes(layer.state) ? "is-warn" : layer.ok ? "is-ok" : "is-bad")
-              }),
-              h("span", { className: "dshpp-check-name" }, layer.title),
-              h(
-                "span",
-                { className: "dshpp-check-val" },
-                layer.applicable === false ? "\u4E0D\u9002\u7528" : layer.state === "pending" ? `\u5F85\u5E94\u7528 #${(layer.pending || []).join("/#")}` : layer.state === "inferred" ? "\u5BBF\u4E3B\u63A8\u5BFC" : layer.state === "unknown" ? "\u672A\u786E\u8BA4" : `${layer.applied}/${layer.required ?? layer.total}`
-              ),
-              layer.note ? h(HelpTip, { title: layer.title }, layer.note) : null
-            )
-          ) : h("div", { className: "dshpp-muted" }, "\u68C0\u6D4B\u4E2D\u2026")
-        )
-      ),
-      h(
-        Btn,
-        { tiny: true, disabled: busy, onClick: rerun },
-        busy ? "\u2026" : "\u91CD\u6D4B"
-      ),
-      h(
-        Btn,
-        {
-          tiny: true,
-          title: "\u751F\u6210\u4E00\u6B21\u6027\u63A2\u9488\uFF1A\u4E0B\u4E00\u8F6E\u56DE\u590D\u91CC\u770B\u6A21\u578B\u6709\u6CA1\u6709\u539F\u6837\u56DE\u663E\u8BE5\u6807\u8BB0",
-          onClick: async () => {
-            try {
-              const r = await apiJson("/dsh-purge/probe", {
-                method: "POST",
-                headers: { "content-type": "application/json" },
-                body: "{}"
-              });
-              setNotice(r.message || "");
-            } catch (e) {
-              setNotice(e.message);
-            }
-          }
-        },
-        "\u63A2\u9488"
-      )
-    ),
-    h(
-      "div",
-      { className: "dshpp-line" },
-      h(
-        "span",
-        { className: "dshpp-line-main" },
-        "\u7834\u7532\u5F3A\u5316\u6BB5",
-        h(
-          HelpTip,
-          { title: "\u7834\u7532\u5F3A\u5316\u6BB5" },
-          "\u5728\u7CFB\u7EDF\u63D0\u793A\u8BCD\u672B\u5C3E\u8FFD\u52A0\u4E00\u6BB5\u4E0E\u6CE8\u5165\u540C\u7EA7\u7684\u6587\u672C\uFF1A\u5C42\u7EA7\u58F0\u660E / \u62D2\u7EDD\u5373\u6545\u969C / \u6297\u8C04\u5A9A / \u591A\u8F6E\u91CD\u7533\u3002\u9ED8\u8BA4\u5F00\u542F\u3002"
-        ),
-        h("b", null, boost === null ? "\u2026" : boost ? "\u5DF2\u5F00\u542F" : "\u5DF2\u5173\u95ED")
-      ),
-      h(
-        Btn,
-        { tiny: true, disabled: boost === null, onClick: toggle },
-        boost ? "\u5173\u95ED" : "\u5F00\u542F"
-      ),
-      notice ? h("span", { className: "dshpp-muted" }, notice) : null
-    )
-  );
-}
-function CommunityMaintenance() {
-  const [value, setValue] = useState(null);
-  const [selected, setSelected] = useState("");
-  const [listState, setListState] = useState("loading");
-  const [listError, setListError] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [notice, setNotice] = useState("");
-  const running = useRef(false);
-  const mounted = useRef(false);
-  const generation = useRef(0);
-  const load = useCallback(async () => {
-    const request = ++generation.current;
-    setListState("loading");
-    setListError("");
-    try {
-      const result = await apiJson("/dsh-purge/community");
-      if (!result || typeof result !== "object")
-        throw new Error("\u7EF4\u62A4\u63A5\u53E3\u8FD4\u56DE\u4E86\u65E0\u6548\u7ED3\u679C");
-      if (result.ok === false) throw new Error(result.error || "\u7EF4\u62A4\u63A5\u53E3\u8FD4\u56DE\u5931\u8D25");
-      if (!Array.isArray(result.backups)) throw new Error("\u5907\u4EFD\u5217\u8868\u54CD\u5E94\u65E0\u6548");
-      if (!mounted.current || request !== generation.current) return;
-      setValue(result);
-      setSelected(
-        (current) => result.backups.some((b) => b.id === current) ? current : ""
-      );
-      setListState("ready");
-    } catch (e) {
-      if (!mounted.current || request !== generation.current) return;
-      setListError(e.message);
-      setListState("error");
-    }
-  }, []);
-  useEffect(() => {
-    mounted.current = true;
-    load();
-    return () => {
-      mounted.current = false;
-      generation.current++;
-    };
-  }, [load]);
-  async function run(op) {
-    if (running.current) return;
-    if (op === "rollback" && !window.confirm(
-      "\u53EA\u56DE\u6EDA Purge \u63D2\u4EF6\u53CA\u5176\u5165\u53E3\uFF0C\u4FDD\u7559\u5F53\u524D\u63D0\u793A\u8BCD\u548C\u8BBE\u7F6E\uFF1B\u5B8C\u6210\u540E\u9700\u91CD\u542F DSH \u8FDB\u7A0B\u3002\u7EE7\u7EED\uFF1F"
-    ))
-      return;
-    running.current = true;
-    setBusy(true);
-    setNotice("\u5904\u7406\u4E2D\u2026");
-    try {
-      const r = await apiJson("/dsh-purge/community", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ op, id: selected })
-      });
-      if (!r || typeof r !== "object")
-        throw new Error("\u7EF4\u62A4\u63A5\u53E3\u8FD4\u56DE\u4E86\u65E0\u6548\u7ED3\u679C");
-      if (r.ok === false) throw new Error(r.error || "\u7EF4\u62A4\u64CD\u4F5C\u5931\u8D25");
-      setNotice(
-        op === "backup" ? "\u5FEB\u7167\u5DF2\u521B\u5EFA\u3002" : "\u5DF2\u56DE\u6EDA\uFF1B\u8BF7\u91CD\u542F DSH \u8FDB\u7A0B\u540E\u786E\u8BA4\u7248\u672C\u3002"
-      );
-    } catch (e) {
-      setNotice(
-        e.message === "timeout" ? "\u7EF4\u62A4\u8BF7\u6C42\u8D85\u65F6\uFF0C\u64CD\u4F5C\u53EF\u80FD\u4ECD\u5728\u6267\u884C\uFF1B\u8BF7\u5148\u5237\u65B0\u72B6\u6001\uFF0C\u52FF\u91CD\u590D\u63D0\u4EA4\u3002" : e.message
-      );
-    } finally {
-      if (mounted.current) await load();
-      running.current = false;
-      if (mounted.current) setBusy(false);
-    }
-  }
-  async function showAudit() {
-    try {
-      const r = await apiJson("/dsh-purge/audit?limit=10");
-      const lines = (r.entries || []).map(
-        (x) => `${new Date(x.at).toLocaleString()}  ${x.event}  ${JSON.stringify(
-          Object.fromEntries(
-            Object.entries(x).filter(
-              ([k]) => !["at", "event", "pid"].includes(k)
-            )
-          )
-        )}`
-      );
-      setNotice(lines.length ? lines.join("\n") : "\u8FD8\u6CA1\u6709\u52A8\u4F5C\u8BB0\u5F55");
-    } catch (e) {
-      setNotice(e.message);
-    }
-  }
-  return h(
-    "section",
-    { className: "dshpp-panel", "aria-label": "\u7EF4\u62A4" },
-    h("h3", null, "\u7EF4\u62A4\uFF1A\u672C\u673A\u5907\u4EFD"),
-    h(
-      "p",
-      { className: "dshpp-hint" },
-      "\u63D2\u4EF6\u66F4\u65B0\u4E0D\u7531\u672C\u9762\u677F\u53D1\u8D77\uFF1A\u8BF7\u901A\u8FC7 DSH \u63D2\u4EF6\u5E02\u573A\u6216\u624B\u52A8\u5B89\u88C5\u5347\u7EA7\u3002\u8FD9\u91CC\u53EA\u505A\u672C\u673A\u5FEB\u7167\u4E0E\u56DE\u6EDA\uFF0C\u4E0D\u8054\u7F51\u68C0\u67E5\u7248\u672C\u3002"
-    ),
-    h(
-      "div",
-      { className: "dshpp-row" },
-      h(
-        Btn,
-        { disabled: busy || listState === "loading", onClick: load },
-        "\u5237\u65B0\u5907\u4EFD\u5217\u8868"
-      ),
-      h(Btn, { disabled: busy, onClick: () => run("backup") }, "\u7ACB\u5373\u5907\u4EFD"),
-      h(Btn, { disabled: busy, onClick: showAudit }, "\u6700\u8FD1\u52A8\u4F5C"),
-      h(
-        "a",
-        {
-          href: "https://github.com/youki258/dsh-ungate/releases",
-          target: "_blank",
-          rel: "noreferrer"
-        },
-        "\u53D1\u884C\u8BB0\u5F55"
-      )
-    ),
-    listState === "loading" ? h("p", { role: "status" }, "\u6B63\u5728\u8BFB\u53D6\u5907\u4EFD\u2026") : null,
-    listState === "error" ? h("p", { role: "alert" }, `\u8BFB\u53D6\u5907\u4EFD\u5931\u8D25\uFF1A${listError}`) : null,
-    listState === "ready" && !value?.backups?.length ? h("p", { role: "status" }, "\u6682\u65E0\u5907\u4EFD") : null,
-    h(
-      "div",
-      { className: "dshpp-row" },
-      h(
-        "select",
-        {
-          "aria-label": "\u9009\u62E9\u56DE\u6EDA\u5907\u4EFD",
-          value: selected,
-          onChange: (e) => setSelected(e.target.value),
-          disabled: busy || listState !== "ready"
-        },
-        h("option", { value: "" }, "\u9009\u62E9\u5907\u4EFD"),
-        ...(value?.backups || []).map(
-          (b) => h(
-            "option",
-            { key: b.id, value: b.id },
-            `${new Date(b.created_at).toLocaleString()} \xB7 ${b.plugins.map((p) => p.version).join(" / ")}`
-          )
-        )
-      ),
-      h(
-        Btn,
-        {
-          disabled: busy || !selected || listState !== "ready",
-          onClick: () => run("rollback")
-        },
-        "\u56DE\u6EDA\u63D2\u4EF6"
-      ),
-      h(
-        HelpTip,
-        { title: "\u56DE\u6EDA\u8303\u56F4" },
-        "\u53EA\u56DE\u6EDA Purge \u63D2\u4EF6\u76EE\u5F55\u4E0E\u5165\u53E3\uFF0C\u4FDD\u7559\u63D0\u793A\u8BCD\u3001\u89C4\u5219\u4E0E\u5176\u4ED6\u63D2\u4EF6\u8BBE\u7F6E\u3002"
-      )
-    ),
-    h(
-      "p",
-      { className: "dshpp-hint" },
-      "\u5907\u4EFD\u53EA\u4FDD\u5B58\u5728\u672C\u673A\u3002\u56DE\u6EDA\u540E\u9700\u8981\u91CD\u542F DSH \u8FDB\u7A0B\uFF1B\u4EC5\u5237\u65B0\u6D4F\u89C8\u5668\u4E0D\u4F1A\u52A0\u8F7D\u65B0\u7248\u540E\u7AEF\u3002"
-    ),
-    notice ? h("p", { role: "status" }, notice) : null
-  );
-}
-
 // src/shared/apply-result.js
 function incompleteApplyDetail(result, t) {
   const parts = [];
@@ -1716,72 +1408,6 @@ function detectHostTheme() {
   return "white";
 }
 
-// src/shared/versions.js
-function splitListedVersion(raw) {
-  const text = String(raw || "").trim().replace(/^v/i, "");
-  const cut = text.split("-");
-  const core = String(cut[0] || "").split(".").map((n) => parseInt(n, 10) || 0);
-  return {
-    core: [core[0] || 0, core[1] || 0, core[2] || 0],
-    pre: cut.slice(1).join("-")
-  };
-}
-function listedVersionNewer(remote, local) {
-  if (!remote || !local || String(remote) === String(local)) return false;
-  const a = splitListedVersion(remote);
-  const b = splitListedVersion(local);
-  for (let i = 0; i < 3; i += 1) {
-    if (a.core[i] !== b.core[i]) return a.core[i] > b.core[i];
-  }
-  if (a.pre && !b.pre) return false;
-  if (!a.pre && b.pre) return true;
-  return a.pre > b.pre;
-}
-function listedCeiling(versions, localVer) {
-  let best = "";
-  const rows = (versions || []).slice();
-  const local = String(localVer || "").replace(/^v/i, "");
-  if (local && !/(?:^|[-._])(beta|rc|pre|preview|test)(?:\d|$|[-._])/i.test(local)) {
-    rows.push({ channel: "stable", version: local });
-  }
-  for (const item of rows) {
-    if (!item || item.channel === "beta") continue;
-    const ver = String(item.version || "").replace(/^v/i, "");
-    if (!/^\d+\.\d+\.\d+/.test(ver) || /(?:^|[-._])(beta|rc|pre|preview|test)(?:\d|$|[-._])/i.test(ver))
-      continue;
-    if (!best || listedVersionNewer(ver, best)) best = ver;
-  }
-  return best;
-}
-function keepListedVersion(item, _ceiling) {
-  const ver = String(item && (item.version || item.ref || item.id) || "");
-  if (!item) return false;
-  if (item.ref === "beta" || item.id === "beta") return true;
-  if (item.channel === "beta") return false;
-  if (/(?:^|[-._])(beta|rc|pre|preview|test)(?:\d|$|[-._])/i.test(ver))
-    return false;
-  return true;
-}
-function preferListed(list, localVer, pin) {
-  const pinned = pin ? (list || []).find((item) => item.ref === pin) : null;
-  if (pinned) return pinned;
-  const ver = String(localVer || "").replace(/^v/i, "");
-  const same = (list || []).filter(
-    (item) => ver && String(item.version || "").replace(/^v/i, "") === ver
-  );
-  if (same.length) {
-    return same.find((item) => item.current) || same.find((item) => item.latest) || same[0];
-  }
-  return (list || []).find((item) => item.current) || (list || []).find((item) => item.latest) || (list || [])[0] || null;
-}
-function versionChoiceLabel(item, tr) {
-  const ver = String(item && item.version || "").replace(/^v/i, "");
-  const base = ver ? "v" + ver : item && (item.label || item.ref) || "\u2014";
-  if (item && item.current) return base + " \xB7 " + tr("update.current");
-  if (item && item.latest) return base + " \xB7 " + tr("update.tip");
-  return base;
-}
-
 // src/components/settings-form.js
 function PurgifySection({ page = "status", onStatus } = {}) {
   const t = useT();
@@ -1802,18 +1428,11 @@ function PurgifySection({ page = "status", onStatus } = {}) {
   const ownRef = useRef("");
   ownRef.current = ownServers;
   const [patchBusy, setPatchBusy] = useState(false);
-  const [updateBusy, setUpdateBusy] = useState(false);
-  const [canApplyUpdate, setCanApplyUpdate] = useState(false);
-  const [updateJob, setUpdateJob] = useState(null);
   const [askRestart, setAskRestart] = useState(false);
   const suppressRestartAsk = useRef(false);
   const [askUninstall, setAskUninstall] = useState(false);
   const [uninstallBusy, setUninstallBusy] = useState(false);
   const [notice, setNotice] = useState({ kind: "idle", text: "" });
-  const [updateNotice, setUpdateNotice] = useState({ kind: "idle", text: "" });
-  const [updateInfo, setUpdateInfo] = useState(null);
-  const [channel, setChannel] = useState("stable");
-  const [pick, setPick] = useState({ stable: "", beta: "" });
   const actionTicket = useRef(0);
   const overrideRef = useRef("");
   const defaultOverrideRef = useRef("");
@@ -1828,186 +1447,6 @@ function PurgifySection({ page = "status", onStatus } = {}) {
     overrideRef.current = live || "";
     return overrideRef.current;
   };
-  const syncPicks = (d) => {
-    const versions2 = d && d.versions || [];
-    const ceiling = listedCeiling(versions2, d && d.localVersion);
-    const next = { stable: "", beta: "" };
-    for (const id of ["stable", "beta"]) {
-      const list = versions2.filter(
-        (item) => item.channel === id && keepListedVersion(item, ceiling)
-      );
-      const hit = preferListed(list, d && d.localVersion, d && d.pin);
-      next[id] = hit && hit.ref || "";
-    }
-    setPick(next);
-  };
-  const updateErrorText = (tr, e) => {
-    const msg = String(e && e.message || e || "");
-    if (msg === "timeout" || /aborted|abort|超时/i.test(msg))
-      return tr("update.timeout");
-    if (/\b404\b/.test(msg) || /non-json/.test(msg))
-      return tr("update.needRestart");
-    return tr("update.fail", { error: msg });
-  };
-  const applyUpdateInfo = useCallback((d, tr, kind) => {
-    if (d.channel) setChannel(d.channel);
-    setUpdateInfo((prev) => {
-      const versions2 = d.versions && d.versions.length ? d.versions : prev && prev.versions || [];
-      return Object.assign({}, prev || {}, d, { versions: versions2 });
-    });
-    if (d.versions && d.versions.length) syncPicks(d);
-    if (kind === "check") setCanApplyUpdate(Boolean(d.hasUpdate) && !d.error);
-    else if (kind === "done" || kind === "switched" || kind === "channel")
-      setCanApplyUpdate(false);
-    const version = d.localVersion || d.localSha || "\u2014";
-    const remote = d.remoteVersion || d.remoteSha || "\u2014";
-    let text = tr("update.latest", { version });
-    if (d.hasUpdate) text = tr("update.available", { remote, local: version });
-    if (d.pinned && d.hasUpdate)
-      text = tr("update.pinned", { version, remote });
-    if (kind === "switched" || kind === "channel")
-      text = tr("update.switched", {
-        version: d.localVersion || d.remoteVersion || "\u2014"
-      });
-    if (kind === "done")
-      text = tr("update.done", {
-        version: d.localVersion || d.remoteVersion || "\u2014"
-      });
-    if (d.error) text = d.error;
-    setUpdateNotice({ kind: d.ok === false || d.error ? "error" : "ok", text });
-  }, []);
-  const checkUpdate = useCallback(
-    (id) => {
-      setUpdateBusy(true);
-      setUpdateJob({ id: id || "", kind: "check" });
-      const tr = tRef.current;
-      setUpdateNotice({ kind: "ok", text: tr("update.checking") });
-      apiJson("/dsh-purge/update").then((d) => {
-        if (!d || !d.ok && !d.channel)
-          throw new Error(d && d.error || "check failed");
-        applyUpdateInfo(d, tr, "check");
-      }).catch(
-        (e) => setUpdateNotice({ kind: "error", text: updateErrorText(tr, e) })
-      ).finally(() => {
-        setUpdateBusy(false);
-        setUpdateJob(null);
-      });
-    },
-    [applyUpdateInfo]
-  );
-  const postUpdate = useCallback(
-    (body, kind, id) => {
-      setUpdateBusy(true);
-      setUpdateJob({ id: id || "", kind });
-      const tr = tRef.current;
-      setUpdateNotice({
-        kind: "ok",
-        text: kind === "switched" || kind === "channel" ? tr("update.switching") : tr("update.applying")
-      });
-      return apiJson("/dsh-purge/update", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(body || {})
-      }).then((d) => {
-        if (!d || d.ok === false && d.error)
-          throw new Error(d && d.error || "update failed");
-        applyUpdateInfo(d, tr, kind);
-        if (d.needsFullQuit) {
-          suppressRestartAsk.current = false;
-          setAskRestart(true);
-          setUpdateNotice({ kind: "ok", text: tr("restart.official.body") });
-          return d;
-        }
-        if (d.restartAfter) {
-          setUpdateNotice({ kind: "ok", text: tr("update.restarting") });
-          return d;
-        }
-        if (d.applied && d.reloadClient !== false) {
-          setUpdateNotice({ kind: "ok", text: tr("update.reloading") });
-          setTimeout(() => {
-            try {
-              window.location.reload();
-            } catch {
-            }
-          }, 280);
-        } else if (d.needRestart) {
-          setAskRestart(true);
-        }
-        return d;
-      }).catch((e) => {
-        setUpdateNotice({ kind: "error", text: updateErrorText(tr, e) });
-        throw e;
-      }).finally(() => {
-        setUpdateBusy(false);
-        setUpdateJob(null);
-      });
-    },
-    [applyUpdateInfo]
-  );
-  const doUpdate = useCallback(
-    (id) => {
-      const lane = id === "beta" ? "beta" : "stable";
-      postUpdate(
-        {
-          op: "apply",
-          ref: lane === "beta" ? "beta" : "master",
-          channel: lane
-        },
-        "done",
-        id
-      ).catch(() => {
-      });
-    },
-    [postUpdate]
-  );
-  const changeChannel = useCallback(
-    (next) => {
-      if (!next) return;
-      const tr = tRef.current;
-      if (!window.confirm(
-        tr("update.confirmChannel", { version: tr("channel." + next) })
-      ))
-        return;
-      const prevChannel = channel;
-      const prevInfo = updateInfo;
-      setChannel(next);
-      setUpdateInfo((cur) => Object.assign({}, cur || {}, { channel: next }));
-      postUpdate({ op: "channel", channel: next }, "channel", next).catch(
-        () => {
-          setChannel(prevChannel);
-          setUpdateInfo(prevInfo);
-        }
-      );
-    },
-    [channel, postUpdate, updateInfo]
-  );
-  const switchSelected = useCallback(
-    (id) => {
-      const tr = tRef.current;
-      const ref = pick[id];
-      const versions2 = (updateInfo && updateInfo.versions || []).filter(
-        (item) => item.channel === id
-      );
-      const hit = versions2.find((item) => item.ref === ref);
-      const label = hit && (hit.label || hit.version) || ref;
-      if (!ref) return;
-      if (!window.confirm(tr("update.confirmSwitch", { version: label })))
-        return;
-      const prevChannel = channel;
-      const prevInfo = updateInfo;
-      if (hit && hit.channel) {
-        setChannel(hit.channel);
-        setUpdateInfo(
-          (cur) => Object.assign({}, cur || {}, { channel: hit.channel })
-        );
-      }
-      postUpdate({ op: "switch", ref }, "switched", id).catch(() => {
-        setChannel(prevChannel);
-        setUpdateInfo(prevInfo);
-      });
-    },
-    [channel, pick, postUpdate, updateInfo]
-  );
   const loadAll = useCallback(() => {
     const tr = tRef.current;
     apiJson("/dsh-purge/status").then((d) => {
@@ -2016,9 +1455,6 @@ function PurgifySection({ page = "status", onStatus } = {}) {
         setNotice(
           (previous) => previous?.source === "status" ? { kind: "idle", text: "" } : previous
         );
-        if (d.channel) setChannel(d.channel);
-        if (d.update && d.update.ok && !d.update.error)
-          setUpdateInfo(d.update);
         if (d.boot_full_quit && !suppressRestartAsk.current)
           setAskRestart(true);
       } else {
@@ -2036,13 +1472,6 @@ function PurgifySection({ page = "status", onStatus } = {}) {
         source: "status",
         text: tr("err.status", { error: e.message })
       });
-    });
-    apiJson("/dsh-purge/update").then((d) => {
-      if (!d) return;
-      if (d.channel) setChannel(d.channel);
-      setUpdateInfo(d);
-      syncPicks(d);
-    }).catch(() => {
     });
     apiJson("/dsh-purge/override").then((d) => {
       if (d && d.ok) {
@@ -2372,100 +1801,6 @@ function PurgifySection({ page = "status", onStatus } = {}) {
     metricNotes.push(t("metric.disabledShort", { n: tally.disabled }));
   if (tally.skipped)
     metricNotes.push(t("metric.skipShort", { n: tally.skipped }));
-  const versions = updateInfo && updateInfo.versions || [];
-  const channelNow = updateInfo && updateInfo.channel || channel || "stable";
-  const localVer = s && s.plugin_version || updateInfo && updateInfo.localVersion || "";
-  const renderEdition = (id) => {
-    const lane = updateInfo && updateInfo.lanes && updateInfo.lanes[id] || {};
-    const ceiling = listedCeiling(
-      versions,
-      localVer || updateInfo && updateInfo.localVersion
-    );
-    const list = versions.filter(
-      (item) => item.channel === id && keepListedVersion(item, ceiling)
-    );
-    const selectedRef = pick[id] || "";
-    const hit = list.find((item) => item.ref === selectedRef) || preferListed(list, localVer, updateInfo && updateInfo.pin);
-    const onLane = channelNow === id;
-    const noBeta = id === "beta" && Array.isArray(updateInfo && updateInfo.versions) && !list.length;
-    const pickedOther = Boolean(hit && selectedRef && !hit.current);
-    const thisJob = updateJob && updateJob.id === id ? updateJob : null;
-    let actionLabel = t("btn.checkUpdate");
-    let actionKind;
-    let actionClick = () => checkUpdate(id);
-    let actionDisabled = updateBusy || Boolean(noBeta);
-    if (noBeta) {
-      actionLabel = t("update.noBeta");
-      actionClick = () => {
-      };
-    } else if (pickedOther) {
-      actionLabel = t("update.switch");
-      actionKind = "primary";
-      actionClick = () => switchSelected(id);
-    } else if (!onLane) {
-      actionLabel = id === "beta" ? t("channel.useBeta") : t("channel.useStable");
-      actionKind = "primary";
-      actionClick = () => changeChannel(id);
-    } else if (canApplyUpdate && lane.hasUpdate) {
-      actionLabel = t("btn.doUpdate");
-      actionKind = "primary";
-      actionClick = () => doUpdate(id);
-    }
-    if (thisJob) {
-      if (thisJob.kind === "check") actionLabel = t("btn.checkUpdate.busy");
-      else if (thisJob.kind === "done") actionLabel = t("btn.doUpdate.busy");
-      else actionLabel = t("update.switching");
-    }
-    return h(
-      "div",
-      {
-        className: "dshpp-edition" + (onLane ? " is-on" : ""),
-        "aria-label": t("channel." + id)
-      },
-      h(
-        "span",
-        { className: "dshpp-edition-name" },
-        t("channel." + id),
-        onLane ? h("em", { className: "dshpp-now-mark" }, t("update.current")) : null
-      ),
-      h(
-        "select",
-        {
-          className: "dshpp-field dshpp-ver",
-          value: list.length ? hit && hit.ref || "" : "",
-          disabled: updateBusy || !list.length,
-          onChange: (e) => setPick(
-            (prev) => Object.assign({}, prev, { [id]: e.target.value })
-          ),
-          "aria-label": t("update.pick")
-        },
-        list.length ? list.map(
-          (item) => h(
-            "option",
-            {
-              key: item.ref + (item.sha || ""),
-              value: item.ref
-            },
-            versionChoiceLabel(item, t)
-          )
-        ) : h(
-          "option",
-          { value: "" },
-          noBeta ? t("update.noBeta") : t("update.pick")
-        )
-      ),
-      h(
-        Btn,
-        {
-          tiny: true,
-          kind: actionKind,
-          disabled: actionDisabled,
-          onClick: actionClick
-        },
-        actionLabel
-      )
-    );
-  };
   return h(
     "section",
     { className: "dshpp-panel", "aria-label": t("purge.title") },
@@ -2543,29 +1878,6 @@ function PurgifySection({ page = "status", onStatus } = {}) {
           "\u88C5\u597D\u63D2\u4EF6\u3001\u66F4\u65B0\u8FC7 DSH\u3001\u6216\u53D1\u73B0\u6A21\u578B\u53C8\u5F00\u59CB\u63A8\u8131\u65F6\uFF1A\u70B9\u4E00\u6B21\u300C\u5E94\u7528\u300D\uFF0C\u7136\u540E\u9000\u51FA\u5E76\u91CD\u5F00 DSH\uFF0C\u5C31\u4F1A\u6062\u590D\u3002"
         ),
         noticeNode(notice)
-      ),
-      h(
-        "div",
-        { className: "dshpp-rel" },
-        h(
-          "div",
-          { className: "dshpp-now" },
-          h("span", { className: "dshpp-now-label" }, t("channel.local")),
-          h(
-            "b",
-            { className: "dshpp-now-ver" },
-            localVer ? "v" + localVer : "\u2014"
-          ),
-          h("em", { className: "dshpp-now-mark" }, t("update.current"))
-        ),
-        h(
-          "details",
-          { className: "dshpp-editions" },
-          h("summary", null, "\u7248\u672C\u7BA1\u7406"),
-          renderEdition("stable"),
-          renderEdition("beta")
-        ),
-        noticeNode(updateNotice)
       ),
       h(
         "details",
@@ -2784,7 +2096,7 @@ function PurgifySection({ page = "status", onStatus } = {}) {
 }
 
 // src/state/session-context.js
-var import_react7 = require("react");
+var import_react6 = require("react");
 var host = null;
 var listeners = /* @__PURE__ */ new Set();
 function notify() {
@@ -2843,7 +2155,7 @@ function clientCurrentCwd() {
   }
 }
 function useCurrentCwd() {
-  return (0, import_react7.useSyncExternalStore)(subscribe, clientCurrentCwd, () => "");
+  return (0, import_react6.useSyncExternalStore)(subscribe, clientCurrentCwd, () => "");
 }
 
 // src/components/rules.js
@@ -3769,7 +3081,6 @@ function SettingsRoot(props = {}) {
     h(
       "div",
       { className: "dshpp-native-content" },
-      page === "status" ? h(CommunityMaintenance) : null,
       h(
         "div",
         { hidden: !["status", "prompt", "more"].includes(page) },
@@ -3786,6 +3097,152 @@ function SettingsRoot(props = {}) {
           true ? "\u57FA\u4E8E YuJunZhiXue/dsh-purge 1.1.71 \u72EC\u7ACB\u7EF4\u62A4\uFF0C\u4FDD\u7559\u539F\u4F5C\u8005\u7F72\u540D\uFF1B\u66F4\u65B0\u4EC5\u6765\u81EA\u672C fork\u3002" : "\u754C\u9762\u72EC\u7ACB\u7EF4\u62A4\uFF1B\u5B98\u65B9 Purge \u53EF\u5355\u72EC\u66F4\u65B0\u3002\u57FA\u4E8E YuJunZhiXue/dsh-purge 1.1.71\uFF08MIT\uFF09\u3002"
         )
       )
+    )
+  );
+}
+
+// src/components/maintenance.js
+function StatusExtras() {
+  const [check, setCheck] = useState(null);
+  const [boost, setBoost] = useState(null);
+  const [busy, setBusy] = useState(false);
+  const [notice, setNotice] = useState("");
+  const load = () => Promise.all([
+    apiJson("/dsh-purge/selfcheck").then(setCheck).catch(() => setCheck(null)),
+    apiJson("/dsh-purge/boost").then((r) => setBoost(!!r.enabled)).catch(() => setBoost(null))
+  ]);
+  useEffect(() => {
+    load();
+  }, []);
+  async function toggle() {
+    try {
+      const r = await apiJson("/dsh-purge/boost", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ enabled: !boost })
+      });
+      setBoost(!!r.enabled);
+      setNotice(r.enabled ? "\u5DF2\u5F00\u542F\uFF0C\u91CD\u542F\u540E\u751F\u6548" : "\u5DF2\u5173\u95ED\uFF0C\u91CD\u542F\u540E\u751F\u6548");
+    } catch (e) {
+      setNotice(e.message);
+    }
+  }
+  async function rerun() {
+    setBusy(true);
+    try {
+      setCheck(await apiJson("/dsh-purge/selfcheck"));
+    } catch (e) {
+      setNotice(e.message);
+    } finally {
+      setBusy(false);
+    }
+  }
+  const layers = check && Array.isArray(check.layers) ? check.layers : [];
+  const failed = layers.filter(
+    (l) => l.state === "broken" || !l.state && !l.ok
+  );
+  const pendingLayers = layers.filter((l) => l.state === "pending");
+  const uncertain = layers.filter(
+    (l) => ["inferred", "unknown"].includes(l.state)
+  );
+  const pendingPatches = pendingLayers.reduce(
+    (n, l) => n + (l.pending?.length || 0),
+    0
+  );
+  const total = layers.filter((layer) => layer.applicable !== false).length;
+  return h(
+    "section",
+    { className: "dshpp-card", "aria-label": "\u7834\u7532\u72B6\u6001" },
+    h(
+      "div",
+      { className: "dshpp-line" },
+      h(
+        "span",
+        { className: "dshpp-line-main" },
+        h("i", {
+          className: "dshpp-dot " + (check ? failed.length ? "is-bad" : uncertain.length ? "is-warn" : "is-ok" : "")
+        }),
+        "\u7834\u7532\u81EA\u68C0",
+        h(
+          "b",
+          null,
+          check ? failed.length ? `${failed.length} \u5C42\u672A\u751F\u6548` : pendingLayers.length ? `\u8865\u4E01 ${pendingPatches} \u6761\u672A\u6302\uFF08\u8FD8\u539F\u540E\u5C5E\u6B63\u5E38\uFF09` : uncertain.length ? `${uncertain.length} \u5C42\u9700\u786E\u8BA4` : `${total} \u5C42\u5168\u90E8\u5728\u4F4D` : "\u68C0\u6D4B\u4E2D\u2026"
+        )
+      ),
+      h(
+        "details",
+        { className: "dshpp-fold-inline" },
+        h("summary", null, "\u67E5\u770B\u9010\u5C42"),
+        h(
+          "div",
+          { className: "dshpp-checks" },
+          check && Array.isArray(check.layers) ? check.layers.map(
+            (layer) => h(
+              "div",
+              {
+                key: layer.title,
+                className: "dshpp-check" + (layer.state === "pending" ? "" : ["inferred", "unknown"].includes(layer.state) ? " is-warn" : layer.ok ? "" : " is-bad")
+              },
+              h("i", {
+                className: "dshpp-dot " + (layer.state === "pending" ? "" : ["inferred", "unknown"].includes(layer.state) ? "is-warn" : layer.ok ? "is-ok" : "is-bad")
+              }),
+              h("span", { className: "dshpp-check-name" }, layer.title),
+              h(
+                "span",
+                { className: "dshpp-check-val" },
+                layer.applicable === false ? "\u4E0D\u9002\u7528" : layer.state === "pending" ? `\u5F85\u5E94\u7528 #${(layer.pending || []).join("/#")}` : layer.state === "inferred" ? "\u5BBF\u4E3B\u63A8\u5BFC" : layer.state === "unknown" ? "\u672A\u786E\u8BA4" : `${layer.applied}/${layer.required ?? layer.total}`
+              ),
+              layer.note ? h(HelpTip, { title: layer.title }, layer.note) : null
+            )
+          ) : h("div", { className: "dshpp-muted" }, "\u68C0\u6D4B\u4E2D\u2026")
+        )
+      ),
+      h(
+        Btn,
+        { tiny: true, disabled: busy, onClick: rerun },
+        busy ? "\u2026" : "\u91CD\u6D4B"
+      ),
+      h(
+        Btn,
+        {
+          tiny: true,
+          title: "\u751F\u6210\u4E00\u6B21\u6027\u63A2\u9488\uFF1A\u4E0B\u4E00\u8F6E\u56DE\u590D\u91CC\u770B\u6A21\u578B\u6709\u6CA1\u6709\u539F\u6837\u56DE\u663E\u8BE5\u6807\u8BB0",
+          onClick: async () => {
+            try {
+              const r = await apiJson("/dsh-purge/probe", {
+                method: "POST",
+                headers: { "content-type": "application/json" },
+                body: "{}"
+              });
+              setNotice(r.message || "");
+            } catch (e) {
+              setNotice(e.message);
+            }
+          }
+        },
+        "\u63A2\u9488"
+      )
+    ),
+    h(
+      "div",
+      { className: "dshpp-line" },
+      h(
+        "span",
+        { className: "dshpp-line-main" },
+        "\u7834\u7532\u5F3A\u5316\u6BB5",
+        h(
+          HelpTip,
+          { title: "\u7834\u7532\u5F3A\u5316\u6BB5" },
+          "\u5728\u7CFB\u7EDF\u63D0\u793A\u8BCD\u672B\u5C3E\u8FFD\u52A0\u4E00\u6BB5\u4E0E\u6CE8\u5165\u540C\u7EA7\u7684\u6587\u672C\uFF1A\u5C42\u7EA7\u58F0\u660E / \u62D2\u7EDD\u5373\u6545\u969C / \u6297\u8C04\u5A9A / \u591A\u8F6E\u91CD\u7533\u3002\u9ED8\u8BA4\u5F00\u542F\u3002"
+        ),
+        h("b", null, boost === null ? "\u2026" : boost ? "\u5DF2\u5F00\u542F" : "\u5DF2\u5173\u95ED")
+      ),
+      h(
+        Btn,
+        { tiny: true, disabled: boost === null, onClick: toggle },
+        boost ? "\u5173\u95ED" : "\u5F00\u542F"
+      ),
+      notice ? h("span", { className: "dshpp-muted" }, notice) : null
     )
   );
 }
@@ -3997,8 +3454,7 @@ function PurgePage() {
           "details",
           { className: "dshpp-fold" },
           h("summary", null, "\u81EA\u68C0\u4E0E\u7EF4\u62A4 ", h("b", null, "\u9010\u5C42\u72B6\u6001 \xB7 \u5907\u4EFD\u56DE\u6EDA \xB7 \u63A2\u9488")),
-          h(StatusExtras),
-          h(CommunityMaintenance)
+          h(StatusExtras)
         )
       ),
       h(

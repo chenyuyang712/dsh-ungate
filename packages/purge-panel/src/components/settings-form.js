@@ -28,12 +28,6 @@ import {
 } from "./patch-status.js";
 import { noticeNode, Btn } from "./primitives.js";
 import { RestartAsk, restartDsh, detectHostTheme } from "./restart.js";
-import {
-  listedCeiling,
-  keepListedVersion,
-  preferListed,
-  versionChoiceLabel,
-} from "../shared/versions.js";
 
 export function PurgifySection({ page = "status", onStatus } = {}) {
   const t = useT();
@@ -54,18 +48,11 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
   const ownRef = useRef("");
   ownRef.current = ownServers;
   const [patchBusy, setPatchBusy] = useState(false);
-  const [updateBusy, setUpdateBusy] = useState(false);
-  const [canApplyUpdate, setCanApplyUpdate] = useState(false);
-  const [updateJob, setUpdateJob] = useState(null);
   const [askRestart, setAskRestart] = useState(false);
   const suppressRestartAsk = useRef(false);
   const [askUninstall, setAskUninstall] = useState(false);
   const [uninstallBusy, setUninstallBusy] = useState(false);
   const [notice, setNotice] = useState({ kind: "idle", text: "" });
-  const [updateNotice, setUpdateNotice] = useState({ kind: "idle", text: "" });
-  const [updateInfo, setUpdateInfo] = useState(null);
-  const [channel, setChannel] = useState("stable");
-  const [pick, setPick] = useState({ stable: "", beta: "" });
   const actionTicket = useRef(0);
   const overrideRef = useRef("");
   const defaultOverrideRef = useRef("");
@@ -83,207 +70,6 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
     return overrideRef.current;
   };
 
-  const syncPicks = (d) => {
-    const versions = (d && d.versions) || [];
-    const ceiling = listedCeiling(versions, d && d.localVersion);
-    const next = { stable: "", beta: "" };
-    for (const id of ["stable", "beta"]) {
-      const list = versions.filter(
-        (item) => item.channel === id && keepListedVersion(item, ceiling),
-      );
-      const hit = preferListed(list, d && d.localVersion, d && d.pin);
-      next[id] = (hit && hit.ref) || "";
-    }
-    setPick(next);
-  };
-
-  const updateErrorText = (tr, e) => {
-    const msg = String((e && e.message) || e || "");
-    if (msg === "timeout" || /aborted|abort|超时/i.test(msg))
-      return tr("update.timeout");
-    if (/\b404\b/.test(msg) || /non-json/.test(msg))
-      return tr("update.needRestart");
-    return tr("update.fail", { error: msg });
-  };
-
-  const applyUpdateInfo = useCallback((d, tr, kind) => {
-    if (d.channel) setChannel(d.channel);
-    setUpdateInfo((prev) => {
-      const versions =
-        d.versions && d.versions.length
-          ? d.versions
-          : (prev && prev.versions) || [];
-      return Object.assign({}, prev || {}, d, { versions });
-    });
-    if (d.versions && d.versions.length) syncPicks(d);
-    if (kind === "check") setCanApplyUpdate(Boolean(d.hasUpdate) && !d.error);
-    else if (kind === "done" || kind === "switched" || kind === "channel")
-      setCanApplyUpdate(false);
-    const version = d.localVersion || d.localSha || "—";
-    const remote = d.remoteVersion || d.remoteSha || "—";
-    let text = tr("update.latest", { version });
-    if (d.hasUpdate) text = tr("update.available", { remote, local: version });
-    if (d.pinned && d.hasUpdate)
-      text = tr("update.pinned", { version, remote });
-    if (kind === "switched" || kind === "channel")
-      text = tr("update.switched", {
-        version: d.localVersion || d.remoteVersion || "—",
-      });
-    if (kind === "done")
-      text = tr("update.done", {
-        version: d.localVersion || d.remoteVersion || "—",
-      });
-    if (d.error) text = d.error;
-    setUpdateNotice({ kind: d.ok === false || d.error ? "error" : "ok", text });
-  }, []);
-
-  const checkUpdate = useCallback(
-    (id) => {
-      setUpdateBusy(true);
-      setUpdateJob({ id: id || "", kind: "check" });
-      const tr = tRef.current;
-      setUpdateNotice({ kind: "ok", text: tr("update.checking") });
-      apiJson("/dsh-purge/update")
-        .then((d) => {
-          if (!d || (!d.ok && !d.channel))
-            throw new Error((d && d.error) || "check failed");
-          applyUpdateInfo(d, tr, "check");
-        })
-        .catch((e) =>
-          setUpdateNotice({ kind: "error", text: updateErrorText(tr, e) }),
-        )
-        .finally(() => {
-          setUpdateBusy(false);
-          setUpdateJob(null);
-        });
-    },
-    [applyUpdateInfo],
-  );
-
-  const postUpdate = useCallback(
-    (body, kind, id) => {
-      setUpdateBusy(true);
-      setUpdateJob({ id: id || "", kind });
-      const tr = tRef.current;
-      setUpdateNotice({
-        kind: "ok",
-        text:
-          kind === "switched" || kind === "channel"
-            ? tr("update.switching")
-            : tr("update.applying"),
-      });
-      return apiJson("/dsh-purge/update", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify(body || {}),
-      })
-        .then((d) => {
-          if (!d || (d.ok === false && d.error))
-            throw new Error((d && d.error) || "update failed");
-          applyUpdateInfo(d, tr, kind);
-          if (d.needsFullQuit) {
-            suppressRestartAsk.current = false;
-            setAskRestart(true);
-            setUpdateNotice({ kind: "ok", text: tr("restart.official.body") });
-            return d;
-          }
-          if (d.restartAfter) {
-            setUpdateNotice({ kind: "ok", text: tr("update.restarting") });
-            return d;
-          }
-          if (d.applied && d.reloadClient !== false) {
-            setUpdateNotice({ kind: "ok", text: tr("update.reloading") });
-            setTimeout(() => {
-              try {
-                window.location.reload();
-              } catch {
-                /* ignore */
-              }
-            }, 280);
-          } else if (d.needRestart) {
-            setAskRestart(true);
-          }
-          return d;
-        })
-        .catch((e) => {
-          setUpdateNotice({ kind: "error", text: updateErrorText(tr, e) });
-          throw e;
-        })
-        .finally(() => {
-          setUpdateBusy(false);
-          setUpdateJob(null);
-        });
-    },
-    [applyUpdateInfo],
-  );
-
-  const doUpdate = useCallback(
-    (id) => {
-      const lane = id === "beta" ? "beta" : "stable";
-      postUpdate(
-        {
-          op: "apply",
-          ref: lane === "beta" ? "beta" : "master",
-          channel: lane,
-        },
-        "done",
-        id,
-      ).catch(() => {});
-    },
-    [postUpdate],
-  );
-
-  const changeChannel = useCallback(
-    (next) => {
-      if (!next) return;
-      const tr = tRef.current;
-      if (
-        !window.confirm(
-          tr("update.confirmChannel", { version: tr("channel." + next) }),
-        )
-      )
-        return;
-      const prevChannel = channel;
-      const prevInfo = updateInfo;
-      setChannel(next);
-      setUpdateInfo((cur) => Object.assign({}, cur || {}, { channel: next }));
-      postUpdate({ op: "channel", channel: next }, "channel", next).catch(
-        () => {
-          setChannel(prevChannel);
-          setUpdateInfo(prevInfo);
-        },
-      );
-    },
-    [channel, postUpdate, updateInfo],
-  );
-
-  const switchSelected = useCallback(
-    (id) => {
-      const tr = tRef.current;
-      const ref = pick[id];
-      const versions = ((updateInfo && updateInfo.versions) || []).filter(
-        (item) => item.channel === id,
-      );
-      const hit = versions.find((item) => item.ref === ref);
-      const label = (hit && (hit.label || hit.version)) || ref;
-      if (!ref) return;
-      if (!window.confirm(tr("update.confirmSwitch", { version: label })))
-        return;
-      const prevChannel = channel;
-      const prevInfo = updateInfo;
-      if (hit && hit.channel) {
-        setChannel(hit.channel);
-        setUpdateInfo((cur) =>
-          Object.assign({}, cur || {}, { channel: hit.channel }),
-        );
-      }
-      postUpdate({ op: "switch", ref }, "switched", id).catch(() => {
-        setChannel(prevChannel);
-        setUpdateInfo(prevInfo);
-      });
-    },
-    [channel, pick, postUpdate, updateInfo],
-  );
 
   const loadAll = useCallback(() => {
     const tr = tRef.current;
@@ -296,9 +82,6 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
               ? { kind: "idle", text: "" }
               : previous,
           );
-          if (d.channel) setChannel(d.channel);
-          if (d.update && d.update.ok && !d.update.error)
-            setUpdateInfo(d.update);
           if (d.boot_full_quit && !suppressRestartAsk.current)
             setAskRestart(true);
         } else {
@@ -318,14 +101,6 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
           text: tr("err.status", { error: e.message }),
         });
       });
-    apiJson("/dsh-purge/update")
-      .then((d) => {
-        if (!d) return;
-        if (d.channel) setChannel(d.channel);
-        setUpdateInfo(d);
-        syncPicks(d);
-      })
-      .catch(() => {});
     apiJson("/dsh-purge/override")
       .then((d) => {
         if (d && d.ok) {
@@ -704,111 +479,6 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
   if (tally.skipped)
     metricNotes.push(t("metric.skipShort", { n: tally.skipped }));
 
-  const versions = (updateInfo && updateInfo.versions) || [];
-  const channelNow = (updateInfo && updateInfo.channel) || channel || "stable";
-  const localVer =
-    (s && s.plugin_version) || (updateInfo && updateInfo.localVersion) || "";
-  const renderEdition = (id) => {
-    const lane = (updateInfo && updateInfo.lanes && updateInfo.lanes[id]) || {};
-    const ceiling = listedCeiling(
-      versions,
-      localVer || (updateInfo && updateInfo.localVersion),
-    );
-    const list = versions.filter(
-      (item) => item.channel === id && keepListedVersion(item, ceiling),
-    );
-    const selectedRef = pick[id] || "";
-    const hit =
-      list.find((item) => item.ref === selectedRef) ||
-      preferListed(list, localVer, updateInfo && updateInfo.pin);
-    const onLane = channelNow === id;
-    const noBeta =
-      id === "beta" &&
-      Array.isArray(updateInfo && updateInfo.versions) &&
-      !list.length;
-    const pickedOther = Boolean(hit && selectedRef && !hit.current);
-    const thisJob = updateJob && updateJob.id === id ? updateJob : null;
-    let actionLabel = t("btn.checkUpdate");
-    let actionKind;
-    let actionClick = () => checkUpdate(id);
-    let actionDisabled = updateBusy || Boolean(noBeta);
-    if (noBeta) {
-      actionLabel = t("update.noBeta");
-      actionClick = () => {};
-    } else if (pickedOther) {
-      actionLabel = t("update.switch");
-      actionKind = "primary";
-      actionClick = () => switchSelected(id);
-    } else if (!onLane) {
-      actionLabel =
-        id === "beta" ? t("channel.useBeta") : t("channel.useStable");
-      actionKind = "primary";
-      actionClick = () => changeChannel(id);
-    } else if (canApplyUpdate && lane.hasUpdate) {
-      actionLabel = t("btn.doUpdate");
-      actionKind = "primary";
-      actionClick = () => doUpdate(id);
-    }
-    if (thisJob) {
-      if (thisJob.kind === "check") actionLabel = t("btn.checkUpdate.busy");
-      else if (thisJob.kind === "done") actionLabel = t("btn.doUpdate.busy");
-      else actionLabel = t("update.switching");
-    }
-    return h(
-      "div",
-      {
-        className: "dshpp-edition" + (onLane ? " is-on" : ""),
-        "aria-label": t("channel." + id),
-      },
-      h(
-        "span",
-        { className: "dshpp-edition-name" },
-        t("channel." + id),
-        onLane
-          ? h("em", { className: "dshpp-now-mark" }, t("update.current"))
-          : null,
-      ),
-      h(
-        "select",
-        {
-          className: "dshpp-field dshpp-ver",
-          value: list.length ? (hit && hit.ref) || "" : "",
-          disabled: updateBusy || !list.length,
-          onChange: (e) =>
-            setPick((prev) =>
-              Object.assign({}, prev, { [id]: e.target.value }),
-            ),
-          "aria-label": t("update.pick"),
-        },
-        list.length
-          ? list.map((item) =>
-              h(
-                "option",
-                {
-                  key: item.ref + (item.sha || ""),
-                  value: item.ref,
-                },
-                versionChoiceLabel(item, t),
-              ),
-            )
-          : h(
-              "option",
-              { value: "" },
-              noBeta ? t("update.noBeta") : t("update.pick"),
-            ),
-      ),
-      h(
-        Btn,
-        {
-          tiny: true,
-          kind: actionKind,
-          disabled: actionDisabled,
-          onClick: actionClick,
-        },
-        actionLabel,
-      ),
-    );
-  };
   return h(
     "section",
     { className: "dshpp-panel", "aria-label": t("purge.title") },
@@ -914,29 +584,6 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
           "装好插件、更新过 DSH、或发现模型又开始推脱时：点一次「应用」，然后退出并重开 DSH，就会恢复。",
         ),
         noticeNode(notice),
-      ),
-      h(
-        "div",
-        { className: "dshpp-rel" },
-        h(
-          "div",
-          { className: "dshpp-now" },
-          h("span", { className: "dshpp-now-label" }, t("channel.local")),
-          h(
-            "b",
-            { className: "dshpp-now-ver" },
-            localVer ? "v" + localVer : "—",
-          ),
-          h("em", { className: "dshpp-now-mark" }, t("update.current")),
-        ),
-        h(
-          "details",
-          { className: "dshpp-editions" },
-          h("summary", null, "版本管理"),
-          renderEdition("stable"),
-          renderEdition("beta"),
-        ),
-        noticeNode(updateNotice),
       ),
       h(
         "details",

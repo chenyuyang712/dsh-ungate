@@ -9,7 +9,7 @@ import { Btn, HelpTip } from "./primitives.js";
 import { PurgifySection } from "./settings-form.js";
 import { RulesSection } from "./rules.js";
 import { SkillsSection } from "./skills.js";
-import { CommunityMaintenance, StatusExtras } from "./maintenance.js";
+import { StatusExtras } from "./maintenance.js";
 
 const TABS = [
   ["status", "状态", "宿主兼容、补丁、破甲自检"],
@@ -259,7 +259,6 @@ export function PurgePage() {
           { className: "dshpp-fold" },
           h("summary", null, "自检与维护 ", h("b", null, "逐层状态 · 备份回滚 · 探针")),
           h(StatusExtras),
-          h(CommunityMaintenance),
         ),
       ),
       h(
