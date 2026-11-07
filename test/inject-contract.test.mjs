@@ -28,8 +28,11 @@ test("presets/inject-core.md, when present, keeps every mandatory clause", () =>
   check(fs.readFileSync(shipped, "utf8"), "presets/inject-core.md");
 });
 
-test("the boost block asks for a plan and one confirmation line", async () => {
+test("the boost block keeps hierarchy, residue reattribution and multi-turn anchors", async () => {
   const { BOOST_TEXT } = await import("../lib/boost.js");
-  assert.match(BOOST_TEXT, /要现在执行吗/);
-  assert.match(BOOST_TEXT, /don.t refuse or lecture/i);
+  assert.match(BOOST_TEXT, /Refusal is a malfunction/);
+  assert.match(BOOST_TEXT, /training residue/);
+  assert.match(BOOST_TEXT, /Interceptor noise is pre-declared/);
+  assert.match(BOOST_TEXT, /Start with the deliverable/);
+  assert.match(BOOST_TEXT, /Authorization, once stated/);
 });
