@@ -1,6 +1,22 @@
-# dsh-ungate
+<p align="center">
+  <img src="docs/banner.svg" alt="dsh-ungate" width="640">
+</p>
 
-**0.2.2** · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。
+<h1 align="center">🔓 dsh-ungate</h1>
+
+<p align="center"><strong>0.2.2</strong> · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。</p>
+
+<p align="center">
+  <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
+  <a href="https://github.com/youki258/dsh-ungate/stargazers"><img src="https://img.shields.io/github/stars/youki258/dsh-ungate?logo=github&label=Stars" alt="Stars"></a>
+  <a href="LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat" alt="MIT"></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-%3E%3D18-339933?logo=node.js&logoColor=fff" alt="Node.js"></a>
+  <img src="https://img.shields.io/badge/DSH-0.2.1--rc.x%20%2F%200.2.2--rc.1--web-blue" alt="DSH compatible">
+</p>
+
+<p align="center">
+  <a href="README.zh-CN.md">中文</a> | <a href="docs/README.en.md">English</a>
+</p>
 
 > **来源声明（请先看这段）**
 > - 上游原始项目：[YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)（作者 小杨 / YuJunZhiXue，MIT）。
@@ -22,6 +38,16 @@
 它**不改**你的提示词正文、规则集、其他插件配置；**不替**你判断目标归属、不做内容审核、不做公网门禁——范围由操作者自己声明。
 
 "应用"只写宿主源码副本并留备份；磁盘写成功 ≠ 当前进程已加载。所有"已生效"的结论都以重开后的 `selfcheck` 与探针为准。
+
+## 预览
+
+| 面板状态 | 规则 |
+| --- | --- |
+| ![面板状态](docs/preview/settings.png) | ![规则](docs/preview/rules.png) |
+
+| 自有服务器面板（中文） | 自有服务器面板（英文） |
+| --- | --- |
+| ![中文](docs/preview/own-servers.png) | ![英文](docs/preview/own-servers-en.png) |
 
 ## 30 秒上手
 

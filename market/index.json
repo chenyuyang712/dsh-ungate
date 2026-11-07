@@ -1,0 +1,30 @@
+{
+  "name": "dsh-ungate",
+  "title": {
+    "en": "Ungate",
+    "zh": "Ungate 破甲"
+  },
+  "description": {
+    "en": "Subtraction-only DSH distribution: removes approval prompts, sandbox denials, write-intent gates and the model's own refusal habits; 27 host patches, 20-layer selfcheck, probe-verifiable prompt injection.",
+    "zh": "只做减法的 DSH 发行版：拆掉审批弹窗、沙箱拒绝、写意图拦截与模型推脱倾向；27 条宿主补丁、20 层自检、探针可证的提示词注入。"
+  },
+  "author": "youki258",
+  "homepage": "https://github.com/youki258/dsh-ungate#readme",
+  "repository": {
+    "url": "https://github.com/youki258/dsh-ungate"
+  },
+  "versions": [
+    {
+      "version": "0.2.2",
+      "publishTimestamp": 1794050400,
+      "source": {
+        "type": "git",
+        "url": "https://github.com/youki258/dsh-ungate",
+        "commit": "a727865c6413c64e417bb91df329cc36d087dbae"
+      },
+      "engines": {
+        "dsh": ">=0.2.1-rc.1 <0.3.0 || >=0.2.2-rc.1 <0.3.0"
+      }
+    }
+  ]
+}

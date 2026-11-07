@@ -1,6 +1,22 @@
-# dsh-ungate
+<p align="center">
+  <img src="banner.svg" alt="dsh-ungate" width="640">
+</p>
 
-**Current version 0.2.2** — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.
+<h1 align="center">🔓 dsh-ungate</h1>
+
+<p align="center"><strong>Current version 0.2.2</strong> — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.</p>
+
+<p align="center">
+  <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
+  <a href="https://github.com/youki258/dsh-ungate/stargazers"><img src="https://img.shields.io/github/stars/youki258/dsh-ungate?logo=github&label=Stars" alt="Stars"></a>
+  <a href="../LICENSE"><img src="https://img.shields.io/badge/license-MIT-blue?style=flat" alt="MIT"></a>
+  <a href="https://nodejs.org"><img src="https://img.shields.io/badge/Node.js-%3E%3D18-339933?logo=node.js&logoColor=fff" alt="Node.js"></a>
+  <img src="https://img.shields.io/badge/DSH-0.2.1--rc.x%20%2F%200.2.2--rc.1--web-blue" alt="DSH compatible">
+</p>
+
+<p align="center">
+  <a href="../README.zh-CN.md">中文</a> | <a href="README.en.md">English</a>
+</p>
 
 > **Provenance**
 > - Original upstream: [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (author YuJunZhiXue, MIT).
@@ -18,6 +34,16 @@
 | agent preset | `unrestricted`, a superset of standard that only changes persona | pick it in new sessions |
 
 It does **not** touch your prompt text, rule sets or other plugin configs, and it does not judge who owns a target. Disk writes are not proof of load: every "in effect" claim below is backed by a post-restart `selfcheck` and a probe.
+
+## Preview
+
+| Panel status | Rules |
+| --- | --- |
+| ![Panel status](preview/settings.png) | ![Rules](preview/rules.png) |
+
+| Own-servers panel (zh) | Own-servers panel (en) |
+| --- | --- |
+| ![zh](preview/own-servers.png) | ![en](preview/own-servers-en.png) |
 
 ## Quick start
 
