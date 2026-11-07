@@ -1,7 +1,7 @@
 # AGENTS.md — 给 AI agent 的 Ungate 使用说明书
 
 > 写给**在 DSH 里干活的 agent**，不是营销文档。
-> 当前版本：**0.2.2** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
+> 当前版本：**0.2.3** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
 > 版本号与兼容声明由 `pnpm run check:docs` 对照 `package.json` 校验。
 
 ---
@@ -114,7 +114,7 @@ purge probe new
 
 | 组件 | 值 |
 | --- | --- |
-| 插件 | `dsh-ungate` 0.2.2 |
+| 插件 | `dsh-ungate` 0.2.3 |
 | 已验证宿主 | DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5 |
 | 已验证宿主（限定 web / npm CLI 面） | DSH Desktop 0.2.2-rc.1：apply 20 + selfcheck 19/19 适用层；桌面换包/关窗组不适用 |
 | 未验证 | 0.2.1-rc.4、0.2.2-alpha.2（selfcheck 标未验证，不猜） |
@@ -160,4 +160,4 @@ pnpm run test:ui
 
 - 发版必须同步：本文件首部版本行、§9 表格、`package.json` 的 `version` / `dshReleases` / `dshTarget`、`release-notes.md` 首行。
 - `check:docs` 还会拦截：上游 1.6.x 残留、已删除功能（渗透工具面、历史调试入口、hooks 拦截旁路）的死引用、没有实测支撑的 `DSH Desktop x.y.z` 声明、发行包链接版本不一致。
-- 上游历史资料只在 `docs/upstream/`；当前文档以本文件为准，与 README 冲突时先改 README 再改这里。
+- 上游历史资料归档已随 0.2.3 清理移除；当前文档以本文件为准，与 README 冲突时先改 README 再改这里。

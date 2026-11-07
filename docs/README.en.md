@@ -4,7 +4,7 @@
 
 <h1 align="center">🔓 dsh-ungate</h1>
 
-<p align="center"><strong>Current version 0.2.2</strong> — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.</p>
+<p align="center"><strong>Current version 0.2.3</strong> — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -42,13 +42,13 @@ Pick any one entry point; the activation steps afterwards are identical (apply �
 **Option 1: official CLI + pinned-version tgz (recommended)**
 
 ```sh
-dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.2/dsh-ungate-0.2.2.tgz
+dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.3/dsh-ungate-0.2.3.tgz
 ```
 
 **Option 2: npm package**
 
 ```sh
-dsh plugin --profile web add dsh-ungate@0.2.2
+dsh plugin --profile web add dsh-ungate@0.2.3
 ```
 
 **Option 3: community bootstrap installer** (backup migration; review with `--dry-run` first)

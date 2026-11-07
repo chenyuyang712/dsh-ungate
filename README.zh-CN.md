@@ -4,7 +4,7 @@
 
 <h1 align="center">🔓 dsh-ungate</h1>
 
-<p align="center"><strong>0.2.2</strong> · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。</p>
+<p align="center"><strong>0.2.3</strong> · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -46,13 +46,13 @@
 **方式一：官方 CLI + 固定版本 tgz（推荐）**
 
 ```sh
-dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.2/dsh-ungate-0.2.2.tgz
+dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.3/dsh-ungate-0.2.3.tgz
 ```
 
 **方式二：npm 包**（发布到 npm registry 的同名包）
 
 ```sh
-dsh plugin --profile web add dsh-ungate@0.2.2
+dsh plugin --profile web add dsh-ungate@0.2.3
 ```
 
 **方式三：社区引导安装器**（备份迁移、旧包换装；先 `--dry-run` 审阅再执行）

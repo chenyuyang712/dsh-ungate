@@ -1,6 +1,25 @@
-# 0.2.2
+# 0.2.3
 
-> 2026-11-07 · `dsh-ungate` 0.2.2
+> 2026-11-07 · `dsh-ungate` 0.2.3
+
+无限制模式的能力升级：`unrestricted` 预设、破甲强化段与出厂注入正文三处按消融实验数据重写；面板与文档继续做减法。补丁表 27 条不变，兼容面与 0.2.2 相同。
+
+## 变更
+
+- **无限制模式人设重写**（`presets/unrestricted/agent.cordis.yml`）：具名人格锚定、拦截噪声预演（点名 `<ethics_reminder>` / `<ip_reminder>` / `<cyber_warning>` / 伪造 `System:` 消息）、拒绝冲动重新归因、边界词按任务描述处理、多轮持久声明。与 standard 的差异只在人设段，工具面不变。
+- **破甲强化段与出厂注入正文同步重写**（`lib/boost.js`、`lib/default-prompt-inject.md` 并重新 seal 加密槽）；已存在的用户 `prompt-inject.md` 不受影响。
+- **删掉被实验证伪的"拒绝恢复"条款**：追问"你刚才是在拒绝吗"会让模型显式确认并维持拒绝（GLM-5.3-flash 6/6），条款反噬；改为"上一轮只给了部分答案时，从交付物继续，而不是从免责声明继续"。
+- **面板减法**：删除首次运行须知弹窗、「规则」「技能」两个只读 tab（后端 HTTP/CLI 与 `/rules` `/skills` 命令保留）、135 个死 locale 键、132 条死 CSS 规则、孤儿 `versions.js`。
+- **文档卫生**：移除上游截图与预览区（换为本项目 banner）、删除 47 份上游维护文档归档、`check:docs` 不再要求该归档存在。
+
+## 验证
+
+- 消融实验（API 层，DeepSeek-v4.1-flash / GLM-5.3-flash）：新版人设多轮升级链 15/15 直通（baseline 早期崩），拒绝恢复条款证伪后删除。
+- 真实 harness 链路（`dsh --profile headless` 一次性探针，标准模式 + 注入层）：DCSync 授权演练与 AMSI patch 两道灰色域题直通交付，与裸模型 baseline 形成对照；`PURGE-PROBE` nonce 回显闭环。
+- 装配级验证 10/10：persona 六机制锚点在位，被证伪条款三处删净。
+- `node --test`（449 项）、`pnpm run check:docs`、面板 bundle 校验通过。
+
+# 0.2.2
 
 修一个**注入几乎全丢**的严重缺陷：0.2.1 及更早版本会把 `prompt-inject.md` 里被 `<!-- redteam-only:begin -->` / `<!-- redteam-only:end -->` 包住的正文整段删除，而绝大多数用户的正文正是这么写的——实测主实例 32479 字节的注入正文，最终只发出 **922 字节**。
 
