@@ -22,6 +22,8 @@
     "bin",
     "docs",
     "!docs/upstream",
+    "!docs/redteam-upstream-DISCLOSURE",
+    "!docs/redteam-upstream-LICENSE",
     "presets",
     "skills",
     "scripts",
