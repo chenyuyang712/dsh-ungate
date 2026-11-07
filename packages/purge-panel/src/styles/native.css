@@ -94,8 +94,6 @@
     .dshpp-title,
     .dshpp-group-h strong,
     .dshpp-metric b,
-    .dshpp-now-ver,
-    .dshpp-edition-name
   ) {
   font-family: inherit;
   font-size: 1em;
@@ -176,25 +174,11 @@
 .dshpp-native .dshpp-metric span {
   font-size: 0.85em;
 }
-.dshpp-native .dshpp-editions {
-  margin: 10px 0;
-  border: 0;
-}
 .dshpp-native summary {
   cursor: pointer;
   color: var(--dshpp-mute);
   padding: 8px 0;
   font-size: 0.9em;
-}
-.dshpp-native .dshpp-edition {
-  grid-template-columns: 1fr auto;
-  gap: 8px;
-}
-.dshpp-native .dshpp-edition-name {
-  grid-column: 1/-1;
-}
-.dshpp-native .dshpp-edition .dshpp-btn {
-  min-width: 0;
 }
 .dshpp-native .dshpp-table {
   table-layout: fixed;
