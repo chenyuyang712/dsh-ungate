@@ -14,17 +14,7 @@ export function useT() {
 
 export const zh = {
   nav: "规则设定",
-  "envGate.title": "环境还没配好",
-  "envGate.lead":
-    "红队模式发送前需要本机工具。未检测到可用环境时，先去环境适配，或确认暂不配置。",
-  "envGate.kaliHint":
-    "检测到 Kali 时会直接用本机工具，不必填路径。没有 Kali 时，在环境适配里填写各工具路径，或选一个整包文件夹自动分配。",
-  "envGate.skip": "暂不配置",
-  "envGate.skipConfirm":
-    "确认后这次可以继续对话。扫描和利用类技能仍会因为缺少工具而不可用，之后可以在 dsh-purge → 环境适配里补路径。",
-  "envGate.skipNo": "返回",
-  "envGate.skipYes": "确认暂不配置",
-  "envGate.go": "去环境适配",
+
   "compat.host":
     "dsh-purge Community {version} · 宿主 DSH {host} · 兼容级别：{level}",
   "compat.loading": "正在读取宿主版本…",
@@ -34,9 +24,7 @@ export const zh = {
   "compat.level.mixed": "组件版本不一致",
   "compat.level.no-host": "未定位宿主",
   "compat.level.unknown": "未知",
-  "theme.aria": "外观",
-  "theme.white": "白",
-  "theme.ink": "墨",
+
   "purge.title": "补丁",
   "override.title": "提示词",
   "own.title": "自己的服务器",
@@ -45,24 +33,18 @@ export const zh = {
   "own.save": "保存名单",
   "saved.own": "已保存自己的服务器",
   "saved.own.dropped": "已保存。有 {n} 行不是单个 IP 或主机名，已丢掉",
-  "metric.purged": "已写入",
-  "metric.purged.skip": "已写入。跳过 {n} 项，本机没有这些文件",
+
   "metric.pendingShort": "待处理 {n}",
   "metric.unmatchedShort": "没对上 {n}",
   "metric.partialShort": "部分命中 {n}",
   "metric.driftedShort": "锚点漂移 {n}",
   "metric.disabledShort": "可选关闭 {n}",
   "metric.skipShort": "跳过 {n}",
-  "metric.unlocated.count": "—",
-  "metric.shim": "shim",
-  "metric.shim.na": "本端不需要",
-  "metric.bak.yes": "有备份",
-  "metric.bak.no": "无备份",
-  "metric.bak.hint": "备份",
+
   "table.patch": "项目",
   "table.status": "状态",
   "status.applied": "已应用",
-  "status.off": "已关闭",
+
   "status.pending": "待应用",
   "status.unmatched": "没对上",
   "status.partial": "部分命中",
@@ -74,9 +56,7 @@ export const zh = {
     "点应用会打补丁并把当前默认提示词挂上，框里仍是插件旧默认时自动刷到加密槽，不必再点保存。只有你另写的稿才会按框落盘。待应用=原文还在。跳过=当前版本不需要或组件未安装。",
   "warn.noRoot":
     "未定位到当前宿主的 @deepseek-ai，清洗不会生效。请完全退出后再打开本宿主，在本页点「应用」。桌面端安装目录可以是任意盘符；目录名带 DeepseekHarness / DeepSeek Harness 均可。",
-  "warn.noRoot.desktop":
-    "官方客户端的代码在 app.asar 里。点「应用」会解开并自动重启，不用另跑脚本。若一直显示还没定位，先完全退出客户端再开，再点「应用」。第三方 DSH Desktop 直接点「应用」。",
-  "unpack.restarting": "补丁已写入。点「重启」后客户端会自己重新打开。",
+
   "restart.fullQuit": "正在重启，客户端会自己重新打开。",
   "warn.noInject":
     "官方始终用默认提示词。红队开了规则集就只用规则集；没开时用去掉 CTF 的默认提示词，再接红队操作。两边都空会提示必须添加。",
@@ -102,111 +82,34 @@ export const zh = {
   "uninstall.cancel": "取消",
   "uninstall.applying": "正在卸载并还原…",
   "uninstall.done": "已卸载并还原，正在重启…",
-  "uninstall.done.desktop": "已卸载并还原，正在重启桌面应用…",
+
   "uninstall.fail": "卸载失败: {error}",
-  "btn.checkUpdate": "检测更新",
-  "btn.checkUpdate.busy": "检测中…",
-  "btn.doUpdate": "更新",
-  "btn.doUpdate.busy": "更新中…",
-  "channel.title": "通道",
-  "channel.stable": "正式版",
-  "channel.beta": "测试版",
-  "channel.useStable": "切换到正式版",
-  "channel.useBeta": "切换到测试版",
-  "channel.local": "本机",
-  "update.checking": "正在检测更新…",
-  "update.applying": "正在更新…",
-  "update.switching": "正在切换版本…",
-  "update.latest": "已是最新（{version}）",
-  "update.available": "有新版本 {remote}，当前 {local}",
-  "update.pinned": "已固定在 {version}，通道最新是 {remote}",
-  "update.done": "已更新到 {version}",
-  "update.restarting": "已还原并写入新补丁，正在重启…",
-  "update.fullQuit": "补丁已写入。点「重启」后客户端会自己重新打开。",
+
   "restart.official.title": "需要重启",
   "restart.official.body": "补丁已写入。点重启后客户端会自己重新打开。",
-  "update.switched": "已切换到 {version}",
-  "update.autoDone": "已自动更新到 {version}",
-  "update.reloading": "正在刷新设置页…",
-  "update.dirty": "有新版本，本地有改动未自动覆盖",
-  "update.fail": "更新失败: {error}",
-  "update.timeout": "检测超时，请再点一次检测更新",
-  "update.needRestart": "检测接口未加载，请先重启 dsh 再点检测更新",
-  "update.noBeta": "还没有测试版",
-  "update.switch": "切换到此版本",
-  "update.pick": "选择版本",
+
   "update.tip": "最新",
   "update.current": "当前",
-  "update.confirmSwitch":
-    "切换到 {version}？之后可再切回另一通道或其它版本。本地未提交的插件改动不会保留。",
-  "update.confirmChannel":
-    "切换到{version}？会按该通道重新安装插件，本地未提交的插件改动不会保留。",
-  "metric.version": "版本",
+
+
   "action.apply": "应用",
   "action.revert": "还原",
-  "action.uninstall": "卸载",
+
   "ok.done": "已完成",
   "err.action": "失败: {error}",
   "err.status": "读取失败: {error}",
   "err.override": "读取失败: {error}",
-  "err.rules": "读取失败: {error}",
-  "err.read": "读取失败: {error}",
+
   "err.save": "保存失败: {error}",
   "btn.saveInject": "保存",
   "saved.override": "已保存",
 
 
 
-  "policy.title": "工作区策略",
-  "policy.strict": "严格",
-  "policy.fallback": "空位兜底",
-  "policy.always": "总是允许",
-  "policy.hint":
-    "严格：永远剥 AGENTS.md / CLAUDE.md；空位兜底：提示词框为空时才用；总是允许：保留 DSH 原生行为",
-  "cwd.title": "本地规则（当前目录）",
-  "cwd.empty": "当前目录没有 AGENTS.md / CLAUDE.md",
-  "cwd.rescan": "重新扫描",
-  "cwd.hint":
-    "只有提示词框为空时，被勾选的本地文件才作为兜底注入；提示词框一旦非空就不会用这些文件。",
-  "cwd.scope.cwd": "当前目录",
-  "cwd.scope.ancestor": "上级",
-  "cwd.scope.root": "项目根",
-  "cwd.no.workspace": "DSH 尚未选过工作目录，请先在 DSH 里开始一次任务再回来。",
-  "pill.current": "当前",
-  "btn.use": "启用",
-  "btn.inUse": "当前",
-  "confirm.delete": "删除 {id}？",
-  "ph.id": "id",
-  "ph.alias": "名称",
-  "ph.alias.short": "名称",
-  "btn.create": "新建",
-  "need.id": "需要 id",
-  "ph.content": "",
-  "btn.saveRule": "保存",
 
 
-
-  "btn.importZip": "导入压缩包",
-  "btn.importFolder": "导入文件夹",
-
-  "saved.import": "已导入 {count} 个 Skill",
-  "need.import": "请选择压缩包或文件夹",
-  "err.import.folder":
-    "没读到文件夹里的文件，请直接选 Skill 目录（里面要有 SKILL.md）",
-
-
-
-  "ph.skill.desc": "description（何时用）",
-  "btn.saveSkill": "保存",
-  "need.skill.id": "id 必须是 kebab-case，例如 code-review",
-  "confirm.delete.skill":
-    "从官方 $DSH_HOME/skills 删除 {id}？宿主会自动从目录拿掉。",
-  "err.skills": "读取失败: {error}",
-  "err.skills.needRestart": "Skill 接口未加载，请先重启当前宿主",
-  "btn.restart": "重启",
-  "btn.restart.busy": "重启中…",
   restarting: "重启中…",
-  "restarting.desktop": "正在重启桌面应用…",
+
   "restart.timeout": "超时，请刷新",
   "restart.fail": "失败: {error}",
   "restart.notStarted": "重启没有开始，客户端还在。不会自动再试。",
@@ -320,71 +223,22 @@ export const zh = {
   "patch.84": "host code=0 正常退出不报错 (消除 stopped 对话框)",
   "status.unlocated": "未定位",
   "status.na": "本端不需要",
-  "metric.unlocated": "还没定位到本机 Harness",
-  "metric.sealed": "已找到官方客户端，点应用解开",
-  "metric.sealed.count": "待解开",
-  "metric.lost": "补丁已丢失，请重新应用",
-  "metric.lost.count": "已丢失",
+
   "rewind.label": "回退",
   "rewind.aria": "回退",
   "rewind.busy": "回退中…",
-  "rewind.empty": "没有可回退的上一句",
+
   "rewind.fail": "回退失败: {error}",
   "rewind.once": "回退一次",
   "rewind.once.hint": "把这一轮发出去的那句放回输入框，并清掉这一轮",
   "rewind.round": "回退上一轮",
   "rewind.round.hint": "把这一轮发出去的那句放回输入框；子代理也只撤这一轮",
-  "continue.title": "失败重试 / 继续",
-  "continue.hint":
-    "请求失败会自动重试；异常停止或中断可点「继续」或自动续跑。自己点停止不会自动继续。次数用完后需新开一轮。",
-  "continue.autoRetry": "失败自动重试",
-  "continue.retryMax": "重试次数",
-  "continue.autoContinue": "中断后自动继续",
-  "continue.continueMax": "继续次数",
-  "continue.text": "继续用语",
-  "saved.continue": "已保存",
-  "continue.label": "继续",
-  "continue.aria": "异常停止后继续",
-  "continue.busy": "继续中…",
-  "continue.ready": "继续（还可 {left} 次）",
-  "continue.limit": "已达继续上限",
-  "continue.fail": "继续失败: {error}",
-  "updch.open": "更新通道",
-  "updch.title": "更新通道：代理与 GitHub 密钥",
-  "updch.scope":
-    "这里的代理与密钥只作用于本插件的更新检查与下载通道，不影响其它模型厂商的请求，也不写入宿主进程环境。留空继承已有更新代理环境。",
-  "updch.proxy": "代理地址",
-  "updch.proxy.ph": "socks5://127.0.0.1:60808",
-  "updch.proxy.hint":
-    "支持 http:// / https:// / socks5:// 前缀，例如 http://127.0.0.1:7890。留空继承已有更新代理环境。",
-  "updch.token": "GitHub 密钥",
-  "updch.token.ph": "可选：提高 GitHub API 额度，留空则不修改",
-  "updch.token.set": "本机已配置密钥。输入框始终为空，留空保存表示保持不变。",
-  "updch.token.unset": "本机尚未配置密钥。留空表示不配置。",
-  "updch.token.clear": "清除已保存的密钥",
-  "updch.save": "保存",
-  "updch.saving": "保存中…",
-  "updch.cancel": "取消",
-  "updch.saved": "更新通道已保存，下一次检查更新即生效。",
-  "updch.state.proxy": "更新通道代理：",
-  "updch.state.direct": "更新通道：继承环境或系统代理",
-  "updch.state.token.on": "GitHub 密钥已配置",
-  "updch.state.token.off": "未配置 GitHub 密钥",
+
 };
 
 export const en = {
   nav: "Rules",
-  "envGate.title": "Environment is not ready",
-  "envGate.lead":
-    "Red team mode needs local tools before you send. If none are available, open Env adapt or confirm you will continue without them.",
-  "envGate.kaliHint":
-    "When Kali is detected, local tools are used directly and paths are optional. Otherwise set each tool path in Env adapt, or pick one toolkit folder to assign them.",
-  "envGate.skip": "Skip for now",
-  "envGate.skipConfirm":
-    "You can keep chatting after this. Scan and exploit skills stay unavailable until the tools are installed. You can add paths later under dsh-purge → Env adapt.",
-  "envGate.skipNo": "Back",
-  "envGate.skipYes": "Continue without tools",
-  "envGate.go": "Open Env adapt",
+
   "compat.host":
     "dsh-purge Community {version} · host DSH {host} · compatibility: {level}",
   "compat.loading": "Reading the host version…",
@@ -394,9 +248,7 @@ export const en = {
   "compat.level.mixed": "mixed component versions",
   "compat.level.no-host": "host not located",
   "compat.level.unknown": "unknown",
-  "theme.aria": "Appearance",
-  "theme.white": "Light",
-  "theme.ink": "Ink",
+
   "purge.title": "Patches",
   "override.title": "Prompt",
   "own.title": "Own servers",
@@ -406,25 +258,18 @@ export const en = {
   "saved.own": "Own servers saved",
   "saved.own.dropped":
     "Saved. {n} lines were not a single IP or hostname and were dropped",
-  "metric.purged": "Written",
-  "metric.purged.skip":
-    "Written. Skipped {n}; those files are not on this install",
+
   "metric.pendingShort": "Pending {n}",
   "metric.unmatchedShort": "No match {n}",
   "metric.partialShort": "Partial {n}",
   "metric.driftedShort": "Drifted {n}",
   "metric.disabledShort": "Opt-in off {n}",
   "metric.skipShort": "Skipped {n}",
-  "metric.unlocated.count": "—",
-  "metric.shim": "shim",
-  "metric.shim.na": "Not needed here",
-  "metric.bak.yes": "Backup",
-  "metric.bak.no": "No backup",
-  "metric.bak.hint": "Backup",
+
   "table.patch": "Item",
   "table.status": "Status",
   "status.applied": "Applied",
-  "status.off": "Off",
+
   "status.pending": "Pending",
   "status.unmatched": "No match",
   "status.partial": "Partial",
@@ -436,10 +281,7 @@ export const en = {
     "Apply writes patches and hangs the current default prompt. A stale plugin default in the box is refreshed from the sealed slot; a separate save is unnecessary. Only a prompt you wrote yourself is kept from the box. Pending = original text still present. Skipped = not needed for this version or the component is not installed.",
   "warn.noRoot":
     "Could not find this host’s @deepseek-ai tree, so Apply will not patch anything. Fully quit and reopen this host, then Apply here. Desktop may live on any drive; folder names like DeepseekHarnessDesktop or DeepSeek Harness are fine.",
-  "warn.noRoot.desktop":
-    "Official Harness keeps its code in app.asar. Apply unpacks it and restarts the app. If this page stays “not found”, fully quit the client, reopen it, then Apply again. Third-party DSH Desktop: just Apply.",
-  "unpack.restarting":
-    "Patches are written. Click Restart and the client opens again by itself.",
+
   "restart.fullQuit": "Restarting. The client will open again by itself.",
   "warn.noInject":
     "Official mode always uses the default prompt. Red team uses only the active rule set; otherwise it uses the default prompt without the CTF section, then the red team steps. If both are empty you will be asked to add a prompt.",
@@ -465,117 +307,35 @@ export const en = {
   "uninstall.cancel": "Cancel",
   "uninstall.applying": "Uninstalling and restoring…",
   "uninstall.done": "Uninstalled and restored. Restarting…",
-  "uninstall.done.desktop":
-    "Uninstalled and restored. Restarting the desktop app…",
+
   "uninstall.fail": "Uninstall failed: {error}",
-  "btn.checkUpdate": "Check update",
-  "btn.checkUpdate.busy": "Checking…",
-  "btn.doUpdate": "Update",
-  "btn.doUpdate.busy": "Updating…",
-  "channel.title": "Channel",
-  "channel.stable": "Stable",
-  "channel.beta": "Beta",
-  "channel.useStable": "Switch to stable",
-  "channel.useBeta": "Switch to beta",
-  "channel.local": "This copy",
-  "update.checking": "Checking for updates…",
-  "update.applying": "Updating…",
-  "update.switching": "Switching version…",
-  "update.latest": "Up to date ({version})",
-  "update.available": "Update {remote} available (now {local})",
-  "update.pinned": "Pinned at {version}; channel latest is {remote}",
-  "update.done": "Updated to {version}.",
-  "update.restarting":
-    "Restored the old patches, wrote the new ones, and restarting…",
-  "update.fullQuit":
-    "Patches are written. Click Restart and the client opens again by itself.",
+
   "restart.official.title": "Restart required",
   "restart.official.body":
     "Patches are written. Click Restart and the client opens again by itself.",
-  "update.switched": "Switched to {version}.",
-  "update.autoDone": "Auto-updated to {version}.",
-  "update.reloading": "Refreshing settings…",
-  "update.dirty": "Update available; local edits were not overwritten.",
-  "update.fail": "Update failed: {error}",
-  "update.timeout": "Check timed out. Click Check update again.",
-  "update.needRestart":
-    "Update API is not loaded. Restart dsh, then check again.",
-  "update.noBeta": "No beta build yet",
-  "update.switch": "Switch to this version",
-  "update.pick": "Select version",
+
   "update.tip": "latest",
   "update.current": "current",
-  "update.confirmSwitch":
-    "Switch to {version}? You can switch back later. Uncommitted plugin edits will not be kept.",
-  "update.confirmChannel":
-    "Switch to {version}? The plugin will be reinstalled from that channel. Uncommitted plugin edits will not be kept.",
-  "metric.version": "Version",
+
+
   "action.apply": "Apply",
   "action.revert": "Restore",
-  "action.uninstall": "Uninstall",
+
   "ok.done": "Done",
   "err.action": "Failed: {error}",
   "err.status": "Read failed: {error}",
   "err.override": "Read failed: {error}",
-  "err.rules": "Read failed: {error}",
-  "err.read": "Read failed: {error}",
+
   "err.save": "Save failed: {error}",
   "btn.saveInject": "Save",
   "saved.override": "Saved",
 
 
 
-  "policy.title": "Workspace policy",
-  "policy.strict": "Strict",
-  "policy.fallback": "Fallback",
-  "policy.always": "Always on",
-  "policy.hint":
-    "Strict: always strip AGENTS.md / CLAUDE.md. Fallback: use workspace files only when the prompt box is empty. Always on: keep DSH default behavior.",
-  "cwd.title": "Local rules (current folder)",
-  "cwd.empty": "No AGENTS.md / CLAUDE.md in this folder",
-  "cwd.rescan": "Rescan",
-  "cwd.hint":
-    "Checked files are injected only when the prompt box is empty. A non-empty prompt box always wins.",
-  "cwd.scope.cwd": "cwd",
-  "cwd.scope.ancestor": "ancestor",
-  "cwd.scope.root": "project root",
-  "cwd.no.workspace":
-    "DSH has not opened a workspace yet. Start a task in DSH first, then come back.",
-  "pill.current": "On",
-  "btn.use": "Enable",
-  "btn.inUse": "On",
-  "confirm.delete": "Delete {id}?",
-  "ph.id": "id",
-  "ph.alias": "Name",
-  "ph.alias.short": "Name",
-  "btn.create": "New",
-  "need.id": "id required",
-  "ph.content": "",
-  "btn.saveRule": "Save",
 
 
-
-  "btn.importZip": "Import zip",
-  "btn.importFolder": "Import folder",
-
-  "saved.import": "Imported {count} skill(s)",
-  "need.import": "Choose a zip or folder",
-  "err.import.folder":
-    "No files were read. Select the skill folder itself (it must contain SKILL.md).",
-
-
-
-  "ph.skill.desc": "description (when to use)",
-  "btn.saveSkill": "Save",
-  "need.skill.id": "id must be kebab-case, e.g. code-review",
-  "confirm.delete.skill":
-    "Delete {id} from official $DSH_HOME/skills? The host will drop it from the catalog.",
-  "err.skills": "Read failed: {error}",
-  "err.skills.needRestart": "Skill API is not loaded. Restart this host first.",
-  "btn.restart": "Restart",
-  "btn.restart.busy": "Restarting…",
   restarting: "Restarting…",
-  "restarting.desktop": "Restarting the desktop app…",
+
   "restart.timeout": "Timed out; refresh",
   "restart.fail": "Failed: {error}",
   "restart.notStarted":
@@ -696,16 +456,13 @@ export const en = {
   "patch.83": "Don't fail on signal kill (no crash dialog)",
   "patch.84": "Don't fail on code=0 clean exit (no stopped dialog)",
   "status.na": "Not for this host",
-  "metric.sealed": "Official client found. Apply to unpack",
-  "metric.sealed.count": "Sealed",
-  "metric.lost": "Patches lost — Apply again",
-  "metric.lost.count": "Lost",
+
   "status.unlocated": "Not located",
-  "metric.unlocated": "This install was not found yet",
+
   "rewind.label": "Undo",
   "rewind.aria": "Undo",
   "rewind.busy": "Undoing…",
-  "rewind.empty": "Nothing to undo",
+
   "rewind.fail": "Undo failed: {error}",
   "rewind.once": "Undo once",
   "rewind.once.hint":
@@ -713,44 +470,5 @@ export const en = {
   "rewind.round": "Undo last round",
   "rewind.round.hint":
     "Put this round's message back in the box; subagents drop only this round",
-  "continue.title": "Retry / Continue",
-  "continue.hint":
-    "Failed requests auto-retry. After an abnormal stop or interrupt, use Continue or auto-resume. A manual stop never auto-continues. Counts reset after a completed turn.",
-  "continue.autoRetry": "Auto-retry on failure",
-  "continue.retryMax": "Retry count",
-  "continue.autoContinue": "Auto-continue after interrupt",
-  "continue.continueMax": "Continue count",
-  "continue.text": "Continue text",
-  "saved.continue": "Saved",
-  "continue.label": "Continue",
-  "continue.aria": "Continue after an abnormal stop",
-  "continue.busy": "Continuing…",
-  "continue.ready": "Continue ({left} left)",
-  "continue.limit": "Continue limit reached",
-  "continue.fail": "Continue failed: {error}",
-  "updch.open": "Update channel",
-  "updch.title": "Update channel: proxy and GitHub token",
-  "updch.scope":
-    "These settings apply only to this plugin's update check and download channel. They do not affect requests to any model provider and are never written into the host process environment. Leave blank to inherit the existing update proxy environment.",
-  "updch.proxy": "Proxy URL",
-  "updch.proxy.ph": "socks5://127.0.0.1:60808",
-  "updch.proxy.hint":
-    "Accepts http://, https:// and socks5:// prefixes, e.g. http://127.0.0.1:7890. Leave blank to inherit the existing update proxy environment.",
-  "updch.token": "GitHub token",
-  "updch.token.ph":
-    "Optional: raises the GitHub API quota. Leave blank to keep it unchanged",
-  "updch.token.set":
-    "A token is configured on this machine. The field always starts empty; saving it empty keeps the current token.",
-  "updch.token.unset":
-    "No token is configured on this machine. Leaving it blank keeps it unset.",
-  "updch.token.clear": "Clear the saved token",
-  "updch.save": "Save",
-  "updch.saving": "Saving…",
-  "updch.cancel": "Cancel",
-  "updch.saved":
-    "Update channel saved. It takes effect on the next update check.",
-  "updch.state.proxy": "Update channel proxy: ",
-  "updch.state.direct": "Update channel: inherited environment or system proxy",
-  "updch.state.token.on": "GitHub token configured",
-  "updch.state.token.off": "No GitHub token configured",
+
 };

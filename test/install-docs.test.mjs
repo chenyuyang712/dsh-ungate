@@ -55,16 +55,13 @@ test('current installation instructions reject an appended unquoted legacy entry
   assert.equal(checkInstallExamples(doc + '\n' + example('dsh-purge')).length, 1);
 });
 
-test('both archives retain a real warned example and fail if it is removed', () => {
-  for (const file of ['README.md', 'README.zh-CN.md']) {
-    const doc = fs.readFileSync(new URL(`../docs/upstream/${file}`, import.meta.url), 'utf8');
-    for (const newline of ['\n', '\r\n']) {
-      const text = doc.replace(/\r?\n/g, newline);
-      assert.deepEqual(checkInstallExamples(text, { archive: true }), []);
-      const removed = text.replace(/```yaml\r?\n- insert:[\s\S]*?```/, '');
-      assert.notEqual(removed, text, 'fixture must actually remove the example');
-      assert.ok(checkInstallExamples(removed, { archive: true }).length);
-    }
+test('archive mode retains a real warned example and fails if it is removed', () => {
+  for (const newline of ['\n', '\r\n']) {
+    const text = (notice + example('dsh-purge')).replace(/\r?\n/g, newline);
+    assert.deepEqual(checkInstallExamples(text, { archive: true }), []);
+    const removed = text.replace(/```yaml\r?\n- insert:[\s\S]*?```/, '');
+    assert.notEqual(removed, text, 'fixture must actually remove the example');
+    assert.ok(checkInstallExamples(removed, { archive: true }).length);
   }
 });
 

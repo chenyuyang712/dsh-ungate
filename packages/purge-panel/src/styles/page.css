@@ -183,29 +183,6 @@
   gap: 12px;
 }
 
-/* 字段行：左标题右控件；窄屏自动换行 */
-.dshpp-page .dshpp-field {
-  display: grid;
-  grid-template-columns: minmax(120px, 190px) 1fr;
-  gap: 8px 14px;
-  align-items: center;
-}
-.dshpp-page .dshpp-field > .dshpp-field-label {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.92em;
-  color: var(--dshpp-fg);
-}
-.dshpp-page .dshpp-field > .dshpp-field-body {
-  min-width: 0;
-}
-@media (max-width: 720px) {
-  .dshpp-page .dshpp-field {
-    grid-template-columns: 1fr;
-  }
-}
-
 .dshpp-page .dshpp-muted,
 .dshpp-page .dshpp-hint {
   color: var(--dshpp-mute) !important;
@@ -272,29 +249,6 @@
   --dshpp-solid-hover: #3a8260;
   --dshpp-solid-danger: #a63b3b;
   --dshpp-solid-danger-hover: #bd4747;
-}
-.dshpp-page .dshpp-btn-primary {
-  background: var(--dshpp-solid);
-  border-color: var(--dshpp-solid);
-  color: #fff;
-  font-weight: 600;
-}
-.dshpp-page .dshpp-btn-primary:hover:not(:disabled) {
-  background: var(--dshpp-solid-hover);
-  border-color: var(--dshpp-solid-hover);
-}
-.dshpp-page .dshpp-btn-solid-danger {
-  background: var(--dshpp-solid-danger);
-  border-color: var(--dshpp-solid-danger);
-  color: #fff;
-}
-.dshpp-page .dshpp-btn-solid-danger:hover:not(:disabled) {
-  background: var(--dshpp-solid-danger-hover);
-  border-color: var(--dshpp-solid-danger-hover);
-}
-.dshpp-page .dshpp-btn-danger {
-  color: var(--dshpp-bad);
-  border-color: color-mix(in srgb, var(--dshpp-bad) 40%, transparent);
 }
 .dshpp-page .dshpp-btn-tiny {
   padding: 3px 8px;
@@ -431,54 +385,6 @@
   color: var(--dshpp-warn);
   background: color-mix(in srgb, var(--dshpp-warn) 10%, transparent);
   font-size: 0.86em;
-}
-
-/* 操作条：最常用的「应用」固定在内容区顶部 */
-.dshpp-page .dshpp-actions {
-  position: sticky;
-  top: 0;
-  z-index: 5;
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 0 12px;
-  margin: -4px 0 6px;
-  background: linear-gradient(
-    var(--dsw-alias-bg-base, canvas) 78%,
-    transparent
-  );
-  backdrop-filter: blur(2px);
-  border-bottom: 1px solid var(--dshpp-line);
-}
-.dshpp-page .dshpp-actions .dshpp-pill {
-  margin-left: auto;
-}
-
-/* 指标：三列紧凑 */
-.dshpp-page .dshpp-metrics {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
-  gap: 10px;
-  margin: 4px 0 2px;
-}
-.dshpp-page .dshpp-metric {
-  border: 1px solid var(--dshpp-line);
-  border-radius: 10px;
-  padding: 10px 12px;
-  background: var(--dshpp-bg-2);
-  min-width: 0;
-}
-.dshpp-page .dshpp-metric b {
-  display: block;
-  font-size: 1.05em;
-  font-weight: 600;
-  margin-bottom: 2px;
-  overflow-wrap: anywhere;
-}
-.dshpp-page .dshpp-metric span {
-  color: var(--dshpp-mute);
-  font-size: 0.82em;
 }
 
 /* 折叠块：补丁明细 / 维护 / 自检 */
@@ -632,15 +538,4 @@
 }
 .dshpp-check.is-warn {
   color: var(--dshpp-warn);
-}
-
-.dshpp-page .dshpp-probe-msg {
-  margin: 6px 0 0;
-  padding: 8px 10px;
-  border-radius: 8px;
-  border: 1px dashed var(--dshpp-line);
-  background: var(--dshpp-bg-2);
-  font-size: 0.82em;
-  white-space: pre-wrap;
-  overflow-wrap: anywhere;
 }
