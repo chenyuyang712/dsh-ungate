@@ -205,7 +205,7 @@ if (LEGACY[op]) {
       const naNote = notApplicable ? `（另 ${notApplicable} 条明确不适用、已关闭或无需迁移）` : "";
       const missingNote = report.patch.missing_file ? ` · 目标缺失 ${report.patch.missing_file} 条（详见诊断）` : "";
       const lines = [
-        `Purge 破甲自检 · ${report.host || "(未定位宿主)"}`,
+        `Ungate 自检 · ${report.host || "(未定位宿主)"}`,
         `  DSH ${report.host_version} · ${report.level} · 宿主补丁 ${report.patch.applied}/${report.patch.total}${naNote}${missingNote}`,
         "",
       ];

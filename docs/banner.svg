@@ -37,7 +37,7 @@
   <text x="404" y="196" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
         font-size="104" font-weight="700" fill="#0f1424" letter-spacing="-2">dsh-ungate</text>
   <text x="408" y="258" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
-        font-size="34" fill="#3d4560" letter-spacing="1">宿主补丁发行版 · 27 条 · 全程自证</text>
+        font-size="34" fill="#3d4560" letter-spacing="1">宿主补丁发行版 · 27 条补丁 · 20 层自检</text>
   <text x="408" y="312" font-family="ui-monospace, 'SF Mono', Menlo, monospace"
         font-size="24" fill="#6b7280">apply → reopen → selfcheck → probe</text>
 </svg>

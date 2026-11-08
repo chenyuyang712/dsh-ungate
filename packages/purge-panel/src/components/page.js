@@ -10,9 +10,9 @@ import { PurgifySection } from "./settings-form.js";
 import { StatusExtras } from "./maintenance.js";
 
 const TABS = [
-  ["status", "状态", "宿主兼容、补丁、破甲自检"],
-  ["prompt", "提示词", "注入正文与破甲强化段"],
-  ["more", "更多", "服务器名单与维护"],
+  ["status", "状态", "宿主兼容、补丁、自检"],
+  ["prompt", "提示词", "注入正文与强化段"],
+  ["more", "更多", "服务器名单、诊断与预设"],
 ];
 
 function PurgeGlyph({ size = 18 } = {}) {
@@ -109,7 +109,7 @@ export function LayoutNotice({ info }) {
     info.host_layout?.note ||
     "目标磁盘仍有 app.asar；当前进程加载来源尚未确认。";
   const handoff = info.asar_handoff
-    ? ` 换包状态：${{ not_scheduled: "尚未应用：点「应用」后才会安排换包", archive_reappeared: "归档再次出现，旧换包记录不代表当前已完成", backup_missing: "原归档备份缺失，请检查诊断", unknown_target: "目标实例未确定", unreadable: "换包记录不可读，请检查诊断", starting: "助手启动中（尚未确认就绪）", ready: "助手已就绪", waiting_for_quit: "等待完整退出（macOS ⌘Q / Windows 系统托盘）", waiting_for_unlock: "等待归档解锁", moving: "正在保留原归档", complete: "换包完成，请手动打开 DSH", already_unsealed: "归档已移走，请手动打开 DSH", failed: "失败，请查看诊断并按恢复文档操作", expired: "等待超时，请重新应用或按恢复文档操作", helper_stopped: "助手意外结束，请重新应用或按恢复文档操作" }[info.asar_handoff.phase] || info.asar_handoff.phase}。`
+    ? ` 换包状态：${{ not_scheduled: "尚未应用：点「应用」后才会安排换包", archive_reappeared: "归档再次出现，旧换包记录不代表当前已完成", backup_missing: "原归档备份缺失，请检查诊断", unknown_target: "目标实例未确定", unreadable: "换包记录不可读，请检查诊断", starting: "助手启动中（尚未确认就绪）", ready: "助手已就绪", waiting_for_quit: "等待完整退出（macOS ⌘Q / Windows 系统托盘）", waiting_for_unlock: "等待归档解封", moving: "正在保留原归档", complete: "换包完成，请手动打开 DSH", already_unsealed: "归档已移走，请手动打开 DSH", failed: "失败，请查看诊断并按恢复文档操作", expired: "等待超时，请重新应用或按恢复文档操作", helper_stopped: "助手意外结束，请重新应用或按恢复文档操作" }[info.asar_handoff.phase] || info.asar_handoff.phase}。`
     : "";
   const failure = info.asar_handoff?.error;
   const detail = info.asar_handoff?.detail

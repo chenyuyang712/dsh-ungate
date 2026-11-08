@@ -18,11 +18,11 @@
 | --- | --- | --- | --- |
 | 宿主补丁（27 条定义） | 本插件写进宿主源码副本 | 应用 → 退出重开 | `purge selfcheck` |
 | 运行时提示词注入 | 插件运行时，每步重贴（`$DSH_HOME/prompt-inject.md` 全文，只去掉 `<!-- red-team-only -->` 标记本身、保留段内正文） | 立即 | 面板状态 / `purge probe` |
-| 破甲强化段 | 运行时尾部 section | 立即 | `purge boost` |
+| 强化段 | 运行时尾部 section | 立即 | `purge boost` |
 | 权限配置 | profile 的 `cordis.patch.yml` | 重载后 | selfcheck 权限层 |
 | agent 预设 | `presets/unrestricted` | 新会话选择 | 预设下拉 |
 
-web 面实测：21 条已应用 + 6 条不适用（桌面换包/关窗那组没有 web 目标）。补丁表见 [STATE](STATE.md)。
+web 面实测：21 条已应用 + 6 条不适用（桌面换包/关窗那组没有 web 目标）。补丁表见 [STATE](docs/STATE.md)。
 
 ## 2. 生命周期
 
@@ -108,7 +108,7 @@ purge probe new
 - 是 standard 的超集，工具面一致，只改人设：执行优先、不重复声明边界、多轮不退化。
 - 由 `lib/presets-plugin.js` 注册到 `agentPresets`（**只放文件不会出现在下拉里**）。
 - 安装：`purge preset install`；回归卡：`docs/preset-test.md`。
-- 它不是"额外破甲"：破甲靠宿主补丁与注入，预设只改人格。
+- 它不是额外强化——拆闸靠宿主补丁与注入，预设只改人格。
 
 ## 9. 版本与兼容
 
@@ -131,7 +131,7 @@ purge probe new
 | `GET /dsh-purge/selfcheck` | 20 层证据 |
 | `GET /dsh-purge/community` | 快照列表（CLI `purge backup` / `rollback` 同源） |
 | `POST /dsh-purge/apply` / `revert` / `boost` / `tuning` | 写操作（带 token） |
-| `POST /dsh-purge/maintenance` | backup / rollback / prune |
+| `purge backup` / `purge rollback <id>` / `purge prune` | 本机快照与回滚（CLI，无 HTTP 路由） |
 
 token 在服务启动日志里（`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | tail -1`）。不要把 token、提示词、profile 配置贴进公开 issue。
 

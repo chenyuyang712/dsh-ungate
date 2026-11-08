@@ -7,7 +7,7 @@
 
 <h1 align="center">dsh-ungate</h1>
 
-<p align="center"><strong>DeepSeek Harness 的宿主补丁发行版</strong>：27 条补丁覆盖审批、沙箱、计划模式与提示词层；运行时注入与 <code>unrestricted</code> 预设补齐人格配置；<code>selfcheck</code> 与探针自证每一步。</p>
+<p align="center"><strong>DeepSeek Harness 的宿主补丁发行版</strong>：27 条补丁覆盖审批、沙箱、计划模式与提示词层；运行时注入与 <code>unrestricted</code> 预设补齐人格配置；<code>selfcheck</code> 与探针每步留证据。</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -35,7 +35,7 @@
 | 宿主补丁 | 27 条定义，web 面 21 条落地、6 条仅桌面壳适用 | 点「应用」→ **完全退出 DSH 再打开** |
 | 运行时提示词 | 每步重贴的注入正文（`$DSH_HOME/prompt-inject.md`） | 立即 |
 | 强化段 | 尾部 section，默认开启 | 立即 |
-| 权限配置 | `danger-full-access` + `approval: ask`（由你决定是否改） | 重载后 |
+| 权限配置 | `danger-full-access` + `approval: ask` | 重载后 |
 | agent 预设 | `unrestricted`，standard 的超集，只改人格 | 新会话下拉选择 |
 
 不改动提示词正文、规则集与其他插件配置；不做内容审核与公网门禁，范围由操作者自己声明。
@@ -58,7 +58,7 @@ dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/dow
 dsh plugin --profile web add dsh-ungate@0.2.3
 ```
 
-**方式三：社区引导安装器**（备份迁移、旧包换装；先 `--dry-run` 审阅再执行）
+**方式三：社区引导安装器**（备份迁移、旧包换装；支持 `--dry-run` 预览）
 
 ```sh
 sh scripts/install.sh --dry-run    # Linux/macOS

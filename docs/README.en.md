@@ -7,7 +7,7 @@
 
 <h1 align="center">dsh-ungate</h1>
 
-<p align="center"><strong>A host-patch distribution for DeepSeek Harness</strong>: 27 patches cover approvals, sandbox, plan mode and the prompt layer; runtime injection and the <code>unrestricted</code> preset cover the persona configuration; <code>selfcheck</code> and the probe prove every step.</p>
+<p align="center"><strong>A host-patch distribution for DeepSeek Harness</strong>: 27 patches cover approvals, sandbox, plan mode and the prompt layer; runtime injection and the <code>unrestricted</code> preset cover the persona configuration; <code>selfcheck</code> and the probe leave evidence at each step.</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>

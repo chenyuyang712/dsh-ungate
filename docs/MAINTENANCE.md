@@ -44,7 +44,7 @@ purge reanchor clear 33           # 撤销覆盖，回到出厂锚点
 | GET | `/dsh-purge/community` | 快照、审计摘要 |
 | POST | `/dsh-purge/apply` · `revert` | 写宿主 |
 | POST | `/dsh-purge/tuning` | boost / injectPosition / askNoBlock / refusalRetry |
-| POST | `/dsh-purge/maintenance` | backup / rollback / prune |
+| CLI | `purge backup` / `purge rollback <id>` / `purge prune` | 本机快照与回滚（无 HTTP 路由） |
 
 token 在服务日志里：`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | tail -1`。接口只挂在本进程的 web server 上，不监听外部。
 

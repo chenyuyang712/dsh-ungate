@@ -83,7 +83,7 @@ Desktop 宿主首次「应用」时，`app.asar` 可能仍封着，插件会把�
 
 - **插件升级**：换 tgz 重装（或市场升级）→ 点「应用」→ 退出重开 → `selfcheck`。旧版本的补丁标记会被识别，重复应用是幂等的。
 - **宿主升级后**：`asar_still_sealed` 会变 true、旧补丁全部失效。点「应用」→ 退出重开即可；若某条补丁锚点漂移，`purge diagnose` 会给文件、行号与候选片段，用 `purge reanchor apply <id> --lines A-B --yes` 钉住。
-- 升级不会动 `prompt-inject.md`、规则、其他插件配置、更新偏好。
+- 升级不会动 `prompt-inject.md`、规则与其他插件配置。
 
 ## 5. 回滚与卸载
 

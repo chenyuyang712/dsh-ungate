@@ -236,7 +236,7 @@ win.confirm = () => true;
     root.findAllByType("h1").some((x) => x.children.join("") === "Ungate"),
     "page title renders",
   );
-  assert(root.findAllByProps({ "aria-label": "破甲状态" }).length, "self-check card renders");
+  assert(root.findAllByProps({ "aria-label": "自检状态" }).length, "self-check card renders");
   assert(
     JSON.stringify(tree.toJSON()).includes("0.2.1-rc.1"),
     "the status strip reports the host version from the backend",
@@ -247,9 +247,9 @@ win.confirm = () => true;
     "the removed hooks override section no longer renders",
   );
   const selfcheckTree = JSON.stringify(tree.toJSON());
-  assert(selfcheckTree.includes("破甲自检"), "self-check block renders");
+  assert(selfcheckTree.includes("自检"), "self-check block renders");
   assert(
-    selfcheckTree.includes("破甲强化段"),
+    selfcheckTree.includes("强化段"),
     "boost toggle renders next to the self-check",
   );
   assert(

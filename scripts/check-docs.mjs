@@ -28,7 +28,9 @@ if (!agents.includes(`\`dsh-ungate\` ${version}`))
 const currentDocs = [
   "README.md", "README.zh-CN.md", "AGENTS.md", "release-notes.md", "NOTICE.md", "CONTRIBUTORS.md",
   "docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK.md", "docs/STATE.md",
-  "docs/README.en.md", "docs/preset-test.md",
+  "docs/README.en.md", "docs/preset-test.md", "docs/DESKTOP-TEST.md",
+  // docs/VERIFY.md 有意不在清单：它记录 0.2.2 注入修复的取证，正文含真实标记字面量
+  // `<!-- redteam-only:begin -->`（改写会让记录失真），与 /redteam/i 残留扫描冲突。
 ];
 for (const file of ["docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK.md", "docs/STATE.md"]) {
   if (!read(file).includes(`当前版本 **${version}**`)) problems.push(`${file} 当前版本未同步到 ${version}`);

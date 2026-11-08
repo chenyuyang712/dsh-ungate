@@ -6,9 +6,9 @@ https://github.com/kingcharleslzy-ai/dsh-purge
 That branch derives from **dsh-purge**, original author **小杨 / YuJunZhiXue**:
 https://github.com/YuJunZhiXue/dsh-purge
 
-Original copyright and MIT license remain in LICENSE. The repository preserves upstream source attribution. Upstream README text is retained under docs/upstream. This distribution is free and not offered for paid resale; it is not endorsed by or an official release of the upstream author.
+Original copyright and MIT license remain in LICENSE. The repository preserves upstream source attribution. The upstream README archive (docs/upstream) was removed in 0.2.3; the original text remains in git history. This distribution is free and not offered for paid resale; it is not endorsed by or an official release of the upstream author.
 
-The native settings UI was derived from the original 1.1.71 client and subsequently separated and integrated into this distribution. Existing third-party notices under docs/redteam-upstream-LICENSE and docs/redteam-upstream-DISCLOSURE remain applicable to their respective material.
+The native settings UI was derived from the original 1.1.71 client and subsequently separated and integrated into this distribution. Third-party notices for the disclosure material are retained in the repository (docs/redteam-upstream-*) and excluded from the npm package.
 
 Contributors and their contributions are recorded in [CONTRIBUTORS.md](CONTRIBUTORS.md).
 

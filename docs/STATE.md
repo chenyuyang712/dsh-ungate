@@ -1,7 +1,7 @@
 # 当前状态（0.2.3）
 
 > 当前版本 **0.2.3**（0.2.3 无限制模式升级：preset/boost/默认注入按消融数据重写并删被证伪的恢复条款） · 最后更新：2026-11-07
-> 本文件记录"现在是什么"，不记录"以前是什么"。历史在 [release-notes.md](../release-notes.md) 与 [upstream](upstream/)。
+> 本文件记录"现在是什么"，不记录"以前是什么"。历史在 [release-notes.md](../release-notes.md)；上游归档已随 0.2.3 清理移除，原文在 git 历史。
 
 ## 这是什么
 
@@ -42,7 +42,7 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 | 94 | SKILL_BADGE_DESCRIPTION_NEUTRAL | 提示词 | 应用 |
 
 - 定义在 `lib/core.js` 的 `ALL_PATCHES`；`optional: true` 表示目标缺席时记"不适用"而不是失败。
-- 默认关闭的可选补丁：**无**。`test/opt-in.mjs` 与 `purge patches list` 都返回空清单。
+- 默认关闭的可选补丁：**无**。`purge patches list` 返回空清单。
 - 逐条锚点与真机回归在 `test/patch-anchors.test.mjs`；宿主升级后的漂移用 `purge diagnose` 定位、`purge reanchor` 修复。
 
 ## 自检：20 层

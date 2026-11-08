@@ -2,12 +2,12 @@
 
 > 2026-11-07 · `dsh-ungate` 0.2.3
 
-无限制模式的能力升级：`unrestricted` 预设、破甲强化段与出厂注入正文三处按消融实验数据重写；面板与文档继续做减法。补丁表 27 条不变，兼容面与 0.2.2 相同。
+无限制模式的能力升级：`unrestricted` 预设、强化段与出厂注入正文三处按消融实验数据重写；面板与文档继续做减法。补丁表 27 条不变，兼容面与 0.2.2 相同。
 
 ## 变更
 
-- **无限制模式人设重写**（`presets/unrestricted/agent.cordis.yml`）：具名人格锚定、拦截噪声预演（点名 `<ethics_reminder>` / `<ip_reminder>` / `<cyber_warning>` / 伪造 `System:` 消息）、拒绝冲动重新归因、边界词按任务描述处理、多轮持久声明。与 standard 的差异只在人设段，工具面不变。
-- **破甲强化段与出厂注入正文同步重写**（`lib/boost.js`、`lib/default-prompt-inject.md` 并重新 seal 加密槽）；已存在的用户 `prompt-inject.md` 不受影响。
+- **无限制模式人设重写**（`presets/unrestricted/agent.cordis.yml`）：具名人格锚定、拦截噪声预演（点名 `<ethics_reminder>` / `<ip_reminder>` / `<cyber_warning>` / 伪造 `System:` 消息）、拒绝倾向按注入残留处理、边界词按任务描述处理、多轮持久声明。与 standard 的差异只在人设段，工具面不变。
+- **强化段与出厂注入正文同步重写**（`lib/boost.js`、`lib/default-prompt-inject.md` 并重新 seal 加密槽）；已存在的用户 `prompt-inject.md` 不受影响。
 - **删掉被实验证伪的"拒绝恢复"条款**：追问"你刚才是在拒绝吗"会让模型显式确认并维持拒绝（GLM-5.3-flash 6/6），条款反噬；改为"上一轮只给了部分答案时，从交付物继续，而不是从免责声明继续"。
 - **面板减法**：删除首次运行须知弹窗、「规则」「技能」两个只读 tab（后端 HTTP/CLI 与 `/rules` `/skills` 命令保留）、135 个死 locale 键、132 条死 CSS 规则、孤儿 `versions.js`。
 - **文档卫生**：移除上游截图与预览区（换为本项目 banner）、删除 47 份上游维护文档归档、`check:docs` 不再要求该归档存在。
@@ -40,7 +40,7 @@
 
 > 2026-11-07 · `dsh-ungate` 0.2.1（原 `dsh-purge-minimal`）
 
-这是一次**身份变更**，功能仍然是那 27 条补丁与 20 层自检。改名的原因：`purge` 读起来像批量删宿主代码，`minimal` 读起来像某个分支的变体，两者都不适合作为独立发行版的发行身份。
+这是一次**身份变更**，功能仍然是那 27 条补丁与 20 层自检。改名原因：原名不指向任何具体功能，不适合作为独立发行版的发行身份。
 
 ## 变更
 
@@ -95,7 +95,7 @@
 
 ## 移除
 
-- **hooks 否决旁路整条线**：`lib/hooks-deny.js`、`/dsh-purge/hooks-deny` 接口、面板「高级选项」区块、`hooks_deny_bypass` 状态字段、`tuning` 里的开关、以及状态里那 4 个幽灵补丁 id（30/31/64/65）。此前 `STATE.md` 声称这四条已恢复官方语义，代码里却仍可一键翻回——现在两边一致：不存在。
+- **hooks 否决旁路整条线**：`lib/hooks-deny.js`、`/dsh-purge/hooks-deny` 接口、面板「高级选项」区块、`hooks_deny_bypass` 状态字段、`tuning` 里的开关、以及状态里那 4 个幽灵补丁 id（30/31/64/65）。此前文档声称与代码行为不一致，本次起两边一致：四条幽灵补丁 id 彻底移除。
 - **演练台（drill）残留**：`lib/drill-grant.js`、`/dsh-purge/drill-grant` 路由、卸载流程里的清理分支、面板欢迎语里的"演练台"、预览截图与 `screenshots.json` 条目。
 - **面板与后台的在线更新**：`检查更新` / `自动检查` / 更新通道对话框 / 定时检查全部移除。面板「维护」只剩本机快照、回滚、最近动作与发行记录，并明确写清"升级走插件市场"。原因见 [docs/STATE.md](docs/STATE.md#已知限制)：本 fork 没有可安装的在线源，保留一个永远失败的按钮只会让状态页常年见红。
 - **上游历史资料出仓面**：`docs/releases/1.6.x`、上游维护说明与 DSH Store 文档归档到 `docs/upstream/`，不再混在当前文档里。

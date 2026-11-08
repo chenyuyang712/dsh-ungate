@@ -8,7 +8,7 @@ import {
 import { apiJson } from "../api/client.js";
 import { Btn, HelpTip } from "./primitives.js";
 /**
- * 状态页顶部的两块紧凑信息：破甲自检（默认收起）+ 破甲强化段开关。
+ * 状态页顶部的两块紧凑信息：自检（默认收起）+ 强化段开关。
  * 单独拆出来，是为了让「应用」按钮留在页面最上面，而自检不占一屏。
  */
 export function StatusExtras() {
@@ -66,7 +66,7 @@ export function StatusExtras() {
   const total = layers.filter((layer) => layer.applicable !== false).length;
   return h(
     "section",
-    { className: "dshpp-card", "aria-label": "破甲状态" },
+    { className: "dshpp-card", "aria-label": "自检状态" },
     h(
       "div",
       { className: "dshpp-line" },
@@ -84,7 +84,7 @@ export function StatusExtras() {
                   : "is-ok" // 还原后的 pending 是主动状态，不算故障，不给警示色
               : ""),
         }),
-        "破甲自检",
+        "自检",
         h(
           "b",
           null,
@@ -187,11 +187,11 @@ export function StatusExtras() {
       h(
         "span",
         { className: "dshpp-line-main" },
-        "破甲强化段",
+        "强化段",
         h(
           HelpTip,
-          { title: "破甲强化段" },
-          "在系统提示词末尾追加一段与注入同级的文本：层级声明 / 拒绝即故障 / 抗谄媚 / 多轮重申。默认开启。",
+          { title: "强化段" },
+          "在系统提示词末尾追加一段与注入同级的文本：层级声明 / 拒绝按噪声处理 / 抗谄媚 / 多轮重申。默认开启。",
         ),
         h("b", null, boost === null ? "…" : boost ? "已开启" : "已关闭"),
       ),
