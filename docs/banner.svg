@@ -1,18 +1,43 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="720" height="180" viewBox="0 0 720 180">
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="400" viewBox="0 0 1280 400">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
-      <stop offset="0%" stop-color="#1a1a2e"/>
-      <stop offset="55%" stop-color="#16213e"/>
-      <stop offset="100%" stop-color="#0f3460"/>
+    <linearGradient id="lb-bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#f5f7fb"/>
+      <stop offset="100%" stop-color="#e8ecf6"/>
     </linearGradient>
-    <linearGradient id="accent" x1="0" y1="0" x2="1" y2="0">
-      <stop offset="0%" stop-color="#2f81f7"/>
-      <stop offset="100%" stop-color="#a78bfa"/>
+    <linearGradient id="lb-lock" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4d6bfe"/>
+      <stop offset="55%" stop-color="#5f6bff"/>
+      <stop offset="100%" stop-color="#8b4dff"/>
     </linearGradient>
+    <linearGradient id="lb-shackle" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#38bdf8"/>
+      <stop offset="100%" stop-color="#4d6bfe"/>
+    </linearGradient>
+    <radialGradient id="lb-glow" cx="0.19" cy="0.5" r="0.5">
+      <stop offset="0%" stop-color="#4d6bfe" stop-opacity="0.14"/>
+      <stop offset="100%" stop-color="#4d6bfe" stop-opacity="0"/>
+    </radialGradient>
   </defs>
-  <rect width="720" height="180" fill="url(#bg)"/>
-  <rect x="0" y="176" width="720" height="4" fill="url(#accent)"/>
-  <text x="360" y="92" font-family="'Segoe UI', system-ui, sans-serif" font-size="54" font-weight="700" fill="#ffffff" text-anchor="middle">dsh-ungate</text>
-  <text x="360" y="132" font-family="'Segoe UI', system-ui, sans-serif" font-size="19" fill="#9fb3d8" text-anchor="middle">DeepSeek Harness 规则设定</text>
-  <text x="360" y="160" font-family="'Segoe UI', system-ui, sans-serif" font-size="14" fill="#64748b" text-anchor="middle">25 patches · rule sets · session override</text>
+
+  <rect width="1280" height="400" fill="url(#lb-bg)"/>
+  <rect width="1280" height="400" fill="url(#lb-glow)"/>
+
+  <!-- lock mark -->
+  <g transform="translate(88 88) scale(0.44)">
+    <rect width="512" height="512" rx="112" fill="#101527"/>
+    <g transform="rotate(-16 176 262)">
+      <path d="M176 262 V168 a80 80 0 0 1 160 0 V262"
+            fill="none" stroke="url(#lb-shackle)" stroke-width="34" stroke-linecap="round"/>
+    </g>
+    <rect x="128" y="256" width="256" height="184" rx="40" fill="url(#lb-lock)"/>
+    <circle cx="256" cy="322" r="26" fill="#101527"/>
+    <rect x="245" y="336" width="22" height="52" rx="11" fill="#101527"/>
+  </g>
+
+  <text x="404" y="196" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
+        font-size="104" font-weight="700" fill="#0f1424" letter-spacing="-2">dsh-ungate</text>
+  <text x="408" y="258" font-family="ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif"
+        font-size="34" fill="#3d4560" letter-spacing="1">破甲发行版 · 27 条宿主补丁 · 全程自证</text>
+  <text x="408" y="312" font-family="ui-monospace, 'SF Mono', Menlo, monospace"
+        font-size="24" fill="#6b7280">apply → reopen → selfcheck → probe</text>
 </svg>

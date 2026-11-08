@@ -1,10 +1,13 @@
 <p align="center">
-  <img src="banner.svg" alt="dsh-ungate" width="640">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="banner-dark.svg">
+    <img src="banner.svg" alt="dsh-ungate" width="640">
+  </picture>
 </p>
 
-<h1 align="center">🔓 dsh-ungate</h1>
+<h1 align="center">dsh-ungate</h1>
 
-<p align="center"><strong>Current version 0.2.3</strong> — a subtractive DSH distribution: it removes approval prompts, sandbox fences, write-intent interception and the model's own refusal habits, and keeps only what can prove itself.</p>
+<p align="center"><strong>A de-armored DSH distribution</strong>: 27 host patches remove approval prompts, sandbox fences, fs guards, plan-mode blocks and the model's refusal reflex; runtime prompt injection and the <code>unrestricted</code> preset cover the persona layer; <code>selfcheck</code> and the probe prove every step.</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -18,10 +21,10 @@
   <a href="../README.zh-CN.md">中文</a> | <a href="README.en.md">English</a>
 </p>
 
-> **Provenance**
-> - Original upstream: [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (author YuJunZhiXue, MIT).
-> - The code in this repository comes from the minimal cut of the community branch [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge); host patches, selfcheck, installers and the panel originate there.
-> - [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) only subtracts and rewrites: no tool surface, no legacy debug entry points, no in-plugin self-update, 27 patches, one source of truth for docs. It is **not** an official release by the upstream author.
+## Provenance
+
+- Upstream: [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (YuJunZhiXue, MIT).
+- The code comes from the minimal cut of [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge); [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) subtracts and rewrites on top: no tool surface, no legacy debug entry points, no in-plugin self-update, 27 patches, one source of truth for docs. Not an official release by the upstream author.
 
 ## What it changes
 
@@ -33,7 +36,7 @@
 | Permission config | `danger-full-access` + `approval: ask` | after reload |
 | agent preset | `unrestricted`, a superset of standard that only changes persona | pick it in new sessions |
 
-It does **not** touch your prompt text, rule sets or other plugin configs, and it does not judge who owns a target. Disk writes are not proof of load: every "in effect" claim below is backed by a post-restart `selfcheck` and a probe.
+It does not touch prompt text, rule sets or other plugin configs, and it does not judge who owns a target. Disk writes are not proof of load: conclusions come from a post-restart `selfcheck` and a probe.
 
 ## Install
 
@@ -68,7 +71,7 @@ node bin/community.js probe new          # send any message; the model should ec
 ```
 
 - Desktop users: replace `--profile web` with the actual profile name (the desktop shell defaults to `desktop`).
-- **Upgrading**: this package is `not-updatable` in the plugin manager (expected); just `plugin add` the new version again — configs and prompt text are untouched. After every host upgrade the `asar` reseals: press Apply once, then quit and reopen.
+- **Upgrading**: this package is `not-updatable` in the plugin manager; just `plugin add` the new version again — configs and prompt text are untouched. After every host upgrade the `asar` reseals: press Apply once, then quit and reopen.
 - **Uninstall**: `node bin/community.js uninstall` (cleans only this home's plugin directory and links; never touches prompt text, rule sets or other plugin configs).
 - Details and failure triage: [INSTALLATION](INSTALLATION.md); desktop-shell acceptance: [DESKTOP-TEST](DESKTOP-TEST.md).
 
@@ -81,11 +84,15 @@ node bin/community.js probe new          # send any message; the model should ec
 | DSH Desktop 0.2.2-rc.1 | desktop shell | Untested: the 6 desktop-only patches are n/a here | — |
 | DSH Desktop 0.2.1-rc.4, 0.2.2-alpha.2 | any | Untested; selfcheck reports it | — |
 
-`engines.dsh` in `package.json` is enforced by the host on install and boot.
+`engines.dsh` in `package.json` is enforced by the host on install and boot; it blocks 0.3.x and 0.2.1-rc.0. To force an unverified version, use `dsh plugin --profile <n> allow-version <pkg@ver> --accept-risk` (the exemption does not survive upgrades).
 
 ## Updating
 
-Upgrading is the host's job, not the plugin's: the panel does not check for versions and does not swap packages. Market-installed copies upgrade through the DSH plugin market or `dsh plugin --profile <n> update`; tarball installs are replaced by the next tarball (they are `not-updatable` in the plugin manager by design). After any host upgrade, press Apply once and restart.
+Upgrades go through the host; the plugin never self-updates.
+
+- **Market installs**: upgrade via the DSH plugin market or `dsh plugin --profile <n> update`, then press Apply once and restart.
+- **Tarball installs**: re-run `plugin add` with the new tgz — re-adding is the upgrade (`not-updatable` by design); configs and prompt text are untouched.
+- **After a host upgrade**: the asar reseals and all patches are gone — press Apply once, quit and reopen.
 
 ## Docs
 

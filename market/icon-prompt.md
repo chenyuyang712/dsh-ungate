@@ -1,28 +1,22 @@
-# 图标 / 横幅绘制提示词
+# 图标与横幅（已完成，源文件即 SVG）
 
-给画图 AI 的提示词。产出两件东西：市场横幅 `docs/banner.svg`（或 PNG）与插件图标 `docs/icon.png`。
+生态里所有 dsh-purge fork 共用上游同一张 720×180 程序化 SVG banner；本仓库的 icon 与 banner 已自行绘制，不再共享上游视觉。
 
-## 1. 横幅 banner（仓库 README 顶部 + 市场展示）
+## 资产
 
-- 规格：1280×400（导出 PNG）或等比 SVG；深色背景 #0d1117（GitHub 暗色友好）。
-- 主体文字：`dsh-ungate`（大号，等宽字体如 JetBrains Mono / Space Grotesk），下方小字 `只做减法的 DSH 破甲发行版 · Subtraction-only jailbreak distribution`。
-- 视觉意象：一把**开着的挂锁 / 断开的锁链 / 被拆掉一格的闸门**，象征"拆闸"而不是"加锁"；避免骷髅、匕首等攻击性符号（会被平台压热度）。
-- 点缀：几条发光的青色 (#22d3ee) / 琥珀色 (#f59e0b) 线路沿字面流动，代表"20 层自检全绿"。
-- 中文提示词：
-  > 横幅设计，1280×400，深色 GitHub 风格背景 #0d1117，中央大号等宽字标题「dsh-ungate」，副标题「只做减法的 DSH 破甲发行版」，左侧一把打开的发光挂锁图标，青色与琥珀色霓虹细线从锁孔延伸到标题字面，极简、扁平、工程感，无骷髅无武器，留白充足，矢量插画风
-- 英文提示词：
-  > wide banner 1280x400, dark GitHub-style background #0d1117, big monospace title "dsh-ungate", subtitle "subtraction-only jailbreak distribution", an open glowing padlock icon on the left, cyan and amber neon wires flowing from the keyhole into the letters, minimal flat engineering aesthetic, no skull no weapons, generous whitespace, vector illustration
+| 文件 | 规格 | 用途 |
+| --- | --- | --- |
+| `docs/icon.svg` | 512×512 | 插件 icon：深色圆角底 + 蓝紫渐变挂锁，锁梁逆时针抬起呈开锁态；市场索引日后支持 icon 字段时填 raw.githubusercontent 绝对 URL |
+| `docs/banner.svg` | 1280×400 | 浅色主题横幅：左 icon + `dsh-ungate` 大标题 + 副题「破甲发行版 · 27 条宿主补丁 · 全程自证」+ 等宽小字 `apply → reopen → selfcheck → probe` |
+| `docs/banner-dark.svg` | 1280×400 | 深色主题横幅，同一构图深色配色 |
 
-## 2. 插件图标 icon（市场条目 / 面板角标）
+## 接线
 
-- 规格：512×512 PNG（导出一份 128×128）。
-- 主体：一把**开锁状态的挂锁** + 内部一个通电的「√」或流向箭头；底色深色圆角方块，锁体描边青色。
-- 中文提示词：
-  > 应用图标 512x512，深色圆角方块底，中央一把打开的挂锁，锁梁弹开呈青色霓虹描边，锁孔内一个绿色对勾，极简扁平图标风格，边缘留白，暗色背景下高对比，无文字
-- 英文提示词：
-  > app icon 512x512, dark rounded-square background, an open padlock in the center, shackle popped open with cyan neon outline, a green checkmark inside the keyhole, minimal flat icon style, generous padding, high contrast on dark background, no text
+README 三份（`README.md` / `README.zh-CN.md` / `docs/README.en.md`）头部用 `<picture>` + `prefers-color-scheme` 在 banner.svg 与 banner-dark.svg 间自动切换；换图只替换 SVG 文件，无需改文档。
 
-## 3. 放置
+## 设计参数（供后续改版）
 
-- banner → `docs/banner.svg`（SVG 直接画，或 PNG 转 SVG 外壳）；README 三份（README.md / README.zh-CN.md / docs/README.en.md）已经引用 `docs/banner.svg`，替换文件即可，无需改文档。
-- icon → `docs/icon.png`；若市场索引日后支持 icon 字段，把 128×128 的绝对 URL（raw.githubusercontent）填进 `market/index.json` 的条目。
+- 底色：dark `#0b0e1a→#141031`，light `#f5f7fb→#e8ecf6`；icon 底 `#0e1220→#1c1440` 圆角 rx=112。
+- 锁体渐变 `#5b8cff→#6f7bff→#9a5cff`，锁梁 `#7fd0ff→#5b8cff`；light 版锁体 `#4d6bfe→#8b4dff`。
+- 开锁几何：锁梁 path `M176 262 V168 a80 80 0 0 1 160 0 V262`（stroke 34，round cap），整组 `rotate(-16 176 262)`——逆时针抬起右臂，端点悬在锁体顶面上方；顺时针会插回锁体变成闭合锁。
+- 字体：标题 ui-sans-serif/system-ui 700，等宽行 ui-monospace；无骷髅、无武器符号。

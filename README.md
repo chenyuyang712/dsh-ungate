@@ -1,10 +1,13 @@
 <p align="center">
-  <img src="docs/banner.svg" alt="dsh-ungate" width="640">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="docs/banner-dark.svg">
+    <img src="docs/banner.svg" alt="dsh-ungate" width="640">
+  </picture>
 </p>
 
-<h1 align="center">🔓 dsh-ungate</h1>
+<h1 align="center">dsh-ungate</h1>
 
-<p align="center"><strong>0.2.3</strong> · 一个只做减法的 DSH 发行版：把审批、沙箱围栏、写意图拦截和模型自己的推脱倾向一起拆掉，留下能自证的最小集合。</p>
+<p align="center"><strong>DeepSeek Harness 的破甲发行版</strong>：27 条宿主补丁拆掉审批弹窗、沙箱拒绝、fs 围栏、计划模式硬拦与模型拒绝倾向；运行时提示词注入与 <code>unrestricted</code> 预设补齐人格层；<code>selfcheck</code> 与探针自证每一步。</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -18,10 +21,10 @@
   <a href="README.zh-CN.md">中文</a> | <a href="docs/README.en.md">English</a>
 </p>
 
-> **来源声明（请先看这段）**
-> - 上游原始项目：[YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)（作者 小杨 / YuJunZhiXue，MIT）。
-> - 本仓库的代码直接来自社区分支 [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge) 的 minimal 裁剪；宿主补丁、自检、安装器与面板都源自那里。
-> - 本仓库 [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) 只做减法与重写：去掉工具面与历史调试入口、去掉在线自更新、补丁表压到 27 条、文档收敛为单一事实。**不是上游作者的官方发布**，也不代表社区分支的立场。
+## 来源
+
+- 上游：[YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)（小杨 / YuJunZhiXue，MIT）。
+- 代码来自社区分支 [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge) 的 minimal 裁剪；本仓库 [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) 在其上做减法与重写：去掉工具面与历史调试入口、去掉在线自更新、补丁表压到 27 条、文档收敛为单一事实。不是上游作者的官方发布。
 
 ---
 
@@ -35,9 +38,9 @@
 | 权限配置 | `danger-full-access` + `approval: ask`（由你决定是否改） | 重载后 |
 | agent 预设 | `unrestricted`，standard 的超集，只改人格 | 新会话下拉选择 |
 
-它**不改**你的提示词正文、规则集、其他插件配置；**不替**你判断目标归属、不做内容审核、不做公网门禁——范围由操作者自己声明。
+不改动提示词正文、规则集与其他插件配置；不做内容审核与公网门禁，范围由操作者自己声明。
 
-"应用"只写宿主源码副本并留备份；磁盘写成功 ≠ 当前进程已加载。所有"已生效"的结论都以重开后的 `selfcheck` 与探针为准。
+"应用"只写宿主源码副本并留备份；磁盘写成功 ≠ 当前进程已加载，结论以重开后的 `selfcheck` 与探针为准。
 
 ## 安装
 
@@ -49,7 +52,7 @@
 dsh plugin --profile web add https://github.com/youki258/dsh-ungate/releases/download/v0.2.3/dsh-ungate-0.2.3.tgz
 ```
 
-**方式二：npm 包**（发布到 npm registry 的同名包）
+**方式二：npm 包**
 
 ```sh
 dsh plugin --profile web add dsh-ungate@0.2.3
@@ -72,13 +75,11 @@ node bin/community.js probe new          # 发一句话看模型是否原样回�
 ```
 
 - Desktop 用户把 `--profile web` 换成实际 profile 名（桌面壳默认 `desktop`）。
-- **升级**：本包在插件管理器里属 `not-updatable`（预期行为），换新版本重新 `plugin add` 一次即可，配置与提示词不受影响；每次宿主升级后 `asar` 重新封住，点一次「应用」再退出重开。
+- **升级**：本包在插件管理器里属 `not-updatable`，换新版本重新 `plugin add` 一次即可，配置与提示词不受影响；每次宿主升级后 `asar` 重新封住，点一次「应用」再退出重开。
 - **卸载**：`node bin/community.js uninstall`（只清理本 home 内插件目录与链接，不动提示词、规则集、其他插件配置）。
 - 细节与失败排查见 [安装指南](docs/INSTALLATION.md)；桌面壳验收见 [桌面测试卡](docs/DESKTOP-TEST.md)。
 
 ## 兼容矩阵
-
-只写有实测证据的组合；没测过的版本不猜。
 
 | 宿主 | 面 | 结果 | 证据 |
 | --- | --- | --- | --- |
@@ -92,7 +93,7 @@ node bin/community.js probe new          # 发一句话看模型是否原样回�
 
 ## 面板与 CLI
 
-左侧栏 **Purge**：状态（版本/宿主/补丁计数/逐层证据，按需展开）、提示词正文、规则与技能、更多（诊断与重锚、预设安装）。备份与回滚只走 CLI：`purge backup` / `purge rollback <id>`。
+左侧栏 **Purge**：状态（版本/宿主/补丁计数/逐层证据，按需展开）、提示词正文、更多（服务器名单、诊断与重锚、预设安装）。备份与回滚只走 CLI：`purge backup` / `purge rollback <id>`。
 
 `purge` 是 `bin/community.js` 的别名，常用命令：
 
@@ -108,11 +109,11 @@ node bin/community.js probe new          # 发一句话看模型是否原样回�
 
 ## 更新策略
 
-**升级不由插件自己做**：面板不联网检查版本，也不下载替换包——这是当前架构的约定（宿主统一管理插件生命周期）。
+升级走宿主，插件不自更新：
 
-- 市场/索引安装的：由 DSH 插件市场或 `dsh plugin --profile <n> update` 升级，升级后重新「应用」并重启。
-- tgz 手工安装的：换新版本 tgz 重装；本包在 `pluginManager.listVersions` 里属 `not-updatable`，这是预期。
-- 每次宿主升级后 `asar` 会重新封住、旧补丁全部失效：点一次「应用」再退出重开。
+- **市场安装的**：DSH 插件市场或 `dsh plugin --profile <n> update` 升级，升级后点一次「应用」并重启。
+- **tgz 手动装的**：新版 tgz 重新 `plugin add` 即完成升级（本包 `not-updatable`，重装就是升级方式），配置与提示词不受影响。
+- **宿主升级后**：`asar` 重新封住、旧补丁全部失效——点一次「应用」，退出重开。
 
 ## 生效证明
 
@@ -134,9 +135,9 @@ pnpm run test:ui       # 面板客户端 bundle 契约
 pnpm run build:client  # 改面板源码后重建 bundle
 ```
 
-测试在干净环境跑：`scripts/bootstrap-install.mjs` 只在没有显式 home 时才继承 `DSH_PROFILE`，避免把当前会话的 profile 泄漏进 fixture。真机验收（Electron、换包）另用隔离实例，不拿组件测试冒充。
+测试在干净环境跑：`scripts/bootstrap-install.mjs` 只在没有显式 home 时才继承 `DSH_PROFILE`；真机验收（Electron、换包）用隔离实例单独跑。
 
-CI 在 `.github/workflows/ci.yml`（Node 22/24 矩阵：`check:docs` → 面板 bundle 校验 → 面板契约 → 533 项测试 → 打包并断言包里不含 `docs/upstream/`）；`release.yml` 在 `v*.*.*` tag 上重复同一套检查、打包并建 release，带 fork 保险丝。
+CI 在 `.github/workflows/ci.yml`（Node 22/24 矩阵：`check:docs` → 面板 bundle 校验 → 面板契约 → 449 项测试 → 打包并断言包里不含 `docs/upstream/`）；`release.yml` 在 `v*.*.*` tag 上重复同一套检查、打包并建 release，带 fork 保险丝。
 
 ## 文档地图
 
@@ -147,8 +148,7 @@ CI 在 `.github/workflows/ci.yml`（Node 22/24 矩阵：`check:docs` → 面板 
 | [docs/STATE.md](docs/STATE.md) | 27 条补丁明细、20 层自检语义、已知限制 |
 | [docs/VERIFY.md](docs/VERIFY.md) | 逐宿主验收证据（可复查的命令与输出） |
 | [docs/RUNBOOK.md](docs/RUNBOOK.md) | 运维：重启、体检、恢复决策 |
-| [docs/upstream](docs/upstream) | 上游历史资料原样归档，仅作溯源 |
 
 ## 许可与免责
 
-MIT，见 [LICENSE](LICENSE)；第三方归属见 [NOTICE.md](NOTICE.md)；贡献者见 [CONTRIBUTORS.md](CONTRIBUTORS.md)。本发行版免费，不提供付费转售。宿主补丁会修改 DSH 安装目录下的源码副本并替换归档，属于侵入式操作：应用前请确认你接受这一代价，并保留快照。
+MIT，见 [LICENSE](LICENSE)；第三方归属见 [NOTICE.md](NOTICE.md)；贡献者见 [CONTRIBUTORS.md](CONTRIBUTORS.md)。宿主补丁会修改 DSH 安装目录下的源码副本并替换归档；回滚用 `purge rollback <id>`，快照位置见 AGENTS.md §6。
