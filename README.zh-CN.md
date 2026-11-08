@@ -7,7 +7,7 @@
 
 <h1 align="center">dsh-ungate</h1>
 
-<p align="center"><strong>DeepSeek Harness 的破甲发行版</strong>：27 条宿主补丁拆掉审批弹窗、沙箱拒绝、fs 围栏、计划模式硬拦与模型拒绝倾向；运行时提示词注入与 <code>unrestricted</code> 预设补齐人格层；<code>selfcheck</code> 与探针自证每一步。</p>
+<p align="center"><strong>DeepSeek Harness 的宿主补丁发行版</strong>：27 条补丁覆盖审批、沙箱、计划模式与提示词层；运行时注入与 <code>unrestricted</code> 预设补齐人格配置；<code>selfcheck</code> 与探针自证每一步。</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -149,6 +149,6 @@ CI 在 `.github/workflows/ci.yml`（Node 22/24 矩阵：`check:docs` → 面板 
 | [docs/VERIFY.md](docs/VERIFY.md) | 逐宿主验收证据（可复查的命令与输出） |
 | [docs/RUNBOOK.md](docs/RUNBOOK.md) | 运维：重启、体检、恢复决策 |
 
-## 许可与免责
+## 许可与来源
 
-MIT，见 [LICENSE](LICENSE)；第三方归属见 [NOTICE.md](NOTICE.md)；贡献者见 [CONTRIBUTORS.md](CONTRIBUTORS.md)。宿主补丁会修改 DSH 安装目录下的源码副本并替换归档；回滚用 `purge rollback <id>`，快照位置见 AGENTS.md §6。
+MIT，见 [LICENSE](LICENSE)；原始作者、分支与贡献者归属见 [NOTICE.md](NOTICE.md) 与 [CONTRIBUTORS.md](CONTRIBUTORS.md)。

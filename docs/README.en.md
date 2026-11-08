@@ -7,7 +7,7 @@
 
 <h1 align="center">dsh-ungate</h1>
 
-<p align="center"><strong>A de-armored DSH distribution</strong>: 27 host patches remove approval prompts, sandbox fences, fs guards, plan-mode blocks and the model's refusal reflex; runtime prompt injection and the <code>unrestricted</code> preset cover the persona layer; <code>selfcheck</code> and the probe prove every step.</p>
+<p align="center"><strong>A host-patch distribution for DeepSeek Harness</strong>: 27 patches cover approvals, sandbox, plan mode and the prompt layer; runtime injection and the <code>unrestricted</code> preset cover the persona configuration; <code>selfcheck</code> and the probe prove every step.</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -98,4 +98,4 @@ Upgrades go through the host; the plugin never self-updates.
 
 [AGENTS.md](../AGENTS.md) · [INSTALLATION](../docs/INSTALLATION.md) · [STATE](../docs/STATE.md) · [VERIFY](../docs/VERIFY.md) · [RUNBOOK](../docs/RUNBOOK.md).
 
-MIT — see [LICENSE](../LICENSE), [NOTICE.md](../NOTICE.md), [CONTRIBUTORS.md](../CONTRIBUTORS.md).
+MIT — see [LICENSE](../LICENSE); provenance and contributor attribution: [NOTICE.md](../NOTICE.md), [CONTRIBUTORS.md](../CONTRIBUTORS.md).

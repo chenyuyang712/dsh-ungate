@@ -29,7 +29,7 @@ node /path/to/dsh-ungate/bin/community.js audit --limit 20
 
 ## 2. 重启 DSH 的安全做法
 
-**不要在会话自己的 cgroup 里 `systemctl stop dsh-web`**——停掉的就是当前会话的宿主，之后没人能把服务拉回来（本项目历史上因此出现过 6 小时 27 分钟的中断）。
+**不要在会话自己的 cgroup 里 `systemctl stop dsh-web`**——停掉的就是当前会话的宿主，之后没人能把服务拉回来。
 
 用 transient unit 把重启动作放到会话之外：
 

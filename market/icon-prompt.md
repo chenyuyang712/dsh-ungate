@@ -7,7 +7,7 @@
 | 文件 | 规格 | 用途 |
 | --- | --- | --- |
 | `docs/icon.svg` | 512×512 | 插件 icon：深色圆角底 + 蓝紫渐变挂锁，锁梁逆时针抬起呈开锁态；市场索引日后支持 icon 字段时填 raw.githubusercontent 绝对 URL |
-| `docs/banner.svg` | 1280×400 | 浅色主题横幅：左 icon + `dsh-ungate` 大标题 + 副题「破甲发行版 · 27 条宿主补丁 · 全程自证」+ 等宽小字 `apply → reopen → selfcheck → probe` |
+| `docs/banner.svg` | 1280×400 | 浅色主题横幅：左 icon + `dsh-ungate` 大标题 + 副题「宿主补丁发行版 · 27 条 · 全程自证」+ 等宽小字 `apply → reopen → selfcheck → probe` |
 | `docs/banner-dark.svg` | 1280×400 | 深色主题横幅，同一构图深色配色 |
 
 ## 接线
