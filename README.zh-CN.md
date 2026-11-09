@@ -75,7 +75,7 @@ ungate probe new                # 发一句话，模型原样回显 nonce 即链
 | DSH Desktop 0.2.2-rc.1 | 已验证（web 面） |
 | 其它 0.2.x | 先跑 `ungate diagnose` |
 
-逐宿主证据在 [VERIFY](docs/VERIFY.md)。
+锚点回归由 `test/patch-anchors.test.mjs` 覆盖，逐版本结果记在 [release-notes](release-notes.md)。
 
 ## 命令
 
@@ -96,7 +96,6 @@ ungate probe new                # 发一句话，模型原样回显 nonce 即链
 
 | 文件 | 内容 |
 | --- | --- |
-| [AGENTS.md](AGENTS.md) | 改本仓库的 agent 用：补丁规矩、测试、发版清单 |
 | [docs/INSTALLATION.md](docs/INSTALLATION.md) | 安装、升级、回滚、故障定位 |
 | [docs/CLI.md](docs/CLI.md) | 全部命令、退出码、旧名兼容 |
 | [docs/STATE.md](docs/STATE.md) | 27 条补丁明细、自检语义、已知限制 |

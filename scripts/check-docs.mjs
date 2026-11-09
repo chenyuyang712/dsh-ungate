@@ -28,9 +28,7 @@ if (!agents.includes(`\`dsh-ungate\` ${version}`))
 const currentDocs = [
   "README.md", "README.zh-CN.md", "AGENTS.md", "release-notes.md", "NOTICE.md", "CONTRIBUTORS.md",
   "docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK.md", "docs/STATE.md",
-  "docs/README.en.md", "docs/preset-test.md", "docs/DESKTOP-TEST.md",
-  // docs/VERIFY.md 有意不在清单：它记录 0.2.2 注入修复的取证，正文含真实标记字面量
-  // `<!-- redteam-only:begin -->`（改写会让记录失真），与 /redteam/i 残留扫描冲突。
+  "docs/README.en.md", "docs/CLI.md", "docs/preset-test.md", "docs/DESKTOP-TEST.md",
 ];
 for (const file of ["docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK.md", "docs/STATE.md"]) {
   if (!read(file).includes(`当前版本 **${version}**`)) problems.push(`${file} 当前版本未同步到 ${version}`);
@@ -118,6 +116,45 @@ if (patchCount && !readme.includes(`${patchCount} 条`)) problems.push(`README.m
 // 8) 可复制的安装示例：当前文档必须能被解析器读懂。
 for (const file of currentDocs.filter((f) => f.endsWith(".md")))
   for (const problem of checkInstallExamples(read(file))) problems.push(`${file}: ${problem}`);
+
+// 9) 中英 README 不能各自漂移：逐块比结构（标题层级、表格行数、代码块行数、列表项数）。
+//    文字是翻译，形状必须一样——少一节、多一行表格都会失败。
+const shape = (md) => {
+  const lines = md.split("\n");
+  const blocks = [];
+  let i = 0;
+  while (i < lines.length) {
+    const line = lines[i];
+    if (/^```/.test(line)) {
+      let n = 0; i++;
+      while (i < lines.length && !/^```/.test(lines[i])) { n++; i++; }
+      i++; blocks.push(`code${n}`); continue;
+    }
+    if (/^\|/.test(line)) {
+      let n = 0;
+      while (i < lines.length && /^\|/.test(lines[i])) { n++; i++; }
+      blocks.push(`table${n}`); continue;
+    }
+    if (/^#{1,4}\s/.test(line)) {
+      blocks.push(`h${line.match(/^#+/)[0].length}`); i++; continue;
+    }
+    if (/^\s*[-*]\s/.test(line)) {
+      let n = 0;
+      while (i < lines.length && /^\s*[-*]\s/.test(lines[i])) { n++; i++; }
+      blocks.push(`ul${n}`); continue;
+    }
+    i++;
+  }
+  return blocks;
+};
+const zhShape = shape(readme);
+const enShape = shape(readmeEn);
+if (zhShape.join(",") !== enShape.join(",")) {
+  const at = zhShape.findIndex((b, i) => b !== enShape[i]);
+  problems.push(
+    `README.md 与 docs/README.en.md 结构不一致（第 ${at + 1} 块：中文 ${zhShape[at] ?? "(结束)"} / 英文 ${enShape[at] ?? "(结束)"}）`
+  );
+}
 
 if (problems.length) {
   console.error(`✗ 文档与 ${version} 的版本事实不一致：`);

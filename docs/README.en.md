@@ -75,7 +75,7 @@ A successful disk write is not proof of load: host modules are imported once at 
 | DSH Desktop 0.2.2-rc.1 | Verified (web surface) |
 | Any other 0.2.x | Run `ungate diagnose` first |
 
-Per-host evidence: [VERIFY](VERIFY.md).
+Anchor regressions live in `test/patch-anchors.test.mjs`; per-release results are in [release notes](../release-notes.md).
 
 ## Commands
 
@@ -96,7 +96,6 @@ The plugin never self-updates. Market installs upgrade through the DSH plugin ma
 
 | File | Content |
 | --- | --- |
-| [AGENTS.md](../AGENTS.md) | for agents editing this repo: patch rules, tests, release checklist |
 | [INSTALLATION](INSTALLATION.md) | install, upgrade, rollback, failure triage |
 | [CLI](CLI.md) | every command, exit code, legacy names |
 | [STATE](STATE.md) | the 27 patches, selfcheck semantics, known limits |

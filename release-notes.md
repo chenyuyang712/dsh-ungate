@@ -11,6 +11,9 @@
 - **README 重写**：首屏改成一句可判断的话（去掉哪几类限制）+ 四条收益，删掉"它改变什么"对照表与长篇机制说明；命令表收成 4 行并指向 CLI 文档；来源与许可合并到文末。
 - **AGENTS.md 收窄为本仓库的开发约定**（约 60 行）：改补丁的五条规矩、不变量、测试与构建、发版清单。原来的 514 行是上游 1.6.x 的 agent 使用手册，其中"补丁数 73/76""红队工具需 Node ≥22.5""`purge patches enable 18,19`"等描述与本发行版不符。同时从 `package.json` 的 `files` 里去掉——DSH 只读 `$DSH_HOME/AGENTS.md` 和工作区根，打进 npm 包没有任何 agent 会读。
 - 修正两处不成立的声明：README/AGENTS 曾称本发行版去掉"计划模式硬拦"与"工具结果修剪"，实际全仓没有相关补丁（`targetFiles()` 里 `compaction-tool-result-pruner` 是上游 opt-in #19 留下的死键）。改为"不在本发行版的处理范围内"。
+- **删掉对外文档里的维护者材料**：`docs/VERIFY.md`（逐环节验收记录、临时路径、sha256、边界声明）与 `skills/pentest-sop.md`（演练台残留的评分纪律）不再随包发布，证据合并进本文件与 `test/patch-anchors.test.mjs`；顺带删掉指向已删除截图的死清单 `screenshots.json`。
+- **收窄发行包内容**：`package.json files` 改为逐文件列举，只带用户文档（INSTALLATION / CLI / STATE / RUNBOOK / README.en）、图片资产与许可证；`AGENTS.md`、`DESKTOP-TEST.md`、`preset-test.md`、`MAINTENANCE.md` 留在仓库里给维护者看，不再进 tgz。
+- **中英文档不再靠人盯**：`check:docs` 新增结构比对——中英 README 的章节层级、表格行数、代码块与列表长度必须逐块对齐，少一节或多一行都直接失败。
 
 ## 验证
 
