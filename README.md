@@ -72,11 +72,10 @@ ungate probe new                # 发一句话，模型原样回显 nonce 即链
 | 宿主 | 结果 |
 | --- | --- |
 | DSH Desktop 0.2.1-rc.1 / rc.2 / rc.3 / rc.5 | 已验证 |
-| DSH Desktop 0.2.2-rc.1 | 已验证（web 与 npm CLI 面；桌面换包组未验） |
-| DSH Desktop 0.2.1-rc.4 / 0.2.2-alpha.2 | 未验证，自检会标出来 |
-| 其它 0.2.x | 允许应用，先跑 `ungate diagnose` 看漂移 |
+| DSH Desktop 0.2.2-rc.1 | 已验证（web 面） |
+| 其它 0.2.x | 先跑 `ungate diagnose` |
 
-逐宿主证据与复现命令在 [VERIFY](docs/VERIFY.md)。
+逐宿主证据在 [VERIFY](docs/VERIFY.md)。
 
 ## 命令
 
