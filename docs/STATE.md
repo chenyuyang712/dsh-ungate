@@ -1,6 +1,6 @@
-# 当前状态（0.2.3）
+# 当前状态（0.2.4）
 
-> 当前版本 **0.2.3**（0.2.3 无限制模式升级：preset/boost/默认注入按消融数据重写并删被证伪的恢复条款） · 最后更新：2026-11-07
+> 当前版本 **0.2.4**。本版只改文档与 CLI 名，补丁表与注入行为不变（27 条宿主补丁 / 20 层自检）。 · 最后更新：2026-11-09
 > 本文件记录"现在是什么"，不记录"以前是什么"。历史在 [release-notes.md](../release-notes.md)；上游归档已随 0.2.3 清理移除，原文在 git 历史。
 
 ## 这是什么
@@ -42,12 +42,12 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 | 94 | SKILL_BADGE_DESCRIPTION_NEUTRAL | 提示词 | 应用 |
 
 - 定义在 `lib/core.js` 的 `ALL_PATCHES`；`optional: true` 表示目标缺席时记"不适用"而不是失败。
-- 默认关闭的可选补丁：**无**。`purge patches list` 返回空清单。
-- 逐条锚点与真机回归在 `test/patch-anchors.test.mjs`；宿主升级后的漂移用 `purge diagnose` 定位、`purge reanchor` 修复。
+- 默认关闭的可选补丁：**无**。`ungate patches list` 返回空清单。
+- 逐条锚点与真机回归在 `test/patch-anchors.test.mjs`；宿主升级后的漂移用 `ungate diagnose` 定位、`ungate reanchor` 修复。
 
 ## 自检：20 层
 
-`purge selfcheck` 报告 20 层，未指定实例时大部分是 `unknown`——这是设计，不是故障。web 面实际适用的 19 层（宿主磁盘布局层在 web 面不适用）。语义：
+`ungate selfcheck` 报告 20 层，未指定实例时大部分是 `unknown`——这是设计，不是故障。web 面实际适用的 19 层（宿主磁盘布局层在 web 面不适用）。语义：
 
 - `ok` 已确认 / `pending` 待应用 / `inferred`、`unknown` 证据不足（黄）/ `broken` 确认故障（退出码 1）。
 - 面板写「19 层全部在位」是因为它在 web 面显示适用层数；命令行报告原始 20 层。两个数字都对，粒度不同。
@@ -56,7 +56,7 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 
 - **0.2.2-rc.1 只在 web / npm CLI 宿主上验证**：2026-11-06 在隔离实例（`DSH_HOME=/home/kali/.dsh-rc1`、端口 3082、宿主 `/tmp/dsh022`）跑通 apply（20 应用 + #90 已原生 + 6 不适用，零 failed）→ 重启 → selfcheck 20 层 19 ok + 1 不适用、21/21 补丁、零漂移。桌面壳（换包/关窗组 #45/#46/#82/#83/#84/#92）在该宿主上本来就 `surfaces:["desktop"]`，仍属未验证；`host_family` 报 `npm-cli`，不冒充 Desktop 家族。
 - **没有在线更新**：0.2.2 起后端 update 链整体退役（`lib/update*.js` 与 `/dsh-purge/update` 路由删除），`GET /dsh-purge/status` 不再有 `update` 字段。升级只走插件市场或手动安装；快照与回滚只走 CLI。
-- **`purge selfcheck` 裸跑没有意义**：没有 `DSH_HOME` / `PURGE_DSH_CLI` 时宿主为空，会报 `unknown` 与 17 层不确定。先指定实例，再读结果。
+- **`ungate selfcheck` 裸跑没有意义**：没有 `DSH_HOME` / `PURGE_DSH_CLI` 时宿主为空，会报 `unknown` 与 17 层不确定。先指定实例，再读结果。
 - **桌面换包真机覆盖有限**：Linux 侧走过完整流程；Windows/macOS 依赖 Electron 版本，交接受单测覆盖但不等于实机验收。
 - **rc.4 / 0.2.2-alpha.2 未验证**：允许应用，`selfcheck` 会标未验证；不要据此对外声称兼容。
 
@@ -66,8 +66,8 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 | --- | --- | --- |
 | hooks 拦截旁路（四条旧补丁 id 及其接口、面板区块、状态字段） | 与"恢复官方 hook 语义"的声明冲突，且一键就能把 deny/ask 翻成放行 | lib/ 与面板源码里应无该模块与接口 |
 | 历史调试台（调试授权路由、模块、状态、欢迎语） | 只服务已删除的工具面 | lib/ 与面板源码里应无该模块与路由 |
-| 面板/后台在线更新 | 已整体退役：面板无版本管理与备份回滚区，后端无 `/dsh-purge/update` 路由 | 快照与回滚只走 CLI：`purge backup` / `purge rollback <id>` |
-| 上下文化可选补丁的两个开关 | 对应注入面已缩减，补丁不再存在 | `purge patches list` 返回空清单 |
+| 面板/后台在线更新 | 已整体退役：面板无版本管理与备份回滚区，后端无 `/dsh-purge/update` 路由 | 快照与回滚只走 CLI：`ungate backup` / `ungate rollback <id>` |
+| 上下文化可选补丁的两个开关 | 对应注入面已缩减，补丁不再存在 | `ungate patches list` 返回空清单 |
 | 渗透工具面与历史调试入口 | 本 fork 只保留宿主解闸能力 | `presets/` 只有 `unrestricted` |
 
 ## 状态落在哪

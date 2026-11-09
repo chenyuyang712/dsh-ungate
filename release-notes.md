@@ -1,3 +1,22 @@
+# 0.2.4
+
+> 2026-11-09 · `dsh-ungate` 0.2.4
+
+只改文档与入口命名，补丁表（27 条）、注入装配与自检层（20 层）均无变化；已装 0.2.3 的用户不需要为行为升级。
+
+## 变更
+
+- **CLI 主名改为 `ungate`**：与包名对齐（此前 `purge` 是上游项目的标记）。`purge`、`dsh-purge` 保留为同一入口的兼容别名，已写进脚本的调用不会断。插件 id 仍是 `dsh-purge`，数据目录仍是 `$DSH_HOME/dsh-purge-minimal/`，面板 HTTP 前缀仍是 `/dsh-purge/`，聊天斜杠命令仍是 `/purge`——这些都没动，已有配置与状态不受影响。
+- **新增 [docs/CLI.md](docs/CLI.md)**：全部命令、退出码、探针用法、环境变量、旧名兼容说明，从 README 移出。
+- **README 重写**：首屏改成一句可判断的话（去掉哪几类限制）+ 四条收益，删掉"它改变什么"对照表与长篇机制说明；命令表收成 4 行并指向 CLI 文档；来源与许可合并到文末。
+- **AGENTS.md 收窄为本仓库的开发约定**（约 60 行）：改补丁的五条规矩、不变量、测试与构建、发版清单。原来的 514 行是上游 1.6.x 的 agent 使用手册，其中"补丁数 73/76""红队工具需 Node ≥22.5""`purge patches enable 18,19`"等描述与本发行版不符。同时从 `package.json` 的 `files` 里去掉——DSH 只读 `$DSH_HOME/AGENTS.md` 和工作区根，打进 npm 包没有任何 agent 会读。
+- 修正两处不成立的声明：README/AGENTS 曾称本发行版去掉"计划模式硬拦"与"工具结果修剪"，实际全仓没有相关补丁（`targetFiles()` 里 `compaction-tool-result-pruner` 是上游 opt-in #19 留下的死键）。改为"不在本发行版的处理范围内"。
+
+## 验证
+
+- `node scripts/check-docs.mjs`、`pnpm test`（449 项）、`pnpm run smoke`、面板双 bundle 校验全部通过。
+- 旧名兼容：`purge status` 与 `ungate status` 走同一分支，输出一致。
+
 # 0.2.3
 
 > 2026-11-07 · `dsh-ungate` 0.2.3
@@ -25,10 +44,10 @@
 
 ## 变更
 
-- **后端 update 链整体退役**：`lib/update*.js`（更新控制器/下载/镜像/代理/密钥）、`/dsh-purge/update` 路由与 11 个 update 测试套件删除；status 不再有 `update` 字段，升级只走插件市场或手动安装，快照与回滚只走 CLI（`purge backup` / `purge rollback <id>`）。
+- **后端 update 链整体退役**：`lib/update*.js`（更新控制器/下载/镜像/代理/密钥）、`/dsh-purge/update` 路由与 11 个 update 测试套件删除；status 不再有 `update` 字段，升级只走插件市场或手动安装，快照与回滚只走 CLI（`ungate backup` / `ungate rollback <id>`）。
 - `modePromptText()` 不再删段：改为**去标记、留正文**（`unwrapRedteamOnlySections`）。本 fork 没有红队模式可判，所以正文应当全部到模型。
 - `withoutRedteamOnlySections()` 保留导出但不再用于注入路径，注释写明它是旧语义、调用它会吃掉用户正文。
-- 探针语义不变：`purge probe new` 仍是证明"注入到达模型"的手段；这次修的正是它此前查不出的那一类。
+- 探针语义不变：`ungate probe new` 仍是证明"注入到达模型"的手段；这次修的正是它此前查不出的那一类。
 
 ## 验证
 

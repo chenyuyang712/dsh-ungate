@@ -112,7 +112,7 @@ if (LEGACY[op]) {
         result = { written: true, ...preview, status: (await core.patchStatus(host))[row.id] };
       }
     } else {
-      throw Error("用法：purge reanchor list | show <id> | apply <id> [--index n] [--lines a-b] [--yes] | clear <id>");
+      throw Error("用法：ungate reanchor list | show <id> | apply <id> [--index n] [--lines a-b] [--yes] | clear <id>");
     }
   } else if (op === "patches") {
     const sub = (argument || "list").toLowerCase();
@@ -120,7 +120,7 @@ if (LEGACY[op]) {
     const ids = String(argument2 || "").split(",").map(Number).filter((n) => Number.isInteger(n) && n > 0);
     const optIn = (await import("../lib/core.js")).ALL_PATCHES.filter((p) => p.disabledByDefault).map((p) => p.id);
     if (sub === "enable" || sub === "disable") {
-      if (!ids.length) throw Error(`用法：purge patches ${sub} ${optIn.join(",") || "<id,id>"}`);
+      if (!ids.length) throw Error(`用法：ungate patches ${sub} ${optIn.join(",") || "<id,id>"}`);
       const known = new Set(optIn);
       const unknown = ids.filter((id) => !known.has(id));
       if (unknown.length) throw Error(`只有默认关闭的补丁可以手动开关：${[...known].join(",")}（未知：${unknown.join(",")}）`);
@@ -135,7 +135,7 @@ if (LEGACY[op]) {
         ok: true,
         optIn,
         extraPatches: current,
-        hint: optIn.length ? `purge patches enable ${optIn.join(",")} | disable ${optIn[0]}` : "当前发行版没有可手动开关的可选补丁",
+        hint: optIn.length ? `ungate patches enable ${optIn.join(",")} | disable ${optIn[0]}` : "当前发行版没有可手动开关的可选补丁",
         note: optIn.length ? "默认关闭：开启会取消重复调用提醒与工具结果修剪，长会话上下文会变大" : "可选补丁（#18/#19）已随注入面缩减下线",
       };
     }
@@ -145,7 +145,7 @@ if (LEGACY[op]) {
       const next = writeTuning({ refusalRetry: sub === "on" });
       result = { ok: true, refusalRetry: next.refusalRetry, restart_required: false, effective: "next-turn" };
     } else {
-      result = { ok: true, refusalRetry: readTuning(home).refusalRetry === true, hint: "purge retry on|off" };
+      result = { ok: true, refusalRetry: readTuning(home).refusalRetry === true, hint: "ungate retry on|off" };
     }
   } else if (op === "rewind") {
     const sub = (argument || "status").toLowerCase();
@@ -153,7 +153,7 @@ if (LEGACY[op]) {
       const next = writeTuning({ rewind: sub === "on" });
       result = { ok: true, rewind: next.rewind, restart_required: true };
     } else {
-      result = { ok: true, rewind: readTuning(home).rewind !== false, hint: "purge rewind on|off" };
+      result = { ok: true, rewind: readTuning(home).rewind !== false, hint: "ungate rewind on|off" };
     }
   } else if (op === "inject") {
     // 注入位置：head / tail / both。改完下一轮对话即生效（section 每轮回读 tuning），
@@ -165,7 +165,7 @@ if (LEGACY[op]) {
       logAudit("tuning_setting", { setting: "injectPosition", value: next.injectPosition }, home);
       result = { ok: true, injectPosition: next.injectPosition, restart_required: false };
     } else if (sub === "status" || !argument) {
-      result = { ok: true, injectPosition: readTuning(home).injectPosition || "head", hint: "purge inject head|tail|both" };
+      result = { ok: true, injectPosition: readTuning(home).injectPosition || "head", hint: "ungate inject head|tail|both" };
     } else {
       result = { ok: false, error: "injectPosition 只接受 head / tail / both", value: sub };
       process.exitCode = 2;
@@ -177,7 +177,7 @@ if (LEGACY[op]) {
       result = { ok: true, ...probe };
     } else {
       const probe = readProbe();
-      result = { ok: true, active: !!probe, nonce: probe?.nonce || "", hint: "purge probe new" };
+      result = { ok: true, active: !!probe, nonce: probe?.nonce || "", hint: "ungate probe new" };
     }
   } else if (op === "preset") {
     const sub = argument || "status";
@@ -187,11 +187,11 @@ if (LEGACY[op]) {
     } else if (sub === "status" || sub === "path") {
       result = presetStatus(home);
     } else {
-      throw Error("用法：purge preset [status|install [--force]]");
+      throw Error("用法：ungate preset [status|install [--force]]");
     }
   } else if (op === "boost") {
     if (argument === "on" || argument === "off") result = { enabled: writeBoost(argument === "on") };
-    else result = { enabled: readBoost(), hint: "purge boost on|off" };
+    else result = { enabled: readBoost(), hint: "ungate boost on|off" };
   } else if (op === "selfcheck" || op === "check-bypass") {
     // The extracted installer runs migrate before runtime dependencies are installed.
     const { selfCheck } = await import("../lib/selfcheck.js");
@@ -289,7 +289,7 @@ if (LEGACY[op]) {
     });
   } else
     throw Error(
-      "用法：purge status | host-status | host-check | diagnose | selfcheck [--json] | toggle | boost on|off | patches [list|enable ids|disable ids] | probe [new] | audit [--limit n] | preset [status|install] | backup [prune|usage] | rollback <备份ID> | migrate <tgz> | apply | revert | uninstall | edit",
+      "用法：ungate status | host-status | host-check | diagnose | selfcheck [--json] | toggle | boost on|off | patches [list|enable ids|disable ids] | probe [new] | audit [--limit n] | preset [status|install] | backup [prune|usage] | rollback <备份ID> | migrate <tgz> | apply | revert | uninstall | edit",
     );
   console.log(JSON.stringify(result, null, 2));
 } catch (e) {

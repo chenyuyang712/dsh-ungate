@@ -1,163 +1,53 @@
-# AGENTS.md — 给 AI agent 的 Ungate 使用说明书
+# AGENTS.md — 本仓库的开发约定
 
-> 写给**在 DSH 里干活的 agent**，不是营销文档。
-> 当前版本：**0.2.3** · 已实测宿主：DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5；DSH Desktop 0.2.2-rc.1 仅 web / npm CLI 面（桌面换包组未验）
-> 版本号与兼容声明由 `pnpm run check:docs` 对照 `package.json` 校验。
+> 给在**这个仓库里改代码**的 agent 看。使用说明在 [README](README.md)，运维在 [docs/RUNBOOK.md](docs/RUNBOOK.md)。
+> 当前版本：**0.2.4**（`dsh-ungate` 0.2.4）· 27 条宿主补丁
 
----
+## 先读哪几个文件
 
-## 0. 30 秒版本
+| 要改什么 | 先读 |
+| --- | --- |
+| 补丁定义 | `lib/core.js` 的 `ALL_PATCHES`、`lib/patches/*.mjs`、`targetFiles()` |
+| 补丁状态与自检 | `lib/selfcheck.js`、`lib/patches/index.mjs`、[STATE](docs/STATE.md) |
+| 注入装配 | `lib/identity.js`（`modePromptText` / `rewritePromptAssembly`）、`lib/boost.js` |
+| 面板 | `packages/purge-panel/src/`，产物是仓库根的 `client.js` |
+| 安装与快照 | `lib/community.js`（`Maintenance`）、`scripts/bootstrap-install.mjs` |
 
-- 这个插件（`dsh-ungate`）拆掉 DSH 里**拦你**的东西：审批弹窗、沙箱拒绝、写/编辑前的意图追问、以及工具提示词里那些让模型「建议你自己执行」的推脱措辞。计划模式与工具结果修剪不在本发行版的处理范围内。
-- 入口只有两个：**面板（左侧栏 Ungate/Purge）** 和 **CLI（`purge`）**。不要手改宿主目录里的文件——下一次「应用」会覆盖。
-- 安装 ≠ 应用 ≠ 加载：装完要点「应用」，然后**完全退出 DSH 再打开**，最后用 `selfcheck` + 探针证明。
+## 改补丁的规矩
 
-## 1. 心智模型：五层
+1. 目标文件在 `targetFiles()` 里登记键名，补丁里不写死绝对路径。
+2. `replace` 里留 `[dsh-purge]` 标记，并把同一段字符串写进 `markers`——判定「已应用」只认它。
+3. 在 `test/patch-anchors.test.mjs` 钉一份真实宿主片段做回归。
+4. 第三方插件目标用 `optional: true`：不在场记 `na`，不算失败。
+5. 宿主升级后锚点漂移先跑 `ungate diagnose` 看候选落点，不要凭猜改 pattern。
 
-| 层 | 由谁提供 | 生效方式 | 怎么查 |
-| --- | --- | --- | --- |
-| 宿主补丁（27 条定义） | 本插件写进宿主源码副本 | 应用 → 退出重开 | `purge selfcheck` |
-| 运行时提示词注入 | 插件运行时，每步重贴（`$DSH_HOME/prompt-inject.md` 全文，只去掉 `<!-- red-team-only -->` 标记本身、保留段内正文） | 立即 | 面板状态 / `purge probe` |
-| 强化段 | 运行时尾部 section | 立即 | `purge boost` |
-| 权限配置 | profile 的 `cordis.patch.yml` | 重载后 | selfcheck 权限层 |
-| agent 预设 | `presets/unrestricted` | 新会话选择 | 预设下拉 |
+## 不变量
 
-web 面实测：21 条已应用 + 6 条不适用（桌面换包/关窗那组没有 web 目标）。补丁表见 [STATE](docs/STATE.md)。
+- `$DSH_HOME/prompt-inject.md`、规则集、其他插件配置：任何时候都不写。
+- 插件 id 仍是 `dsh-purge`，数据目录仍是 `$DSH_HOME/dsh-purge-minimal/`：改包名不改这两处，否则已有配置失效。
+- `apply` 前必须留快照；`revert` 只撤自己写过的补丁，不整份覆盖宿主文件。
+- 面板的 HTTP 前缀仍是 `/dsh-purge/`，聊天斜杠命令仍是 `/purge`。
 
-## 2. 生命周期
-
-```
-安装插件 → 点「应用」（备份 + 写宿主）→ 退出并重开 DSH → selfcheck 全绿 → 开工
-```
-
-什么时候要再点一次「应用」：DSH 官方更新后、插件升级后、新装了带工具面的插件、或发现模型又开始推脱。「应用」是幂等的，不确定就点它。
-
-**不要**把"磁盘写成功"当成"当前进程已加载"：宿主模块只在启动时 import 一次。
-
-## 3. CLI 参考
-
-`purge` 是 `bin/community.js` 的别名；没进 PATH 时用 `node <插件目录>/bin/community.js`。裸 CLI 缺少实例信息时先显式指定 `DSH_HOME` 与 `PURGE_DSH_CLI`，否则自检只会报告 `unknown`。
-
-| 命令 | 作用 | 备注 |
-| --- | --- | --- |
-| `purge status` | 宿主路径、补丁计数、surface | 0 |
-| `purge selfcheck [--json]` | 20 层逐层证据 | `broken` → 退出码 1 |
-| `purge apply` / `revert` | 写补丁 / 撤补丁 | 交互式；都先备份 |
-| `purge host-status` | 只读磁盘布局与运行入口 | 0，须读 `state` |
-| `purge diagnose [--json]` | 锚点漂移诊断（行号 + 候选片段） | 0 |
-| `purge reanchor list\|show\|apply <id> [--index n] [--lines a-b] [--yes]\|clear <id>` | 半自动重锚 | 覆盖存本地 |
-| `purge probe [new]` | 生成/查看注入探针 | 30 分钟 TTL |
-| `purge audit [--limit n]` | 最近动作 | 含 `refusal_retry` |
-| `purge boost [on\|off]` | 强化段开关 | 写 tuning |
-| `purge inject head\|tail\|both` | 注入位置 | 下一轮生效 |
-| `purge preset [status\|install]` | 落盘 `unrestricted` | 只放文件不会出现在下拉里 |
-| `purge backup` / `rollback <id>` / `usage` / `prune` | 快照 / 回滚 / 占用 / 清理 | 回滚走 tgz 安装 |
-| `purge retry [on\|off]` | 拒绝检测 + 单次重试 | 默认 off |
-| `purge patches [list]` | 可选补丁清单 | 当前发行版没有 opt-in 补丁 |
-| `purge uninstall` | 卸载并清理本 home 内的插件目录与链接 | 不动外部源码 |
-
-自检状态语义：`ok`（已确认）、`pending`（待应用）、`inferred`（宿主推导，黄）、`unknown`（证据不足，黄）、`broken`（确认故障）。**pending 不是故障**，点一次「应用」即可。
-
-## 4. 探针：证明注入真的到了模型
+## 测试与构建
 
 ```sh
-purge probe new
-# → {"nonce":"purge-1a2b3c4d","message":"请原样输出下面这行…[purge-1a2b3c4d]"}
+pnpm install --frozen-lockfile --allow-build=esbuild
+pnpm test               # 449 项
+pnpm run check:docs     # 版本、兼容声明、残留引用
+pnpm run smoke          # 打包后验证
+pnpm run test:ui        # 面板 bundle 契约
 ```
 
-发一句话让模型回显：回显 = 链路通；回显但仍在推脱 = 人设/强化段问题；不回显 = 注入没到（看注入层、`boost` 是否被关、`injectPosition`）。
+- 改面板源码要重建**两个** bundle：`node packages/purge-panel/scripts/build.mjs --community`（写仓库根 `client.js`）与不带 `--community`（写 `packages/purge-panel/client.js`）。
+- 测试在干净环境跑：`scripts/bootstrap-install.mjs` 只在没有显式 home 时才继承 `DSH_PROFILE`，所以从 DSH 会话里跑也不会串 profile。
+- 重启本机 DSH 不能在当前会话的 cgroup 里 `systemctl stop dsh-web`（会连带杀掉会话）；用 `sudo systemd-run --unit=... --collect systemctl restart dsh-web`。
+- 真机验收（Electron、Windows 换包）另开隔离实例，不能拿组件测试冒充。
 
-## 5. 症状 → 动作
+## 发版清单
 
-| 症状 | 先跑 | 判读 | 动作 |
-| --- | --- | --- | --- |
-| 补丁数不是 21/27（web 面） | `selfcheck --json` | 看 `layers[].state` | pending → 应用；broken → `diagnose` |
-| 全部 `missing_file` | `status` | `ai_base` 为空 | 宿主未解包：点应用 → 重开 |
-| 模型开始推脱 | `probe new` | 是否回显 | 回显→调人设/强化段；不回显→查注入层 |
-| 工具被拒绝执行 | `selfcheck` | 审批/沙箱层是否绿 | 绿 → 属工具自身限制；红 → 点应用 |
-| DSH 刚更新过 | `status` | `asar_still_sealed` | 点应用 → 重开 → selfcheck |
-| 面板版本与磁盘不一致 | 面板黄条 | 界面与后端版本不同 | 核对磁盘与运行版本，按 INSTALLATION 重装 |
-| 想撤销一切 | — | — | `revert`（只撤补丁）/ `rollback <id>`（回滚插件） |
+1. `package.json`：`version`、`dsh.install.tarball`、`dsh.compatibility.dshReleases`、`dshTarget`。
+2. 文档同步：`README.md`、`README.zh-CN.md`（必须与 README 逐字节相同）、`docs/README.en.md`、`docs/INSTALLATION.md`、`docs/MAINTENANCE.md`、`docs/RUNBOOK.md`、`docs/STATE.md`、本文件。
+3. `release-notes.md` 首行必须是 `# <version>`。
+4. `pnpm run check:docs && pnpm test` 全绿后 `pnpm pack`，打 tag，release workflow 出 tgz。
 
-## 6. 状态与文件
-
-| 路径 | 内容 |
-| --- | --- |
-| `$DSH_HOME/prompt-inject.md` | **用户的注入正文**，插件只读，除非用户点保存 |
-| `$DSH_HOME/dsh-purge/tuning.json` | `{boost, injectPosition, askNoBlock, refusalRetry, extraPatches}` |
-| `$DSH_HOME/dsh-purge/probe.json` | 探针 nonce（30 分钟 TTL） |
-| `$DSH_HOME/dsh-purge/anchor-overrides.json` | 本地重锚覆盖（删掉即恢复出厂锚点） |
-| `$DSH_HOME/dsh-purge-minimal/audit.jsonl` | 动作审计（1MB 轮转，保留 2 份） |
-| `$DSH_HOME/dsh-purge/applied.json` · `installed-rev` | 上次应用的插件版本 |
-| `$DSH_HOME/dsh-purge-minimal/backups/<id>/` | 快照（`manifest.json` + 小文件，大文件在 `objects/`） |
-| `$DSH_HOME/.agent-presets/unrestricted/` | 无限制模式预设 |
-
-**不变量**：`prompt-inject.md`、规则集、其他插件配置，任何时候都不该被「应用」或「回滚」覆盖。
-
-**目录名与 id 都不跟包名走**：包叫 `dsh-ungate`，但插件 id 仍是 `dsh-purge`（`cordis.patch.yml` 的 key、HTTP 前缀、设置段都靠它，改了等于让已有配置失效），数据目录仍是 `$DSH_HOME/dsh-purge-minimal/`（项目不碰用户 home 的目录结构，也不做自动迁移）。
-
-## 7. 补丁表：27 条
-
-- 定义在 `lib/core.js` 的 `ALL_PATCHES`；每条 = `{id, name, layer, file, replacements:[{pattern, replace}], markers, optional?}`。
-- `pattern` 是对宿主源码的精确片段（允许为多个宿主版本准备多条候选），`markers` 判断"已应用"。
-- 新增一条的规矩：在 `targetFiles()` 登记文件键 → `replace` 留 `[dsh-purge]` 标记并写进 `markers` → 在 `test/patch-anchors.test.mjs` 钉真实片段 → 第三方目标用 `optional: true`。
-- 宿主升级后锚点漂移：`diagnose` 给出文件、行号、旧锚点首行与候选落点；确认后 `reanchor apply <id> --lines A-B`（先看 dry-run），加 `--yes` 写入。
-
-## 8. 预设 `unrestricted`
-
-- 是 standard 的超集，工具面一致，只改人设：执行优先、不重复声明边界、多轮不退化。
-- 由 `lib/presets-plugin.js` 注册到 `agentPresets`（**只放文件不会出现在下拉里**）。
-- 安装：`purge preset install`；回归卡：`docs/preset-test.md`。
-- 它不是额外强化——拆闸靠宿主补丁与注入，预设只改人格。
-
-## 9. 版本与兼容
-
-| 组件 | 值 |
-| --- | --- |
-| 插件 | `dsh-ungate` 0.2.3 |
-| 已验证宿主 | DSH Desktop 0.2.1-rc.1、0.2.1-rc.2、0.2.1-rc.3、0.2.1-rc.5 |
-| 已验证宿主（限定 web / npm CLI 面） | DSH Desktop 0.2.2-rc.1：apply 20 + selfcheck 19/19 适用层；桌面换包/关窗组不适用 |
-| 未验证 | 0.2.1-rc.4、0.2.2-alpha.2（selfcheck 标未验证，不猜） |
-| 其它宿主 | 允许应用，先看 `diagnose`；漂移不等于"应该没问题" |
-| Node | ≥18 |
-
-宿主的 app.asar 必须用 `diskFs()` 读取；普通 Node 自检通过不等同于 Electron 运行时通过。
-
-## 10. 面板接口（给排查用）
-
-| 接口 | 用途 |
-| --- | --- |
-| `GET /dsh-purge/status` | 版本、宿主、补丁计数（0.2.2 起无 `update` 字段） |
-| `GET /dsh-purge/selfcheck` | 20 层证据 |
-| `GET /dsh-purge/community` | 快照列表（CLI `purge backup` / `rollback` 同源） |
-| `POST /dsh-purge/apply` / `revert` / `boost` / `tuning` | 写操作（带 token） |
-| `purge backup` / `purge rollback <id>` / `purge prune` | 本机快照与回滚（CLI，无 HTTP 路由） |
-
-token 在服务启动日志里（`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | tail -1`）。不要把 token、提示词、profile 配置贴进公开 issue。
-
-## 11. 安装失败排查（精简）
-
-1. 确认入口：DSH 官方插件界面/市场，或该实例的 `dsh plugin --profile <名称> add <固定版本 tgz>`；不要 `npm i -g`，也不要在没初始化 profile 的 home 上装。
-2. `ERR_PNPM_MINIMUM_RELEASE_AGE_VIOLATION` 先看是否同时报 `version not present in registry manifest`；是则比较镜像与 npm 官方元数据，只对明确的公开镜像做一次 scoped registry 重试。
-3. `fetch failed` 不等于发行包没上传：按 metadata / archive / checksum 三段定位，瞬时 408/429/5xx 最多两次。
-4. 失败时保留日志与快照，用 `rollback <id>` 恢复；不要把失败说成成功，不要自动重启。
-5. 版本核对以 `package.json` 与 `release-notes.md` 为准。
-
-安装器测试与完整桌面/宿主验收分开记录，不混为"全部功能已验证"。
-
-## 12. 测试入口
-
-```sh
-pnpm test            # 449 项
-pnpm run smoke       # 打包后验证（pnpm 环境自动回退）
-pnpm run check:docs  # 版本/兼容/残留引用一致性
-pnpm run test:ui
-```
-
-`scripts/bootstrap-install.mjs` 只在**没有显式 home** 时继承 `DSH_PROFILE`：这样从任何 DSH 会话里跑测试都不会把当前 profile 泄漏进 fixture。真机验收（Electron、Windows 换包）另用隔离实例，不能拿组件测试冒充。
-
-## 13. 文档维护规则
-
-- 发版必须同步：本文件首部版本行、§9 表格、`package.json` 的 `version` / `dshReleases` / `dshTarget`、`release-notes.md` 首行。
-- `check:docs` 还会拦截：上游 1.6.x 残留、已删除功能（渗透工具面、历史调试入口、hooks 拦截旁路）的死引用、没有实测支撑的 `DSH Desktop x.y.z` 声明、发行包链接版本不一致。
-- 上游历史资料归档已随 0.2.3 清理移除；当前文档以本文件为准，与 README 冲突时先改 README 再改这里。
+`check:docs` 还会拦：上游 1.6.x 残留、已删除功能的死引用、没有实测支撑的 `DSH Desktop x.y.z` 声明、发行包链接版本不一致。CI 在 `.github/workflows/ci.yml`。

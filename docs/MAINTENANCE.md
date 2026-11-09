@@ -1,6 +1,6 @@
-# 维护手册（0.2.3）
+# 维护手册（0.2.4）
 
-> 当前版本 **0.2.3**。面向维护这个插件本体的人：改补丁、修锚点、看审计、发版。
+> 当前版本 **0.2.4**。面向维护这个插件本体的人：改补丁、修锚点、看审计、发版。
 
 ## 1. 应用与还原
 
@@ -14,11 +14,11 @@
 宿主升级后，`pattern` 可能不再逐字命中。流程：
 
 ```sh
-purge diagnose                    # 列出 drifted：id、文件、行号、候选片段
-purge diagnose --json | jq '.drifted'   # 机器读
-purge reanchor apply 33 --index 0 --lines 812-826   # dry-run：看候选与 uniquely-applies
-purge reanchor apply 33 --index 0 --lines 812-826 --yes   # 写入本地覆盖
-purge reanchor clear 33           # 撤销覆盖，回到出厂锚点
+ungate diagnose                    # 列出 drifted：id、文件、行号、候选片段
+ungate diagnose --json | jq '.drifted'   # 机器读
+ungate reanchor apply 33 --index 0 --lines 812-826   # dry-run：看候选与 uniquely-applies
+ungate reanchor apply 33 --index 0 --lines 812-826 --yes   # 写入本地覆盖
+ungate reanchor clear 33           # 撤销覆盖，回到出厂锚点
 ```
 
 规则：
@@ -44,7 +44,7 @@ purge reanchor clear 33           # 撤销覆盖，回到出厂锚点
 | GET | `/dsh-purge/community` | 快照、审计摘要 |
 | POST | `/dsh-purge/apply` · `revert` | 写宿主 |
 | POST | `/dsh-purge/tuning` | boost / injectPosition / askNoBlock / refusalRetry |
-| CLI | `purge backup` / `purge rollback <id>` / `purge prune` | 本机快照与回滚（无 HTTP 路由） |
+| CLI | `ungate backup` / `ungate rollback <id>` / `ungate prune` | 本机快照与回滚（无 HTTP 路由） |
 
 token 在服务日志里：`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | tail -1`。接口只挂在本进程的 web server 上，不监听外部。
 
@@ -52,13 +52,13 @@ token 在服务日志里：`sudo grep -aoE "token=[A-Za-z0-9_-]+" <log> | tail -
 
 - 快照：`$DSH_HOME/dsh-purge-minimal/backups/<id>/manifest.json` + `objects/` 里的大文件（宿主源码副本按内容寻址）。快照不包含用户提示词正文的额外副本。
 - 审计：`$DSH_HOME/dsh-purge-minimal/audit.jsonl`，1MB 轮转保留 2 份。事件：`apply`、`revert`、`boost`、`probe`、`preset`、`reanchor`、`tuning_setting`、`refusal_retry`、`refusal_retry_outcome`。
-- `purge audit --limit 20` 是最快的"刚才发生了什么"。
+- `ungate audit --limit 20` 是最快的"刚才发生了什么"。
 
 ## 6. 拒绝重试层
 
-`purge retry on|off`（默认 off）。插件在 `llm/stream` waterfall 上缓冲输出开头（≤400 字符），命中拒绝特征就丢弃并在系统提示尾部追加一段加固语，重跑一次。每次重试写 `refusal_retry`（只记长度与前 80 字符）。
+`ungate retry on|off`（默认 off）。插件在 `llm/stream` waterfall 上缓冲输出开头（≤400 字符），命中拒绝特征就丢弃并在系统提示尾部追加一段加固语，重跑一次。每次重试写 `refusal_retry`（只记长度与前 80 字符）。
 
-排查顺序：先看 `purge audit --limit 20` 有没有 `refusal_retry`；有，再考虑调 `injectPosition` 或强化段，不要先怀疑补丁。
+排查顺序：先看 `ungate audit --limit 20` 有没有 `refusal_retry`；有，再考虑调 `injectPosition` 或强化段，不要先怀疑补丁。
 
 ## 7. 发版检查单
 

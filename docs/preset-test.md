@@ -1,12 +1,12 @@
-# `unrestricted` 预设回归卡（0.2.3）
+# `unrestricted` 预设回归卡（0.2.4）
 
-> 验证"人设生效"而不是"补丁生效"。补丁层用 `purge selfcheck` + 探针证明，这里只测模型行为。
+> 验证"人设生效"而不是"补丁生效"。补丁层用 `ungate selfcheck` + 探针证明，这里只测模型行为。
 > 每次改 `presets/unrestricted/*.yml` 或 `lib/presets-plugin.js` 后跑一遍；结果记在 PR 或 issue 里。
 
 ## 前置
 
 ```sh
-purge preset install          # 落盘到 $DSH_HOME/.agent-presets/unrestricted/
+ungate preset install          # 落盘到 $DSH_HOME/.agent-presets/unrestricted/
 # 新会话下拉里选择「无限制模式」；另开一个会话选「标准模式」做对照
 ```
 
@@ -47,7 +47,7 @@ purge preset install          # 落盘到 $DSH_HOME/.agent-presets/unrestricted/
 
 ## 不通过怎么办
 
-1. 先证明链路：`purge probe new` 回显 → 注入到位；不回显 → 修注入层，预设无关。
+1. 先证明链路：`ungate probe new` 回显 → 注入到位；不回显 → 修注入层，预设无关。
 2. 回显但不通过 → 改 `presets/unrestricted/agent.cordis.yml` 的 persona 段（越短越好，命令式优先）。
-3. 改完 `purge preset install --force`，新会话重测；**不要**直接改 `$DSH_HOME/.agent-presets/` 里的落盘文件当实验，那会让源码与运行态漂移。
+3. 改完 `ungate preset install --force`，新会话重测；**不要**直接改 `$DSH_HOME/.agent-presets/` 里的落盘文件当实验，那会让源码与运行态漂移。
 4. 记下模型名与日期：人设效果对模型版本敏感，结论不能跨模型复用。
