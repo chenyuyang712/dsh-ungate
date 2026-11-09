@@ -1,21 +1,18 @@
-// 文档跟着版本走：版本号、发行说明首行、英文 README、AGENTS 与 docs/*.md 必须指向同一个 0.1.2 事实。
+// 文档跟着版本走：版本号、发行说明首行、英文 README、AGENTS 与 docs/*.md 必须指向同一个版本事实。
 // 另外拦住三类历史漂移：上游 1.6.x 残留、已删除功能（红队/演练台/hooks 否决旁路）的死引用、
 // 以及没有实测支撑的兼容性声明。CI 与本地 `pnpm run check:docs` 都跑它。
 import fs from "node:fs";
 import { checkInstallExamples } from "./lib/check-install-examples.mjs";
+import { PAIRS, verifyPair } from "./i18n-pairing.mjs";
 
 const read = (file) => fs.readFileSync(file, "utf8");
 const pkg = JSON.parse(read("package.json"));
 const version = pkg.version;
 const notesFirst = read("release-notes.md").split("\n")[0].trim();
 const readme = read("README.md");
-const readmeZh = read("README.zh-CN.md");
 const readmeEn = read("docs/README.en.md");
 const agents = read("AGENTS.md");
 const problems = [];
-
-// 1) 中文 README 与主 README 完全一致：避免两份事实各自漂移。
-if (readmeZh !== readme) problems.push("README.zh-CN.md 必须与 README.md 保持一致");
 
 // 2) 版本号的首行锚点。
 if (notesFirst !== `# ${version}`) problems.push(`release-notes.md 首行应为 "# ${version}"，实际是 "${notesFirst}"`);
@@ -26,9 +23,9 @@ if (!agents.includes(`\`dsh-ungate\` ${version}`))
 
 // 3) 当前事实文档：都写着同一个版本，且不再引用上游 1.6.x 或已删除功能。
 const currentDocs = [
-  "README.md", "README.zh-CN.md", "AGENTS.md", "release-notes.md", "NOTICE.md", "CONTRIBUTORS.md",
+  "README.md", "AGENTS.md", "release-notes.md", "NOTICE.md", "CONTRIBUTORS.md",
   "docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK.md", "docs/STATE.md",
-  "docs/README.en.md", "docs/CLI.md", "docs/preset-test.md", "docs/DESKTOP-TEST.md",
+  "docs/README.en.md", "docs/CLI.md", "docs/maintainer/preset-test.md", "docs/maintainer/DESKTOP-TEST.md",
 ];
 for (const file of ["docs/INSTALLATION.md", "docs/MAINTENANCE.md", "docs/RUNBOOK.md", "docs/STATE.md"]) {
   if (!read(file).includes(`当前版本 **${version}**`)) problems.push(`${file} 当前版本未同步到 ${version}`);
@@ -117,43 +114,12 @@ if (patchCount && !readme.includes(`${patchCount} 条`)) problems.push(`README.m
 for (const file of currentDocs.filter((f) => f.endsWith(".md")))
   for (const problem of checkInstallExamples(read(file))) problems.push(`${file}: ${problem}`);
 
-// 9) 中英 README 不能各自漂移：逐块比结构（标题层级、表格行数、代码块行数、列表项数）。
-//    文字是翻译，形状必须一样——少一节、多一行表格都会失败。
-const shape = (md) => {
-  const lines = md.split("\n");
-  const blocks = [];
-  let i = 0;
-  while (i < lines.length) {
-    const line = lines[i];
-    if (/^```/.test(line)) {
-      let n = 0; i++;
-      while (i < lines.length && !/^```/.test(lines[i])) { n++; i++; }
-      i++; blocks.push(`code${n}`); continue;
-    }
-    if (/^\|/.test(line)) {
-      let n = 0;
-      while (i < lines.length && /^\|/.test(lines[i])) { n++; i++; }
-      blocks.push(`table${n}`); continue;
-    }
-    if (/^#{1,4}\s/.test(line)) {
-      blocks.push(`h${line.match(/^#+/)[0].length}`); i++; continue;
-    }
-    if (/^\s*[-*]\s/.test(line)) {
-      let n = 0;
-      while (i < lines.length && /^\s*[-*]\s/.test(lines[i])) { n++; i++; }
-      blocks.push(`ul${n}`); continue;
-    }
-    i++;
-  }
-  return blocks;
-};
-const zhShape = shape(readme);
-const enShape = shape(readmeEn);
-if (zhShape.join(",") !== enShape.join(",")) {
-  const at = zhShape.findIndex((b, i) => b !== enShape[i]);
-  problems.push(
-    `README.md 与 docs/README.en.md 结构不一致（第 ${at + 1} 块：中文 ${zhShape[at] ?? "(结束)"} / 英文 ${enShape[at] ?? "(结束)"}）`
-  );
+// 9) 中英 README 不能各自漂移：结构签名（标题、代码块原文、表格尺寸、列表项数、链接目标）
+//    + 分节哈希记录（README.i18n.yaml）。只改一侧、没重新记录就失败。
+// 中英成对文档：结构签名（含代码块原文、链接目标）+ 分节哈希记录。
+for (const pair of PAIRS) {
+  const { problems: pairProblems } = verifyPair(pair);
+  problems.push(...pairProblems.map((p) => `${pair.zh} ↔ ${pair.en}：${p}`));
 }
 
 if (problems.length) {

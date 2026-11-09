@@ -59,11 +59,12 @@ pwsh scripts/install.ps1 -DryRun     # Windows
 ## 装完三步
 
 ```sh
-ungate apply                    # 等价于面板点「应用」：写宿主源码副本并留备份
-# 完全退出 DSH（托盘退出 / ⌘Q，不是关窗口）再打开
-ungate selfcheck --json         # state=ok、broken 为空
-ungate probe new                # 发一句话，模型原样回显 nonce 即链路通
+ungate apply
+ungate selfcheck --json
+ungate probe new
 ```
+
+`apply` 等价于面板点「应用」：写宿主源码副本并留备份。写完**完全退出 DSH**（托盘退出 / ⌘Q，不是关窗口）再打开，然后 `selfcheck --json` 应给出 `state=ok`、`broken` 为空，`probe new` 生成的 nonce 由模型原样回显即链路通。
 
 磁盘写成功不等于已加载：宿主模块只在启动时 import 一次，结论以重开后的自检与探针为准。
 

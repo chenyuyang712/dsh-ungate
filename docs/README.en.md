@@ -16,7 +16,7 @@
 [![License](https://img.shields.io/badge/license-MIT-blue?style=flat)](../LICENSE)
 [![Node](https://img.shields.io/badge/Node.js-%3E%3D18-339933?logo=node.js&logoColor=fff)](https://nodejs.org)
 
-Current version **0.2.4** · Verified **DSH Desktop 0.2.1-rc.1 / 0.2.1-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5** (0.2.2-rc.1 on the web and npm CLI surfaces only) · [中文](../README.zh-CN.md)
+Current version **0.2.4** · Verified **DSH Desktop 0.2.1-rc.1 / 0.2.1-rc.2 / 0.2.1-rc.3 / 0.2.1-rc.5** (0.2.2-rc.1 on the web and npm CLI surfaces only) · [中文](../README.md)
 
 </div>
 
@@ -59,11 +59,12 @@ Desktop shells: replace `--profile web` with `desktop`.
 ## Three steps after installing
 
 ```sh
-ungate apply                    # same as pressing Apply in the panel: writes a host source copy and keeps backups
-# Fully quit DSH (tray exit / ⌘Q, not just closing the window), reopen
-ungate selfcheck --json         # state=ok, broken empty
-ungate probe new                # send any message; the model should echo the nonce verbatim
+ungate apply
+ungate selfcheck --json
+ungate probe new
 ```
+
+`apply` is the panel's Apply: it writes the host source copy and keeps backups. Then **fully quit DSH** (tray exit / ⌘Q, not just closing the window) and reopen; `selfcheck --json` should report `state=ok` with `broken` empty, and the nonce from `probe new` must come back verbatim from the model.
 
 A successful disk write is not proof of load: host modules are imported once at startup, so conclusions come from a post-restart selfcheck and a probe.
 

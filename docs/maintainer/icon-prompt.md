@@ -1,6 +1,6 @@
-# 图标与横幅（已完成，源文件即 SVG）
+# 图标与横幅
 
-生态里所有 dsh-purge fork 共用上游同一张 720×180 程序化 SVG banner；本仓库的 icon 与 banner 已自行绘制，不再共享上游视觉。
+源文件就是 SVG，改视觉直接改这三份。
 
 ## 资产
 
@@ -12,7 +12,7 @@
 
 ## 接线
 
-README 三份（`README.md` / `README.zh-CN.md` / `docs/README.en.md`）头部用 `<picture>` + `prefers-color-scheme` 在 banner.svg 与 banner-dark.svg 间自动切换；换图只替换 SVG 文件，无需改文档。
+README 两份（`README.md` / `docs/README.en.md`）头部用 `<picture>` + `prefers-color-scheme` 在 banner.svg 与 banner-dark.svg 间自动切换；换图只替换 SVG 文件，无需改文档。
 
 ## 设计参数（供后续改版）
 

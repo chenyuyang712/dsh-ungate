@@ -1,7 +1,7 @@
 # 当前状态（0.2.4）
 
-> 当前版本 **0.2.4**。本版只改文档与 CLI 名，补丁表与注入行为不变（27 条宿主补丁 / 20 层自检）。 · 最后更新：2026-11-09
-> 本文件记录"现在是什么"，不记录"以前是什么"。历史在 [release-notes.md](../release-notes.md)；上游归档已随 0.2.3 清理移除，原文在 git 历史。
+> 当前版本 **0.2.4**。27 条宿主补丁 / 20 层自检。 · 最后更新：2026-11-09
+> 只写现在是什么；历史在 [release-notes.md](../release-notes.md)。
 
 ## 这是什么
 
@@ -81,10 +81,3 @@ web 面（`--profile web`）实测：**21 条已应用**、**6 条不适用**（
 | `$DSH_HOME/dsh-purge-minimal/backups/` | 快照与对象（`manifest.json` + `objects/`） |
 | `$DSH_HOME/dsh-purge-minimal/` | 数据目录，**沿用历史目录名、不随包改名、不做任何迁移**：项目不读写用户 home 的结构 |
 | `$DSH_HOME/.agent-presets/unrestricted/` | 无限制模式预设 |
-
-## 本机参考实例
-
-| 实例 | 地址 | DSH_HOME | 宿主版本 | 用途 |
-| --- | --- | --- | --- | --- |
-| 主实例 | 127.0.0.1:3080 | `/home/kali/.dsh` | 0.2.2-rc.1（宿主 `/usr/lib/node_modules/@deepseek-ai/dsh`，旧版备份 `dsh.bak-0.2.1-rc.3`） | 日常使用与验收 |
-| 隔离实例 | 127.0.0.1:3081 | `/home/kali/.dsh-iso` | 0.2.2-rc.1（宿主 `/home/kali/.dsh-iso/host-0.2.2-rc.1`，旧副本 `host` 保留） | 改宿主/换包类改动先在它上面跑 |

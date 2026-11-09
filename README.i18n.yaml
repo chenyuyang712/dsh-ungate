@@ -1,0 +1,32 @@
+# 中英成对文档的一致性记录：每节两侧各自的哈希。
+# 改了一侧就把另一侧带上，然后 node scripts/i18n-pairing.mjs --write 重新记录。
+/:
+  en: 18be29590e4e1fb8
+  zh: 818617c2fc567557
+/dsh-ungate:
+  en: c868fc15273db7ba
+  zh: 5b652f449e4504cc
+/dsh-ungate/what-it-is:
+  en: b2eb6354b9e488e4
+  zh: 075a3a170df64f69
+/dsh-ungate/install:
+  en: d9d3aa22755c692e
+  zh: 3647f45841ae37cc
+/dsh-ungate/three-steps-after-installing:
+  en: 888cef684b9c5eac
+  zh: 1c5d9f3ef06b8ccc
+/dsh-ungate/compatibility:
+  en: 0960a64ad6cf70bf
+  zh: 71962c51c28b174c
+/dsh-ungate/commands:
+  en: f89216939b63a8d1
+  zh: 2ef8fa112972ca18
+/dsh-ungate/updating:
+  en: ac3dcb8a4cb31b9d
+  zh: 6eeac085767248dc
+/dsh-ungate/docs:
+  en: f9063fe58907dd61
+  zh: ac33d68e9c19c344
+/dsh-ungate/provenance-and-license:
+  en: 2c5103cabd1e285f
+  zh: da4ab5df7f6a18c0

@@ -6,7 +6,7 @@
 ## 0. 一分钟体检
 
 ```sh
-export DSH_HOME=/home/kali/.dsh DSH_PROFILE=web
+export DSH_HOME="$HOME/.dsh" DSH_PROFILE=web
 export PURGE_DSH_CLI="$(command -v dsh)"
 node /path/to/dsh-ungate/bin/community.js status
 node /path/to/dsh-ungate/bin/community.js selfcheck --json | jq '{ok, state, patch, broken}'
@@ -71,7 +71,7 @@ sudo systemd-run --unit=dsh-web-restart --collect \
 ```sh
 # 起
 sudo systemd-run --unit=dsh-web-iso --collect \
-  env DSH_HOME=/home/kali/.dsh-iso /usr/bin/node <host>/lib/bin.js \
+  env DSH_HOME="$HOME/.dsh-iso" /usr/bin/node <host>/lib/bin.js \
   --profile web --port 3081 --no-open --trusted-host 127.0.0.1 --trusted-host 127.0.0.1:3081
 # 看
 systemctl status dsh-web-iso --no-pager

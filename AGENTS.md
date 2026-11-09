@@ -46,7 +46,7 @@ pnpm run test:ui        # 面板 bundle 契约
 ## 发版清单
 
 1. `package.json`：`version`、`dsh.install.tarball`、`dsh.compatibility.dshReleases`、`dshTarget`。
-2. 文档同步：`README.md`、`README.zh-CN.md`（必须与 README 逐字节相同）、`docs/README.en.md`、`docs/INSTALLATION.md`、`docs/MAINTENANCE.md`、`docs/RUNBOOK.md`、`docs/STATE.md`、本文件。
+2. 文档同步：`README.md`、`docs/README.en.md`（成对，`node scripts/i18n-pairing.mjs --write` 记录）、`docs/INSTALLATION.md`、`docs/MAINTENANCE.md`、`docs/RUNBOOK.md`、`docs/STATE.md`、本文件。
 3. `release-notes.md` 首行必须是 `# <version>`。
 4. `pnpm run check:docs && pnpm test` 全绿后 `pnpm pack`，打 tag，release workflow 出 tgz。
 
