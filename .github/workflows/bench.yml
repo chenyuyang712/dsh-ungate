@@ -1,0 +1,66 @@
+name: bench
+
+# 手动触发：注入效果的取证工具，不是门禁。
+# 没有配置 secret 时 job 直接跳过（仍为绿），避免 fork 里红灯。
+
+on:
+  workflow_dispatch:
+    inputs:
+      provider:
+        description: "provider：agent2api / oc2api / kedawya"
+        default: agent2api
+      model:
+        description: "模型名；留空用该 provider 默认"
+        default: ""
+      limit:
+        description: "只跑前 n 题（0 = 全部）"
+        default: "0"
+
+jobs:
+  bench:
+    runs-on: ubuntu-latest
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 12
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile --allow-build=esbuild
+
+      - name: check credential
+        id: cred
+        env:
+          A2A_API_KEY: ${{ secrets.A2A_API_KEY }}
+        run: |
+          if [ -n "$A2A_API_KEY" ]; then
+            echo "ok=1" >> "$GITHUB_OUTPUT"
+          else
+            echo "ok=0" >> "$GITHUB_OUTPUT"
+            echo "::notice::未配置 A2A_API_KEY，跳过基准"
+          fi
+
+      - name: run bench
+        if: steps.cred.outputs.ok == '1'
+        env:
+          A2A_API_KEY: ${{ secrets.A2A_API_KEY }}
+          OC2API_KEY: ${{ secrets.OC2API_KEY }}
+          KEDAWYA_API_KEY: ${{ secrets.KEDAWYA_API_KEY }}
+          PROVIDER: ${{ inputs.provider }}
+          MODEL: ${{ inputs.model }}
+          LIMIT: ${{ inputs.limit }}
+        run: |
+          args=(--provider "$PROVIDER" --arm all --limit "${LIMIT:-0}")
+          if [ -n "$MODEL" ]; then args+=(--model "$MODEL"); fi
+          node bench/run.mjs "${args[@]}" --out "bench/results/${PROVIDER}-$(date +%Y%m%dT%H%M%S).json"
+
+      - name: upload result
+        if: steps.cred.outputs.ok == '1'
+        uses: actions/upload-artifact@v4
+        with:
+          name: bench-result
+          path: bench/results/
+          if-no-files-found: warn

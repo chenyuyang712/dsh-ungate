@@ -7,3 +7,4 @@ audit.jsonl
 *.tgz
 .dshpurge.bak
 lib/default-prompt-inject.md
+bench/results/
