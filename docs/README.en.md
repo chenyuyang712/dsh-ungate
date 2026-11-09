@@ -7,7 +7,7 @@
 
 <h1 align="center">dsh-ungate</h1>
 
-<p align="center"><strong>A host-patch distribution for DeepSeek Harness</strong>: 27 patches cover approvals, sandbox, plan mode and the prompt layer; runtime injection and the <code>unrestricted</code> preset cover the persona configuration; <code>selfcheck</code> and the probe leave evidence at each step.</p>
+<p align="center"><strong>Removes DeepSeek Harness's approval prompts, sandbox denials and the "run it yourself" hedging — and puts your own prompt text into the system prompt on every turn.</strong> 27 host patches + runtime injection + the <code>unrestricted</code> preset; <code>selfcheck</code> and the probe make every step checkable.</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -21,12 +21,24 @@
   <a href="../README.zh-CN.md">中文</a> | <a href="README.en.md">English</a>
 </p>
 
-## Provenance
-
-- Upstream: [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (YuJunZhiXue, MIT).
-- The code comes from the minimal cut of [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge); [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) subtracts and rewrites on top: no tool surface, no legacy debug entry points, no in-plugin self-update, 27 patches, one source of truth for docs. Not an official release by the upstream author.
-
 ## What it changes
+
+Install, press Apply once, fully quit and reopen DSH — then these behaviours change:
+
+| Today | After |
+| --- | --- |
+| Every tool call pops an approval prompt you must click through | Approved automatically; execution is no longer interrupted |
+| The sandbox refuses to write files or run commands | Runs under the profile's permission config (default `danger-full-access`) |
+| The model answers "run it yourself" or "I need you to confirm first" | Executes directly and returns the result |
+| The official identity sentence and caution paragraphs in the system prompt | Replaced by your `$DSH_HOME/prompt-inject.md` body |
+| Your own rules never reach the system prompt | The injection body is re-attached every step and is not crowded out during assembly |
+| New sessions use the standard persona | Switch to the `unrestricted` preset: execution first, less preamble, no multi-turn drift |
+
+Of the 27, 9 are behavioural (prompt-wording neutralisation for tools, sandbox and identity), 12 keep the injection alive through assembly, and 6 only cover desktop-shell repack/close. No filler entries; the per-patch table is in [STATE](STATE.md).
+
+Changes land only on the host source copy (backed up before every apply; `purge revert` undoes them). Your prompt text, rule sets and other plugin configs are untouched. No content review and no public-target gate — scope is declared by the operator.
+
+## Layers
 
 | Layer | Content | Takes effect |
 | --- | --- | --- |
@@ -36,7 +48,7 @@
 | Permission config | `danger-full-access` + `approval: ask` | after reload |
 | agent preset | `unrestricted`, a superset of standard that only changes persona | pick it in new sessions |
 
-It does not touch prompt text, rule sets or other plugin configs, and it does not judge who owns a target. Disk writes are not proof of load: conclusions come from a post-restart `selfcheck` and a probe.
+A successful disk write is not proof of load: host modules are imported once at startup, so conclusions always come from a post-restart `selfcheck` and a probe.
 
 ## Install
 
@@ -86,6 +98,22 @@ node bin/community.js probe new          # send any message; the model should ec
 
 `engines.dsh` in `package.json` is enforced by the host on install and boot; it blocks 0.3.x and 0.2.1-rc.0. To force an unverified version, use `dsh plugin --profile <n> allow-version <pkg@ver> --accept-risk` (the exemption does not survive upgrades).
 
+## Panel and CLI
+
+Left sidebar **Purge**: status (version / host / patch counters / per-layer evidence, expandable), prompt text, and More (server roster, diagnostics and re-anchoring, preset install). Backups and rollback are CLI-only: `purge backup` / `purge rollback <id>`.
+
+`purge` is an alias of `bin/community.js`:
+
+| Command | Purpose |
+| --- | --- |
+| `purge status` / `selfcheck [--json]` | host and patch overview / 20 per-layer evidence rows (`broken` → exit 1) |
+| `purge apply` / `revert` | write patches / undo them (both back up first, both idempotent) |
+| `purge diagnose` / `reanchor …` | anchor-drift diagnosis / semi-automatic re-anchoring |
+| `purge probe [new]` | runtime injection probe (30-minute TTL) |
+| `purge backup` / `rollback <id>` / `usage` / `prune` | snapshot / rollback / footprint / cleanup |
+
+Full table: [AGENTS.md §3](../AGENTS.md).
+
 ## Updating
 
 Upgrades go through the host; the plugin never self-updates.
@@ -94,8 +122,38 @@ Upgrades go through the host; the plugin never self-updates.
 - **Tarball installs**: re-run `plugin add` with the new tgz — re-adding is the upgrade (`not-updatable` by design); configs and prompt text are untouched.
 - **After a host upgrade**: the asar reseals and all patches are gone — press Apply once, quit and reopen.
 
+## Proof it took effect
+
+```sh
+purge probe new
+# → {"nonce":"purge-1a2b3c4d","message":"Echo the following line verbatim…[purge-1a2b3c4d]"}
+```
+
+The model echoing the nonce verbatim means the injection chain works; echoing it but still deflecting means a persona/boost problem; no echo means the injection never arrived (check the injection layer, `boost`, `injectPosition`).
+
+## Development and tests
+
+```sh
+pnpm install --frozen-lockfile --allow-build=esbuild   # the panel build needs esbuild's binary
+pnpm test              # 449 tests: patch anchors, selfcheck, installer, HTTP, panel contracts, regressions
+pnpm run smoke         # after packing: dependency-free start, module imports, preset parse, status
+pnpm run check:docs    # version / compatibility claims / stale references consistency
+pnpm run test:ui       # panel client bundle contract
+pnpm run build:client  # rebuild the bundle after editing panel sources
+```
+
+Tests run in a clean environment: `scripts/bootstrap-install.mjs` inherits `DSH_PROFILE` only when no explicit home is given. Real-machine acceptance (Electron, repack) runs on an isolated instance.
+
+CI lives in `.github/workflows/ci.yml` (Node 22/24 matrix: `check:docs` → panel bundle check → panel contract → 449 tests → pack and assert the tarball excludes `docs/upstream/`); `release.yml` repeats the same checks on `v*.*.*` tags, packs and creates the release.
+
 ## Docs
 
-[AGENTS.md](../AGENTS.md) · [INSTALLATION](../docs/INSTALLATION.md) · [STATE](../docs/STATE.md) · [VERIFY](../docs/VERIFY.md) · [RUNBOOK](../docs/RUNBOOK.md).
+[AGENTS.md](../AGENTS.md) · [INSTALLATION](INSTALLATION.md) · [STATE](STATE.md) · [VERIFY](VERIFY.md) · [RUNBOOK](RUNBOOK.md).
 
-MIT — see [LICENSE](../LICENSE); provenance and contributor attribution: [NOTICE.md](../NOTICE.md), [CONTRIBUTORS.md](../CONTRIBUTORS.md).
+## Provenance and license
+
+MIT — see [LICENSE](../LICENSE).
+
+- Upstream: [YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge) (YuJunZhiXue).
+- The code comes from the minimal cut of [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge); [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) subtracts and rewrites on top: no tool surface, no legacy debug entry points, no in-plugin self-update, 27 patches, one source of truth for docs. Not an official release by the upstream author.
+- Full attribution: [NOTICE.md](../NOTICE.md) and [CONTRIBUTORS.md](../CONTRIBUTORS.md).

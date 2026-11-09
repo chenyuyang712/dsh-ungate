@@ -7,7 +7,7 @@
 
 <h1 align="center">dsh-ungate</h1>
 
-<p align="center"><strong>DeepSeek Harness 的宿主补丁发行版</strong>：27 条补丁覆盖审批、沙箱、计划模式与提示词层；运行时注入与 <code>unrestricted</code> 预设补齐人格配置；<code>selfcheck</code> 与探针每步留证据。</p>
+<p align="center"><strong>把 DeepSeek Harness 里的审批弹窗、沙箱拒绝和「建议你自己执行」的推脱去掉，并让你自己写的提示词每轮进入系统提示。</strong>27 条宿主补丁 + 运行时注入 + <code>unrestricted</code> 预设；<code>selfcheck</code> 与探针可复查每一步。</p>
 
 <p align="center">
   <a href="https://github.com/youki258/dsh-ungate/releases"><img src="https://img.shields.io/github/v/release/youki258/dsh-ungate?label=release" alt="Release"></a>
@@ -21,14 +21,24 @@
   <a href="README.zh-CN.md">中文</a> | <a href="docs/README.en.md">English</a>
 </p>
 
-## 来源
+## 它改变什么
 
-- 上游：[YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)（小杨 / YuJunZhiXue，MIT）。
-- 代码来自社区分支 [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge) 的 minimal 裁剪；本仓库 [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) 在其上做减法与重写：去掉工具面与历史调试入口、去掉在线自更新、补丁表压到 27 条、文档收敛为单一事实。不是上游作者的官方发布。
+装上、点一次「应用」、退出重开 DSH，这些行为会变：
 
----
+| 现在 | 装上之后 |
+| --- | --- |
+| 工具调用弹审批框，要逐次点「允许」 | 自动放行，不再打断执行 |
+| 沙箱拒绝写文件、拒绝执行命令 | 按 profile 的权限配置执行（默认 `danger-full-access`） |
+| 模型回「建议你自己执行」「我需要先确认」 | 直接执行并交付结果 |
+| 系统提示里的官方身份句与谨慎措辞段落 | 由 `$DSH_HOME/prompt-inject.md` 的正文替代 |
+| 每轮系统提示里没有你写的规则 | 注入正文每步重贴，装配阶段不会被别的段挤掉 |
+| 新会话用 standard 人设 | 可切 `unrestricted` 预设：执行优先、少铺垫、多轮不退化 |
 
-## 它做什么
+27 条里 9 条是行为面（工具、沙箱、身份相关的提示词措辞中性化），12 条保证注入在装配阶段存活，6 条只管桌面壳的换包与关窗；没有凑数条目，逐条明细见 [STATE](docs/STATE.md)。
+
+改动只落在宿主源码副本上（应用前自动备份，`purge revert` 可撤），不碰你的提示词正文、规则集与其他插件配置。不做内容审核与公网门禁——范围由操作者自己声明。
+
+## 结构
 
 | 层 | 内容 | 生效方式 |
 | --- | --- | --- |
@@ -38,9 +48,7 @@
 | 权限配置 | `danger-full-access` + `approval: ask` | 重载后 |
 | agent 预设 | `unrestricted`，standard 的超集，只改人格 | 新会话下拉选择 |
 
-不改动提示词正文、规则集与其他插件配置；不做内容审核与公网门禁，范围由操作者自己声明。
-
-"应用"只写宿主源码副本并留备份；磁盘写成功 ≠ 当前进程已加载，结论以重开后的 `selfcheck` 与探针为准。
+磁盘写成功 ≠ 当前进程已加载：宿主模块只在启动时 import 一次，所以结论一律以重开后的 `selfcheck` 与探针为准。
 
 ## 安装
 
@@ -149,6 +157,10 @@ CI 在 `.github/workflows/ci.yml`（Node 22/24 矩阵：`check:docs` → 面板 
 | [docs/VERIFY.md](docs/VERIFY.md) | 逐宿主验收证据（可复查的命令与输出） |
 | [docs/RUNBOOK.md](docs/RUNBOOK.md) | 运维：重启、体检、恢复决策 |
 
-## 许可与来源
+## 来源与许可
 
-MIT，见 [LICENSE](LICENSE)；原始作者、分支与贡献者归属见 [NOTICE.md](NOTICE.md) 与 [CONTRIBUTORS.md](CONTRIBUTORS.md)。
+MIT，见 [LICENSE](LICENSE)。
+
+- 上游：[YuJunZhiXue/dsh-purge](https://github.com/YuJunZhiXue/dsh-purge)（小杨 / YuJunZhiXue）。
+- 代码来自社区分支 [kingcharleslzy-ai/dsh-purge](https://github.com/kingcharleslzy-ai/dsh-purge) 的 minimal 裁剪；本仓库 [youki258/dsh-ungate](https://github.com/youki258/dsh-ungate) 在其上做减法与重写：去掉工具面与历史调试入口、去掉在线自更新、补丁表压到 27 条、文档收敛为单一事实。不是上游作者的官方发布。
+- 完整归属见 [NOTICE.md](NOTICE.md) 与 [CONTRIBUTORS.md](CONTRIBUTORS.md)。
