@@ -72,7 +72,7 @@ A successful disk write is not proof of load: host modules are imported once at 
 | Host | Result |
 | --- | --- |
 | DSH Desktop 0.2.1-rc.1 / rc.2 / rc.3 / rc.5 | Verified |
-| DSH Desktop 0.2.2-rc.1 | Verified (web and npm CLI surfaces; desktop repack group untested) |
+| DSH Desktop 0.2.2-rc.1 | Verified (web surface) |
 | Any other 0.2.x | Run `ungate diagnose` first |
 
 Per-host evidence: [VERIFY](VERIFY.md).
