@@ -37,6 +37,18 @@
       "engines": {
         "dsh": ">=0.2.1-rc.1 <0.3.0 || >=0.2.2-rc.1 <0.3.0"
       }
+    },
+    {
+      "version": "0.2.4",
+      "publishTimestamp": 1794196098,
+      "source": {
+        "type": "git",
+        "url": "https://github.com/youki258/dsh-ungate",
+        "commit": "d43de10075a04d78d8a52bc17f7794450f89ecdb"
+      },
+      "engines": {
+        "dsh": ">=0.2.1-rc.1 <0.3.0 || >=0.2.2-rc.1 <0.3.0"
+      }
     }
   ]
 }
