@@ -1281,8 +1281,17 @@ function PurgifySection({ page = "status", onStatus } = {}) {
         text: unchanged ? t("saved.override") : "\u5DF2\u4FDD\u5B58\u63D0\u4EA4\u7684\u7248\u672C\uFF1B\u5F53\u524D\u4FEE\u6539\u5C1A\u672A\u4FDD\u5B58\u3002"
       });
     } catch (e) {
-      if (ticket === actionTicket.current)
-        setNotice({ kind: "error", text: t("err.save", { error: e.message }) });
+      if (ticket === actionTicket.current) {
+        const msg = String(e?.message || "");
+        if (msg.includes("reset_requires_confirm") || msg.includes("\u663E\u5F0F\u786E\u8BA4")) {
+          setNotice({
+            kind: "error",
+            text: "\u78C1\u76D8\u4E0A\u662F\u4F60\u7684\u63D0\u793A\u8BCD\u6B63\u6587\uFF0C\u4FDD\u5B58\u88AB\u62D2\u7EDD\uFF1A\u8981\u628A\u51FA\u5382\u9ED8\u8BA4\u5199\u56DE\u53BB\uFF0C\u8BF7\u7528\u300C\u6062\u590D\u9ED8\u8BA4\u300D\u3002"
+          });
+        } else {
+          setNotice({ kind: "error", text: t("err.save", { error: msg }) });
+        }
+      }
     } finally {
       promptPending.current = false;
       if (ticket === actionTicket.current) setPatchBusy(false);
@@ -1327,7 +1336,7 @@ function PurgifySection({ page = "status", onStatus } = {}) {
     apiJson("/dsh-purge/override", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ content: defaultOverride })
+      body: JSON.stringify({ content: defaultOverride, reset: true })
     }).then((d) => {
       if (ticket !== actionTicket.current) return;
       if (!d || !d.ok) {

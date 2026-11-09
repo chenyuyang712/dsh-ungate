@@ -61,3 +61,23 @@ test('unreadable prompt is an error, never an empty/default candidate',async t=>
   await assert.rejects(core.installOverride(home));
   assert.equal(fs.readFileSync(path.join(file,'sentinel'),'utf8'),'KEEP');
 });
+test('writing the shipped default over a user file needs an explicit reset flag',async t=>{
+  const home=fixture(t),file=core.findOverrideFile(home);
+  // 无文件：首次 seed 不算覆盖。
+  assert.equal(core.overrideWriteWouldClobber(home,core.defaultOverrideText()),false);
+  await core.saveOverrideContent(home,custom);
+  const before=fs.readFileSync(file);
+  // 用户正文在盘上，默认正文的写入被判定为覆盖。
+  assert.equal(core.overrideWriteWouldClobber(home,core.defaultOverrideText()),true);
+  assert.equal(core.overrideWriteWouldClobber(home,custom),false);
+  assert.equal(core.overrideWriteWouldClobber(home,custom+'\r\nMORE'),false);
+  // 盘上已是默认：写默认是幂等的，不算覆盖。
+  await core.saveOverrideContent(home,core.defaultOverrideText());
+  assert.equal(core.overrideWriteWouldClobber(home,core.defaultOverrideText()),false);
+  // 判定不产生任何写入。
+  fs.writeFileSync(file,core.defaultOverrideText());
+  assert.equal(core.overrideWriteWouldClobber(home,core.defaultOverrideText()),false);
+  fs.writeFileSync(file,before);
+  assert.equal(core.overrideWriteWouldClobber(home,core.defaultOverrideText()),true);
+  assert.deepEqual(fs.readFileSync(file),before);
+});

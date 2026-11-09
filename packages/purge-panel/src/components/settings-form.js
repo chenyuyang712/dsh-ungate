@@ -282,8 +282,17 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
           : "已保存提交的版本；当前修改尚未保存。",
       });
     } catch (e) {
-      if (ticket === actionTicket.current)
-        setNotice({ kind: "error", text: t("err.save", { error: e.message }) });
+      if (ticket === actionTicket.current) {
+        const msg = String(e?.message || "");
+        if (msg.includes("reset_requires_confirm") || msg.includes("显式确认")) {
+          setNotice({
+            kind: "error",
+            text: "磁盘上是你的提示词正文，保存被拒绝：要把出厂默认写回去，请用「恢复默认」。",
+          });
+        } else {
+          setNotice({ kind: "error", text: t("err.save", { error: msg }) });
+        }
+      }
     } finally {
       promptPending.current = false;
       if (ticket === actionTicket.current) setPatchBusy(false);
@@ -334,7 +343,7 @@ export function PurgifySection({ page = "status", onStatus } = {}) {
     apiJson("/dsh-purge/override", {
       method: "POST",
       headers: { "content-type": "application/json" },
-      body: JSON.stringify({ content: defaultOverride }),
+      body: JSON.stringify({ content: defaultOverride, reset: true }),
     })
       .then((d) => {
         if (ticket !== actionTicket.current) return;
